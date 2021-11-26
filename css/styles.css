@@ -1,0 +1,167 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+
+}
+
+:root {
+    --main-text-color: #EDF5E1;
+    --main-background-color: #5CDB95;
+    --dark-text-color: #05386B;
+}
+
+img{
+    width: 70%;
+}
+  
+
+h1 { 
+    text-align: center;
+    color: var(--main-text-color);
+    padding-top: 0.6rem;
+    font-size: 2.2rem;
+}
+
+p,h3,h2{
+    color: var(--dark-text-color);
+}
+
+body {
+    background-color: var(--main-background-color);
+}
+
+#searchQuery{
+    height: 1.8rem;
+    font-size: 1rem;
+}
+
+#selectMovies{
+    height: 2rem;
+    font-size: 1rem;
+}
+
+.frontpageBtn{
+    background-color: #05386B;
+    color: var(--main-text-color);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    height: 2rem;
+}
+
+#saveBtn{
+    background-color: #05386B;
+    color: var(--main-text-color);
+    display: none;
+}
+
+main,#loginSection{
+    margin: 1rem;
+    text-align: center;
+}
+
+table{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li{
+    padding: 1rem;
+}
+
+th {
+background-color: #379683;
+color: var(--main-text-color);
+}
+
+#searchQuery, #selectMovies{
+    background-color: var(--main-text-color);
+}
+
+td{
+  height: 173.75px;
+}
+
+th,td {
+  width: 150px;
+  text-align: center;
+  border: 1px solid black;
+  padding: 5px;
+}
+
+#frontpageBtnPersonSection, #frontpageBtnMovieSection{
+    display: none;
+}
+
+#searchSection{
+    display: block;
+    padding: 1rem;
+}
+
+#resultMovieSection{
+    padding: 1rem;
+    display: block;
+}
+
+#resultPersonSection{
+    padding: 1rem;
+    display: none;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: var(--main-background-color)(0,0,0); /* Fallback color */
+    background-color: var(--main-background-color)(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content {
+background-color: #8EE4AF;
+margin: 15% auto; /* 15% from the top and centered */
+padding: 20px;
+border: 1px solid #888;
+width: 80%; /* Could be more or less, depending on screen size */
+}
+
+img.logoImg {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    padding: 0.1rem;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 500px) {
+    #searchSection,#searchBtn,#selectMovies,#searchQuery {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+} 
