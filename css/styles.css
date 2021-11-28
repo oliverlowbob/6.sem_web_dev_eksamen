@@ -34,6 +34,13 @@ body {
 #searchQuery{
     height: 1.8rem;
     font-size: 1rem;
+    padding-left: 0.1rem;
+}
+
+#searchOptions{
+    font-size: 0.9rem;
+    height: 1.9rem;
+    padding-left: 0.15rem;
 }
 
 #selectMovies{
@@ -69,25 +76,17 @@ ul {
     list-style-type: none;
 }
 
-li{
-    padding: 1rem;
-}
-
 th {
 background-color: #379683;
 color: var(--main-text-color);
 }
 
-#searchQuery, #selectMovies{
+#searchQuery, #selectMovies,#searchOptions{
     background-color: var(--main-text-color);
 }
 
-td{
-  height: 173.75px;
-}
-
 th,td {
-  width: 150px;
+  width: 100px;
   text-align: center;
   border: 1px solid black;
   padding: 5px;
@@ -98,11 +97,11 @@ th,td {
 }
 
 #searchSection{
-    display: block;
+    display: inline;
     padding: 1rem;
 }
 
-#resultMovieSection{
+#resultTrackSection{
     padding: 1rem;
     display: block;
 }
@@ -157,11 +156,16 @@ img.logoImg {
     cursor: pointer;
 }
 
-@media screen and (max-width: 500px) {
-    #searchSection,#searchBtn,#selectMovies,#searchQuery {
+@media screen and (max-width: 532px) {
+    #searchSection,#searchBtn,#selectMovies,#searchQuery,#searchOptions {
         display: block;
         margin-left: auto;
         margin-right: auto;
         text-align: center;
     }
+    
+    th,td {
+        width: 50px;
+        font-size: 0.8rem;
+      }
 } 

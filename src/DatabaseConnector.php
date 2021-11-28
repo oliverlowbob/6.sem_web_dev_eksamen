@@ -7,7 +7,7 @@ class DatabaseConnector {
     {
         $host = "localhost";
         $port = 3306;
-        $db   = "films";
+        $db   = "chinook_abridged";
         $user = "root";
         $pass = "password";
 

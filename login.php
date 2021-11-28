@@ -1,16 +1,17 @@
 <?php
 include_once("nav.php");
 
-session_start();
+// session_start();
 
-if(isset($_SESSION['username'])){
-    header('Location: frontpage.php');
-}
+// if(isset($_SESSION['username'])){
+//     header('Location: frontpage.php');
+// }
+
 ?>
 
 <h1>Login</h1>
 <section id="loginSection">
-    <form action="http://localhost/movies/login/" method="post">
+    <form action="" method="post">
         <div class="container">
             <label for="username"><b>Username</b></label>
             <input type="text" placeholder="Enter Username" name="username" required>

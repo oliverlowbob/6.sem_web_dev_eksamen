@@ -3,7 +3,7 @@
 
     define('ERROR', 'error');
 
-    Class Users extends DatabaseConnector{
+    Class User extends DatabaseConnector{
 
         function statusCode($status) {
             $statusInfo['status'] = $status;
@@ -29,9 +29,10 @@
             if ($con) {
                 $results = array();
 
-                $cQuery = "SELECT * FROM films.user WHERE username = " . $username . ";";
+                $sql = "SELECT * FROM films.user WHERE username=?";
 
-                $stmt = $con->query($cQuery);      
+                $stmt= $con->prepare($sql);
+                $stmt->execute([$username]);
 
                 $users = array();
                 while($row = $stmt->fetch()) {
