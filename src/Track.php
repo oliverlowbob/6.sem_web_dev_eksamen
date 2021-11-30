@@ -115,6 +115,39 @@ class Track extends DatabaseConnector
         }
     }
 
+    public function getTracksByAlbumId($albumId){
+        $con = (new DatabaseConnector())->getConnection();
+
+        if ($con) {
+            $sql = "SELECT * FROM chinook_abridged.track WHERE AlbumId=?";
+            $stmt = $con->prepare($sql);
+            $stmt->execute([$albumId]);
+
+            $results['_total'] = $stmt->rowCount();
+
+            while ($row = $stmt->fetch()) {
+                $result['trackId'] = $row['TrackId'];
+                $result['name'] = $row['Name'];
+                $result['albumId'] = $row['AlbumId'];
+                $result['mediaTypeId'] = $row['MediaTypeId'];
+                $result['genreId'] = $row['GenreId'];
+                $result['composer'] = $row['Composer'];
+                $result['milliseconds'] = $row['Milliseconds'];
+                $result['bytes'] = $row['Bytes'];
+                $result['unitPrice'] = $row['UnitPrice'];
+                $tracks[] = $result;
+            }
+
+            $results['results'] = $tracks;
+
+            $stmt = null;
+
+            return ($results);
+        } else {
+            return $this->statusCode(ERROR);
+        }
+    }
+
     public function searchTracks($searchText)
     {
         $con = (new DatabaseConnector())->getConnection();

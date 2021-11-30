@@ -14,7 +14,6 @@
 img{
     width: 70%;
 }
-  
 
 h1 { 
     text-align: center;
@@ -102,6 +101,10 @@ th,td {
 #searchSection{
     display: inline;
     padding: 1rem;
+}
+
+#addBtn{
+    display: none;
 }
 
 #resultTrackSection{

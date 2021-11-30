@@ -2,19 +2,23 @@ const baseUrl = "http://localhost/music/"
 
 const isAdmin = true;
 
+if(isAdmin){
+    $("#addBtn").css("display", "inline")
+}
+
 async function getAllAlbums() {
     return await $.get(baseUrl + "albums/");
 }
 
-async function getAllMediaTypes(){
+async function getAllMediaTypes() {
     return await $.get(baseUrl + "mediaTypes/");
 }
 
-async function getAllGenres(){
+async function getAllGenres() {
     return await $.get(baseUrl + "genres/");
 }
 
-async function getAllArtists(){
+async function getAllArtists() {
     return await $.get(baseUrl + "artists/");
 }
 
@@ -53,14 +57,14 @@ async function searchBtnClick() {
     const genres = await getAllGenres();
     const searchOptions = $("#searchOptions :selected").val();
 
-    if(searchOptions == "track"){
+    if (searchOptions == "track") {
         const url = baseUrl + "tracks/?name=" + searchQuery;
         const response = await $.get(url);
         const results = response.results;
         await showTracksTable(results, albums, mediaTypes, genres);
     }
 
-    else if(searchOptions == "album"){
+    else if (searchOptions == "album") {
         const url = baseUrl + "albums/?name=" + searchQuery;
         const response = await $.get(url);
         const results = response.results;
@@ -69,21 +73,21 @@ async function searchBtnClick() {
 
 };
 
-async function showAlbumsTable(results){
+async function showAlbumsTable(results) {
     $("#albumTable > tbody").empty();
     const artists = await getAllArtists();
 
-    var bodyStr = ""; 
+    var bodyStr = "";
     for (const result of results) {
         const artist = artists.find(a => a["artistId"] == result["artistId"])["name"];
 
         bodyStr +=
-        "<tr>" +
-        "<td>" + 
-        "<a href='#' onClick='PressAlbumName(" + result["albumId"] + ")'>" + result["name"] + "</a> " +
-        "</td>" +
-        "<td>" + artist + "</td>" +
-        "</tr>";
+            "<tr>" +
+            "<td>" +
+            "<a href='#' onClick='PressAlbumName(" + result["albumId"] + ")'>" + result["name"] + "</a> " +
+            "</td>" +
+            "<td>" + artist + "</td>" +
+            "</tr>";
     }
 
     $("#albumTable > tbody").append(bodyStr);
@@ -105,7 +109,7 @@ async function showTracksTable(results, albums, mediaTypes, genres) {
         const composer = result["composer"];
         var newComposer = "";
 
-        if(composer != null){
+        if (composer != null) {
             newComposer += composer;
         }
 
@@ -121,17 +125,17 @@ async function showTracksTable(results, albums, mediaTypes, genres) {
             "<td>" + millisToMinutesAndSeconds(result["milliseconds"]) + "</td>" +
             "<td>" + bytesToSize(result["bytes"]) + "</td>" +
             "<td>" + result["unitPrice"] + "$" + "</td>";
-            
-            if(isAdmin){
-                bodyStr +=
+
+        if (isAdmin) {
+            bodyStr +=
                 "<td>" +
                 "<a href='#' onClick='DeleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/delete.png' class='logoImg'>" + "</a>" +
                 "</td>" +
                 "</tr>";
-            }
-            else{
-                bodyStr += "</tr>";
-            }
+        }
+        else {
+            bodyStr += "</tr>";
+        }
     }
 
     $("#trackTable > tbody").append(bodyStr);
@@ -150,13 +154,14 @@ async function DeleteTrack(trackId) {
             type: 'DELETE',
             success: function (result) {
                 console.log(result);
+                alert("Track deleted");
                 location.reload();
             },
             error: function (xhr, status, error) {
                 console.log(xhr);
                 console.log(status);
                 console.log(error);
-                alert("Something went wrong")
+                alert("Something went wrong");
             }
         })
     } else {
@@ -165,7 +170,7 @@ async function DeleteTrack(trackId) {
 }
 
 async function SaveTrackInfo() {
-    const url = baseUrl + "tracks/";
+    const url = baseUrl + "track/";
 
     const trackId = $("#trackId").text();
     const albumId = $("#albumId").text();
@@ -212,12 +217,72 @@ async function SaveTrackInfo() {
     });
 }
 
-async function PressAlbumName(){}
+async function PressAlbumName(albumId) {
+    const newUrl = baseUrl + "album/" + albumId;
+    const response = await $.get(newUrl);
+    const artist = await $.get(baseUrl + "artist/" + response["artistId"]);
+    const tracksUrl = baseUrl + "tracks?albumId=" + albumId;
+    const tracks = await $.get(tracksUrl);
+    const results = tracks.results;
+    const mediaTypes = await getAllMediaTypes();
+    const genres = await getAllGenres();
+
+    $("#albumInfoSectionTracksTable > tbody").empty();
+
+    var bodyStr = "";
+
+    for (const result of results) {
+        const mediaType = mediaTypes.find(mt => mt["mediaTypeId"] == result["mediaTypeId"])["name"];
+        const genre = genres.find(g => g["genreId"] == result["genreId"])["name"];
+
+        bodyStr +=
+            "<tr>" +
+            "<td>" + result["name"] + "</td>" +
+            "<td>" + mediaType + "</td>" +
+            "<td>" + genre + "</td>" +
+            "<td>" + millisToMinutesAndSeconds(result["milliseconds"]) + "</td>" +
+            "<td>" + bytesToSize(result["bytes"]) + "</td>" +
+            "<td>" + result["unitPrice"] + "$" + "</td>";
+
+        if (isAdmin) {
+            bodyStr +=
+                "<td>" +
+                "<a href='#' onClick='DeleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/delete.png' class='logoImg'>" + "</a>" +
+                "</td>" +
+                "</tr>";
+        }
+        else {
+            bodyStr += "</tr>";
+        }
+    }
+
+    $("#albumInfoSectionTracksTable > tbody").append(bodyStr);
+
+    $("#albumId").text(albumId);
+
+    $("#albumName").val(response.name);
+    $("#albumName").prop("readonly", true);
+
+    $("#albumArtist").val(artist.name);
+    $("#albumArtist").prop("readonly", true);
+
+    if (isAdmin) {
+        $("#albumName").prop("readonly", false);
+        $("#albumArtist").prop("readonly", false);
+
+        $("#saveTrackBtn").css("display", "block");
+    }
+
+    $("#saveBtn").css("display", "none");
+    $("#resultAlbumSection").css("display", "none");
+    $("#searchSection").css("display", "none");
+    $("#albumInfoSection").css("display", "block");
+}
 
 async function PressTrackName(trackId) {
-    const newUrl = baseUrl + "tracks/" + trackId;
+    const newUrl = baseUrl + "track/" + trackId;
     const response = await $.get(newUrl);
-    const album = await $.get(baseUrl + "albums/" + response["albumId"]);
+    const album = await $.get(baseUrl + "album/" + response["albumId"]);
     const mediaTypes = await getAllMediaTypes();
     const mediaType = mediaTypes.find(mt => mt["mediaTypeId"] == response["mediaTypeId"])["name"];
     const genres = await getAllGenres();
@@ -252,7 +317,7 @@ async function PressTrackName(trackId) {
     $("#trackPrice").val(response.unitPrice + "$");
     $("#trackPrice").prop("readonly", true);
 
-    if(isAdmin){
+    if (isAdmin) {
         $("#trackName").prop("readonly", false);
         $("#trackAlbum").prop("readonly", false);
         $("#trackMediaType").prop("readonly", false);
@@ -280,11 +345,20 @@ function ShowFrontPageTracks() {
     $("#searchSection").css("display", "block");
 }
 
+function ShowFrontpageAlbums() {
+    $("#albumInfoSection").css("display", "none");
+    $("#addAlbumSection").css("display", "none");
+    $("#addTrackSection").css("display", "none");
+    $("#addArtistSection").css("display", "none");
+    $("#resultAlbumSection").css("display", "block");
+    $("#searchSection").css("display", "block");
+}
+
 function bytesToSize(bytes) {
-    if (bytes == 0){
+    if (bytes == 0) {
         return '0 Byte';
-    } 
-    return bytes/(1000 * 1000) + " MB"
+    }
+    return bytes / (1000 * 1000) + " MB"
 }
 
 function millisToMinutesAndSeconds(millis) {
@@ -293,12 +367,12 @@ function millisToMinutesAndSeconds(millis) {
     return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
 }
 
-function MinutesAndSecondsToMillis(time){
+function MinutesAndSecondsToMillis(time) {
     const timeParts = time.split(":");
     return (timeParts[0] * 60000) + (timeParts[1] * 1000)
 }
 
-function sizeToBytes(size){
-    const sizeInt = size.replace(/\D/g,'');
+function sizeToBytes(size) {
+    const sizeInt = size.replace(/\D/g, '');
     return sizeInt;
 }

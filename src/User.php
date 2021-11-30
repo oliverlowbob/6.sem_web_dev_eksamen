@@ -14,7 +14,7 @@
             $con = (new DatabaseConnector())->getConnection();
 
             if ($con) {
-                $sql = "INSERT INTO films.user (username, email, password) VALUES (?, ?, ?)";
+                $sql = "INSERT INTO chinook_abridged.customer (username, email, password) VALUES (?, ?, ?)";
                 $stmt= $con->prepare($sql);
                 $stmt->execute([$username, $email, $password]);
                 $stmt = null;
@@ -23,21 +23,19 @@
             } 
         }
 
-        public function login($username, $password){
+        public function login($email, $password){
             $con = (new DatabaseConnector())->getConnection();
 
             if ($con) {
-                $results = array();
-
-                $sql = "SELECT * FROM films.user WHERE username=?";
+                $sql = "SELECT * FROM chinook_abridged.customer WHERE email=?";
 
                 $stmt= $con->prepare($sql);
-                $stmt->execute([$username]);
+                $stmt->execute([$email]);
 
                 $users = array();
                 while($row = $stmt->fetch()) {
-                    $result['username'] = $row['username'];
-                    $result['password'] = $row['password'];
+                    $result['email'] = $row['Email'];
+                    $result['password'] = $row['Password'];
                     $users[] = $result;
                 }
                 

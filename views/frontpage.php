@@ -1,11 +1,11 @@
 <?php
 include_once("nav.php");
 
-// session_start();
+session_start();
 
-// if(!isset($_SESSION['username'])){
-//     header('Location: login.php');
-// }
+if (!isset($_SESSION['email'])) {
+    header('Location: ../views/login.php');
+}
 
 ?>
 
@@ -25,7 +25,7 @@ include_once("nav.php");
         <div id="addAlbumSection" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="ShowFrontPageTracks()">&times;</span>
-                <form action="http://localhost/music/albums/" method="post">
+                <form action="http://localhost/music/album/" method="post">
                     Title: <input type="text" name="title"><br>
                     Artist: <input type="text" name="artist"><br>
                     <input type="submit" value="Add">
@@ -35,7 +35,7 @@ include_once("nav.php");
         <div id="addTrackSection" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="ShowFrontPageTracks()">&times;</span>
-                <form action="http://localhost/music/tracks" method="post">
+                <form action="http://localhost/music/track" method="post">
                     Name: <input type="text" name="name"><br>
                     Album: <input type="text" name="albumId"><br>
                     MediaType: <input type="text" name="mediaTypeId"><br>
@@ -51,7 +51,7 @@ include_once("nav.php");
         <div id="addArtistSection" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="ShowFrontPageTracks()">&times;</span>
-                <form action="http://localhost/music/artists/" method="post">
+                <form action="http://localhost/music/artist/" method="post">
                     Name: <input type="text" name="name"><br>
                     <input type="submit" value="Add">
                 </form>
@@ -123,6 +123,35 @@ include_once("nav.php");
                     <li><input type="text" id="trackPrice" class="trackInput"></li>
                 </ul>
                 <button id="saveTrackBtn" onclick="SaveTrackInfo()">Save</button>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div id="albumInfoSection" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="ShowFrontpageAlbums()">&times;</span>
+                <p hidden id="albumId"></p> <br>
+                <ul>
+                    <p><strong>Title</strong></p>
+                    <li><input type="text" id="albumName" class="trackInput"></li>
+                    <p><strong>Artist</strong></p>
+                    <li><input type="text" id="albumArtist" class="trackInput"></li>
+                </ul>
+                <h2>Tracks:</h3>
+                    <table id="albumInfoSectionTracksTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Media Type</th>
+                                <th>Genre</th>
+                                <th>Length</th>
+                                <th>Size</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <button id="saveTrackBtn" onclick="SaveTrackInfo()">Save</button>
             </div>
         </div>
     </section>

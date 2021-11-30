@@ -61,19 +61,15 @@ class Artist extends DatabaseConnector
             $stmt = $con->prepare($sql);
             $stmt->execute([$artistId]);
 
-            $results['_total'] = $stmt->rowCount();
-
             while ($row = $stmt->fetch()) {
                 $result['artistId'] = $row['ArtistId'];
                 $result['name'] = $row['Name'];
                 $artists[] = $result;
             }
 
-            $results['results'] = $artists;
-
             $stmt = null;
 
-            return ($results);
+            return ($artists[0]);
         } else {
             return $this->statusCode(ERROR);
         }
