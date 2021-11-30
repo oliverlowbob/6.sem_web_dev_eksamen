@@ -46,6 +46,7 @@ class Track extends DatabaseConnector
             $stmt = $con->prepare($sql);
             $stmt->execute([$name, $albumId, $mediaTypeId, $genreId, $composer, $milliseconds, $bytes, $unitPrice, $id]);
             $stmt = null;
+            return;
         } else {
             return $this->statusCode(ERROR);
         }
@@ -60,8 +61,6 @@ class Track extends DatabaseConnector
             $stmt = $con->prepare($sql);
             $stmt->execute([$trackId]);
 
-            $results['_total'] = $stmt->rowCount();
-
             while ($row = $stmt->fetch()) {
                 $result['trackId'] = $row['TrackId'];
                 $result['name'] = $row['Name'];
@@ -75,11 +74,9 @@ class Track extends DatabaseConnector
                 $tracks[] = $result;
             }
 
-            $results['results'] = $tracks;
-
             $stmt = null;
 
-            return ($results);
+            return ($tracks[0]);
         } else {
             return $this->statusCode(ERROR);
         }

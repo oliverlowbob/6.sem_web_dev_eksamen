@@ -87,19 +87,15 @@ class Artist extends DatabaseConnector
             $cQuery = "SELECT * FROM chinook_abridged.artist";
             $stmt = $con->query($cQuery);
 
-            $results['_total'] = $stmt->rowCount();
-
             while ($row = $stmt->fetch()) {
                 $result['artistId'] = $row['ArtistId'];
                 $result['name'] = $row['Name'];
                 $artists[] = $result;
             }
 
-            $results['results'] = $artists;
-
             $stmt = null;
 
-            return ($results);
+            return ($artists);
         } else {
             return $this->statusCode(ERROR);
         }

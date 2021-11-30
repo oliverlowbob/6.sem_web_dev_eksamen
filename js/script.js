@@ -1,5 +1,7 @@
 const baseUrl = "http://localhost/music/"
 
+const isAdmin = true;
+
 async function getAllAlbums() {
     return await $.get(baseUrl + "albums/");
 }
@@ -12,6 +14,10 @@ async function getAllGenres(){
     return await $.get(baseUrl + "genres/");
 }
 
+async function getAllArtists(){
+    return await $.get(baseUrl + "artists/");
+}
+
 window.onload = async function () {
     const response = await $.get(baseUrl + "tracks/");
     const results = response.results;
@@ -19,7 +25,7 @@ window.onload = async function () {
     const mediaTypes = await getAllMediaTypes();
     const genres = await getAllGenres();
 
-    await showMoviesTable(results, albums, mediaTypes, genres);
+    await showTracksTable(results, albums, mediaTypes, genres);
 };
 
 async function addBtnClick() {
@@ -42,17 +48,52 @@ async function addBtnClick() {
 
 async function searchBtnClick() {
     const searchQuery = $("#searchQuery").val();
-    const url = baseUrl + "tracks/?name=" + searchQuery;
-    const response = await $.get(url);
-    const results = response.results;
     const albums = await getAllAlbums();
     const mediaTypes = await getAllMediaTypes();
     const genres = await getAllGenres();
+    const searchOptions = $("#searchOptions :selected").val();
 
-    await showMoviesTable(results, albums, mediaTypes, genres);
+    if(searchOptions == "track"){
+        const url = baseUrl + "tracks/?name=" + searchQuery;
+        const response = await $.get(url);
+        const results = response.results;
+        await showTracksTable(results, albums, mediaTypes, genres);
+    }
+
+    else if(searchOptions == "album"){
+        const url = baseUrl + "albums/?name=" + searchQuery;
+        const response = await $.get(url);
+        const results = response.results;
+        await showAlbumsTable(results);
+    }
+
 };
 
-async function showMoviesTable(results, albums, mediaTypes, genres) {
+async function showAlbumsTable(results){
+    $("#albumTable > tbody").empty();
+    const artists = await getAllArtists();
+
+    var bodyStr = ""; 
+    for (const result of results) {
+        const artist = artists.find(a => a["artistId"] == result["artistId"])["name"];
+
+        bodyStr +=
+        "<tr>" +
+        "<td>" + 
+        "<a href='#' onClick='PressAlbumName(" + result["albumId"] + ")'>" + result["name"] + "</a> " +
+        "</td>" +
+        "<td>" + artist + "</td>" +
+        "</tr>";
+    }
+
+    $("#albumTable > tbody").append(bodyStr);
+
+    $("#resultAlbumSection").css("display", "block");
+    $("#resultTrackSection").css("display", "none");
+    $("#resultArtistSection").css("display", "none");
+}
+
+async function showTracksTable(results, albums, mediaTypes, genres) {
     $("#trackTable > tbody").empty();
 
     var bodyStr = "";
@@ -73,25 +114,31 @@ async function showMoviesTable(results, albums, mediaTypes, genres) {
             "<td>" + result["composer"] + "</td>" +
             "<td>" + millisToMinutesAndSeconds(result["milliseconds"]) + "</td>" +
             "<td>" + bytesToSize(result["bytes"]) + "</td>" +
-            "<td>" + result["unitPrice"] + "$" + "</td>" +
-
-            "<td>" +
-            "<a href='#' onClick='UpdateTrack(" + result["trackId"] + ")'>" + "<img src='images/update.png' class='logoImg'>" + "</a>" +
-            "<a href='#' onClick='DeleteTrack(" + result["trackId"] + ")'>" + "<img src='images/delete.png' class='logoImg'>" + "</a>" +
-            "</td>" +
-            "</tr>";
+            "<td>" + result["unitPrice"] + "$" + "</td>";
+            
+            if(isAdmin){
+                bodyStr +=
+                "<td>" +
+                "<a href='#' onClick='DeleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/delete.png' class='logoImg'>" + "</a>" +
+                "</td>" +
+                "</tr>";
+            }
+            else{
+                bodyStr += "</tr>";
+            }
     }
 
     $("#trackTable > tbody").append(bodyStr);
 
-    $("#resultMovieSection").css("display", "block");
-    $("#resultPersonSection").css("display", "none");
+    $("#resultTrackSection").css("display", "block");
+    $("#resultAlbumSection").css("display", "none");
+    $("#resultArtistSection").css("display", "none");
 };
 
-async function DeleteTrack(movieId) {
-    const newUrl = "http://localhost/movies/" + movieId;
+async function DeleteTrack(trackId) {
+    const newUrl = baseUrl + "track/" + trackId;
 
-    if (confirm('Are you sure you want to delete this movie?')) {
+    if (confirm('Are you sure you want to delete this track?')) {
         await $.ajax({
             url: newUrl,
             type: 'DELETE',
@@ -107,27 +154,36 @@ async function DeleteTrack(movieId) {
             }
         })
     } else {
-
+        alert("Track not deleted");
     }
-    ;
 }
 
-async function SaveMovieInfo() {
-    const url = "http://localhost/movies";
+async function SaveTrackInfo() {
+    const url = baseUrl + "tracks/";
 
-    const movieId = $("#movieId").text();
-    const title = $("#movieTitle").val();
-    const overview = $("#movieOverview").val();
-    const released = $("#movieReleaseDate").val();
-    const runtime = $("#movieRuntime").val();
+    const trackId = $("#trackId").text();
+    const albumId = $("#albumId").text();
+    const genreId = $("#genreId").text();
+    const mediaTypeId = $("#mediaTypeId").text();
+    const name = $("#trackName").val();
+    const composer = $("#trackComposer").val();
+    const time = $("#trackTime").val();
+    const size = $("#trackSize").val();
+    const unitPrice = $("#trackPrice").val();
 
     const requestData = {
-        movieId: movieId,
-        title: title,
-        overview: overview,
-        released: released,
-        runtime: runtime
+        trackId: trackId,
+        name: name,
+        albumId: albumId,
+        mediaTypeId: mediaTypeId,
+        genreId: genreId,
+        composer: composer,
+        milliseconds: MinutesAndSecondsToMillis(time),
+        bytes: sizeToBytes(size),
+        unitPrice: unitPrice.slice(0, -1)
     };
+
+    console.log(requestData);
 
     $.ajax({
         type: 'PUT',
@@ -138,7 +194,7 @@ async function SaveMovieInfo() {
             console.log(response);
             console.log(status);
             console.log(xhr);
-            alert("Movie info saved");
+            alert("Track updated");
             location.reload();
         },
         error: function (xhr, status, error) {
@@ -150,53 +206,67 @@ async function SaveMovieInfo() {
     });
 }
 
-async function UpdateTrack(movieId) {
-    const newUrl = "http://localhost/movies/" + movieId;
-    const unparsedResponse = await $.get(newUrl);
-    const response = unparsedResponse.results[0];
+async function PressAlbumName(){}
 
-    $("#movieId").text(movieId);
-    $("#movieTitle").val(response.title);
-    $("#movieTitle").prop("readonly", false);
-    $("#movieReleaseDate").val(response.released);
-    $("#movieReleaseDate").prop("readonly", false);
-    $("#movieRuntime").val(response.runtime);
-    $("#movieRuntime").prop("readonly", false);
-    $("#movieOverview").val(response.overview);
-    $("#movieOverview").prop("readonly", false);
+async function PressTrackName(trackId) {
+    const newUrl = baseUrl + "tracks/" + trackId;
+    const response = await $.get(newUrl);
+    const album = await $.get(baseUrl + "albums/" + response["albumId"]);
+    const mediaTypes = await getAllMediaTypes();
+    const mediaType = mediaTypes.find(mt => mt["mediaTypeId"] == response["mediaTypeId"])["name"];
+    const genres = await getAllGenres();
+    const genre = genres.find(g => g["genreId"] == response["genreId"])["name"];
 
-    $("#saveBtn").css("display", "inline-block");
+    $("#trackId").text(trackId);
+    $("#albumId").text(response.albumId);
+    $("#genreId").text(response.genreId);
+    $("#mediaTypeId").text(response.mediaTypeId);
 
-    $("#resultMovieSection").css("display", "none");
-    $("#searchSection").css("display", "none");
-    $("#movieInfoSection").css("display", "block");
-}
+    $("#trackName").val(response.name);
+    $("#trackName").prop("readonly", true);
 
-async function PressTrackName(movieId) {
-    const newUrl = "http://localhost/movies/" + movieId;
-    const unparsedResponse = await $.get(newUrl);
-    const response = unparsedResponse.results[0];
+    $("#trackAlbum").val(album.name);
+    $("#trackAlbum").prop("readonly", true);
 
-    $("#saveBtn").css("display", "hidden");
+    $("#trackMediaType").val(mediaType);
+    $("#trackMediaType").prop("readonly", true);
 
-    $("#movieId").text("");
-    $("#movieTitle").val(response.title);
-    $("#movieTitle").prop("readonly", true);
-    $("#movieReleaseDate").val(response.released);
-    $("#movieReleaseDate").prop("readonly", true);
-    $("#movieRuntime").val(response.runtime);
-    $("#movieRuntime").prop("readonly", true);
-    $("#movieOverview").val(response.overview);
-    $("#movieOverview").prop("readonly", true);
+    $("#trackGenre").val(genre);
+    $("#trackGenre").prop("readonly", true);
+
+    $("#trackComposer").val(response.composer);
+    $("#trackComposer").prop("readonly", true);
+
+    $("#trackTime").val(millisToMinutesAndSeconds(response.milliseconds));
+    $("#trackTime").prop("readonly", true);
+
+    $("#trackSize").val(bytesToSize(response.bytes));
+    $("#trackSize").prop("readonly", true);
+
+    $("#trackPrice").val(response.unitPrice + "$");
+    $("#trackPrice").prop("readonly", true);
+
+    if(isAdmin){
+        $("#trackName").prop("readonly", false);
+        $("#trackAlbum").prop("readonly", false);
+        $("#trackMediaType").prop("readonly", false);
+        $("#trackGenre").prop("readonly", false);
+        $("#trackComposer").prop("readonly", false);
+        $("#trackTime").prop("readonly", false);
+        $("#trackSize").prop("readonly", false);
+        $("#trackPrice").prop("readonly", false);
+
+        $("#saveTrackBtn").css("display", "block");
+    }
 
     $("#saveBtn").css("display", "none");
-    $("#resultMovieSection").css("display", "none");
+    $("#resultTrackSection").css("display", "none");
     $("#searchSection").css("display", "none");
-    $("#movieInfoSection").css("display", "block");
+    $("#trackInfoSection").css("display", "block");
 }
 
 function ShowFrontPageTracks() {
-    $("#movieInfoSection").css("display", "none");
+    $("#trackInfoSection").css("display", "none");
     $("#addAlbumSection").css("display", "none");
     $("#addTrackSection").css("display", "none");
     $("#addArtistSection").css("display", "none");
@@ -205,14 +275,24 @@ function ShowFrontPageTracks() {
 }
 
 function bytesToSize(bytes) {
-    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes == 0) return '0 Byte';
-    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+    if (bytes == 0){
+        return '0 Byte';
+    } 
+    return bytes/(1000 * 1000) + " MB"
 }
 
 function millisToMinutesAndSeconds(millis) {
-    var minutes = Math.floor(millis / 60000);
-    var seconds = ((millis % 60000) / 1000).toFixed(0);
+    const minutes = Math.floor(millis / 60000);
+    const seconds = ((millis % 60000) / 1000).toFixed(0);
     return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+}
+
+function MinutesAndSecondsToMillis(time){
+    const timeParts = time.split(":");
+    return (timeParts[0] * 60000) + (timeParts[1] * 1000)
+}
+
+function sizeToBytes(size){
+    const sizeInt = size.replace(/\D/g,'');
+    return sizeInt;
 }

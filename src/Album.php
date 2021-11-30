@@ -61,8 +61,6 @@ class Album extends DatabaseConnector
             $stmt = $con->prepare($sql);
             $stmt->execute([$albumId]);
 
-            $results['_total'] = $stmt->rowCount();
-
             while ($row = $stmt->fetch()) {
                 $result['artistId'] = $row['ArtistId'];
                 $result['name'] = $row['Title'];
@@ -70,11 +68,9 @@ class Album extends DatabaseConnector
                 $albums[] = $result;
             }
 
-            $results['results'] = $albums;
-
             $stmt = null;
 
-            return ($results);
+            return ($albums[0]);
         } else {
             return $this->statusCode(ERROR);
         }

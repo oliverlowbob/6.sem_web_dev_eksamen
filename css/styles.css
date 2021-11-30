@@ -56,10 +56,13 @@ body {
     height: 2rem;
 }
 
-#saveBtn{
+#saveTrackBtn{
     background-color: #05386B;
     color: var(--main-text-color);
     display: none;
+    position: relative;
+    left: 48.4%;
+    margin-top: 0.5rem;
 }
 
 main,#loginSection{
@@ -106,9 +109,13 @@ th,td {
     display: block;
 }
 
-#resultPersonSection{
+#resultArtistSection,#resultAlbumSection{
     padding: 1rem;
     display: none;
+}
+
+.trackInput{
+    width: 50%;
 }
 
 /* The Modal (background) */

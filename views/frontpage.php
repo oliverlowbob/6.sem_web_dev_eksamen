@@ -75,26 +75,54 @@ include_once("nav.php");
             <tbody></tbody>
         </table>
     </section>
+    <section id="resultAlbumSection">
+        <table id="albumTable">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Artist</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+    <section id="resultArtistSection">
+        <table id="artistAlbumsTable">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
     <section>
-        <div id="movieInfoSection" class="modal">
+        <div id="trackInfoSection" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="ShowFrontPageMovie()">&times;</span>
-                <p hidden id="movieId"></p>
+                <span class="close" onclick="ShowFrontPageTracks()">&times;</span>
+                <p hidden id="trackId"></p> <br>
+                <p hidden id="albumId"></p> <br>
+                <p hidden id="genreId"></p> <br>
+                <p hidden id="mediaTypeId"></p> <br>
                 <ul>
                     <p><strong>Title</strong></p>
-                    <li><input type="text" id="movieTitle"></li>
-                    <p><strong>Release Date</strong></p>
-                    <li><input type="text" id="movieReleaseDate"></li>
-                    <p><strong>Runtime</strong></p>
-                    <li><input type="text" id="movieRuntime"></li>
-                    <p><strong>Overview</strong></p>
-                    <li><input type="text" id="movieOverview"></li>
-                    <p><strong>Directors</strong></p>
-                    <li><input type="text" id="movieDirectors"></li>
-                    <p><strong>Cast</strong></p>
-                    <li><input type="text" id="cast"></li>
+                    <li><input type="text" id="trackName" class="trackInput"></li>
+                    <p><strong>Album</strong></p>
+                    <li><input type="text" id="trackAlbum" class="trackInput"></li>
+                    <p><strong>Media Type</strong></p>
+                    <li><input type="text" id="trackMediaType" class="trackInput"></li>
+                    <p><strong>Genre</strong></p>
+                    <li><input type="text" id="trackGenre" class="trackInput"></li>
+                    <p><strong>Composer</strong></p>
+                    <li><input type="text" id="trackComposer" class="trackInput"></li>
+                    <p><strong>Time</strong></p>
+                    <li><input type="text" id="trackTime" class="trackInput"></li>
+                    <p><strong>Size</strong></p>
+                    <li><input type="text" id="trackSize" class="trackInput"></li>
+                    <p><strong>Prize</strong></p>
+                    <li><input type="text" id="trackPrice" class="trackInput"></li>
                 </ul>
-                <button id="saveBtn" onclick="SaveMovieInfo()">Save</button>
+                <button id="saveTrackBtn" onclick="SaveTrackInfo()">Save</button>
             </div>
         </div>
     </section>

@@ -52,7 +52,7 @@ switch ($requestMethod) {
                 echo json_encode($album->getAlbum($urlPieces[2]));
             }
         }
-        elseif (count($urlPieces) == 2) {
+        elseif (count($urlPieces) == 2 && !isset($_GET['name'])) {
             if($urlPieces[1] == "tracks"){
                 // Get all tracks                        
                 echo json_encode($track->getAllTracks());
@@ -69,18 +69,30 @@ switch ($requestMethod) {
                 // Get all genres                        
                 echo json_encode($genre->getAllGenres());
             }
+            elseif($urlPieces[1] == "artists"){
+                // Get all genres                        
+                echo json_encode($artist->getAllArtists());
+            }
         }
-        elseif ($urlPieces[1] == "tracks" && isset($_GET['name'])) {
-            // Search track by name
-            echo json_encode($track->searchTracks($_GET['name']));
+        elseif (isset($_GET['name'])) {
+            if($urlPieces[1] == "tracks"){
+                // Search track by name
+                echo json_encode($track->searchTracks($_GET['name']));
+            }
+            elseif($urlPieces[1] == "albums"){
+                // Search album by name
+                echo json_encode($album->searchAlbums($_GET['name']));
+            }
         } 
         else{
             http_response_code(404);
         }
         break;
     case "PUT":
-        $musicData = (array) json_decode(file_get_contents('php://input'), TRUE);
-        echo json_encode($track->updateTrack($musicData['trackId'], $musicData['name'], $musicData['albumId'], $musicData['mediaTypeId'], $musicData['genreId'], $musicData['composer'], $musicData['milliseconds'], $musicData['bytes'], $musicData['unitPrice']));
+        if($urlPieces[1] == "tracks"){
+            $musicData = (array) json_decode(file_get_contents('php://input'), TRUE);
+            echo json_encode($track->updateTrack($musicData['trackId'], $musicData['name'], $musicData['albumId'], $musicData['mediaTypeId'], $musicData['genreId'], $musicData['composer'], $musicData['milliseconds'], $musicData['bytes'], $musicData['unitPrice']));
+        }
         break;
     case "POST":
         //add track
