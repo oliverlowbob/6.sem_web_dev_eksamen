@@ -1,9 +1,25 @@
-const baseUrl = "http://localhost/music/"
+const baseUrl = "http://localhost/music/";
 
-const isAdmin = true;
+window.onload = async function () {
+    const response = await $.get(baseUrl + "tracks/");
+    const results = response.results;
+    const albums = await getAllAlbums();
+    const mediaTypes = await getAllMediaTypes();
+    const genres = await getAllGenres();
+    const isAdmin = await admin();
+    sessionStorage.setItem("isAdmin", isAdmin)
 
-if(isAdmin){
+    await showTracksTable(results, albums, mediaTypes, genres);
+};
+
+const IsAdmin = sessionStorage.getItem("isAdmin") === "true";
+
+if(IsAdmin){
     $("#addBtn").css("display", "inline")
+}
+
+async function admin(){
+    return await $.get(baseUrl + "admin/");
 }
 
 async function getAllAlbums() {
@@ -21,16 +37,6 @@ async function getAllGenres() {
 async function getAllArtists() {
     return await $.get(baseUrl + "artists/");
 }
-
-window.onload = async function () {
-    const response = await $.get(baseUrl + "tracks/");
-    const results = response.results;
-    const albums = await getAllAlbums();
-    const mediaTypes = await getAllMediaTypes();
-    const genres = await getAllGenres();
-
-    await showTracksTable(results, albums, mediaTypes, genres);
-};
 
 async function addBtnClick() {
     $("#resultTrackSection").css("display", "none");
@@ -126,7 +132,7 @@ async function showTracksTable(results, albums, mediaTypes, genres) {
             "<td>" + bytesToSize(result["bytes"]) + "</td>" +
             "<td>" + result["unitPrice"] + "$" + "</td>";
 
-        if (isAdmin) {
+        if (IsAdmin) {
             bodyStr +=
                 "<td>" +
                 "<a href='#' onClick='DeleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/delete.png' class='logoImg'>" + "</a>" +
@@ -244,7 +250,7 @@ async function PressAlbumName(albumId) {
             "<td>" + bytesToSize(result["bytes"]) + "</td>" +
             "<td>" + result["unitPrice"] + "$" + "</td>";
 
-        if (isAdmin) {
+        if (IsAdmin) {
             bodyStr +=
                 "<td>" +
                 "<a href='#' onClick='DeleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/delete.png' class='logoImg'>" + "</a>" +
@@ -266,7 +272,7 @@ async function PressAlbumName(albumId) {
     $("#albumArtist").val(artist.name);
     $("#albumArtist").prop("readonly", true);
 
-    if (isAdmin) {
+    if (IsAdmin) {
         $("#albumName").prop("readonly", false);
         $("#albumArtist").prop("readonly", false);
 
@@ -317,7 +323,7 @@ async function PressTrackName(trackId) {
     $("#trackPrice").val(response.unitPrice + "$");
     $("#trackPrice").prop("readonly", true);
 
-    if (isAdmin) {
+    if (IsAdmin) {
         $("#trackName").prop("readonly", false);
         $("#trackAlbum").prop("readonly", false);
         $("#trackMediaType").prop("readonly", false);
@@ -376,3 +382,25 @@ function sizeToBytes(size) {
     const sizeInt = size.replace(/\D/g, '');
     return sizeInt;
 }
+
+//dropdown logic
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function dropdownBtnClick() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+  
+  // Close the dropdown menu if the user clicks outside of it
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
+  

@@ -9,6 +9,14 @@ if (!isset($_SESSION['email'])) {
 
 ?>
 
+<div class="dropdown">
+  <button onclick="dropdownBtnClick()" class="dropbtn">Menu</button>
+  <div id="myDropdown" class="dropdown-content">
+    <a href="http://localhost/music/logout/">Logout</a>
+    <a href="#" onclick="showProfile()">Edit Profile</a>
+  </div>
+</div>
+
 <h1>Music Shop</h1>
 <main>
     <section id="searchSection">

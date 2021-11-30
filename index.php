@@ -1,8 +1,10 @@
 <?php
 session_start();
+//session_destroy();
+//echo $_SESSION["isAdmin"];
 
 if (!isset($_SESSION['email'])) {
-    header('Location: ../views/login.php');
+    header('Location: views/login.php');
 }
 
 require_once("src/Track.php");
@@ -64,6 +66,16 @@ switch ($requestMethod) {
             } elseif ($urlPieces[1] == "artists") {
                 // Get all genres                        
                 echo json_encode($artist->getAllArtists());
+            } elseif ($urlPieces[1] == "admin") {
+                // Check if user is admin
+                if (isset($_SESSION["isAdmin"])) {
+                    echo json_encode($_SESSION["isAdmin"]);
+                } else {
+                    echo json_encode(false);
+                }
+            } elseif($urlPieces[1] == "logout"){
+                session_destroy();
+                header("Location: ../views/login.php");
             }
         } elseif (isset($_GET['name'])) {
             if ($urlPieces[1] == "tracks") {
@@ -106,8 +118,15 @@ switch ($requestMethod) {
             //Login logic
             elseif ($urlPieces[1] == "login") {
                 if (isset($_POST['email']) && isset($_POST['password'])) {
+                    $isAdmin = json_encode($user->isAdmin($_POST['password']));
+                    if ($isAdmin == "true") {
+                        $_SESSION["isAdmin"] = "true";
+                    }else{
+                        $_SESSION["isAdmin"] = "false";
+                    }
                     $response = json_encode($user->login($_POST['email'], $_POST['password']));
                     if ($response == "true") {
+                        
                         $_SESSION["email"] = $_POST['email'];
                         header("Location: ../views/frontpage.php");
                     } else {
