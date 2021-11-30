@@ -102,6 +102,12 @@ async function showTracksTable(results, albums, mediaTypes, genres) {
         const album = albums.find(a => a["albumId"] == result["albumId"])["name"];
         const mediaType = mediaTypes.find(mt => mt["mediaTypeId"] == result["mediaTypeId"])["name"];
         const genre = genres.find(g => g["genreId"] == result["genreId"])["name"];
+        const composer = result["composer"];
+        var newComposer = "";
+
+        if(composer != null){
+            newComposer += composer;
+        }
 
         bodyStr +=
             "<tr>" +
@@ -111,7 +117,7 @@ async function showTracksTable(results, albums, mediaTypes, genres) {
             "<td>" + album + "</td>" +
             "<td>" + mediaType + "</td>" +
             "<td>" + genre + "</td>" +
-            "<td>" + result["composer"] + "</td>" +
+            "<td>" + newComposer + "</td>" +
             "<td>" + millisToMinutesAndSeconds(result["milliseconds"]) + "</td>" +
             "<td>" + bytesToSize(result["bytes"]) + "</td>" +
             "<td>" + result["unitPrice"] + "$" + "</td>";
