@@ -1,6 +1,6 @@
 const baseUrl = "http://localhost/music/";
 
-async function admin() {
+async function getIsAdmin() {
     return await $.get(baseUrl + "admin/");
 }
 
@@ -10,7 +10,7 @@ window.onload = async function () {
     const albums = await getAllAlbums();
     const mediaTypes = await getAllMediaTypes();
     const genres = await getAllGenres();
-    const isAdmin = await admin() === "true";
+    const isAdmin = await getIsAdmin() === "true";
     
     if (isAdmin) {
         $("#addBtn").css("display", "inline")
@@ -33,6 +33,19 @@ async function getAllGenres() {
 
 async function getAllArtists() {
     return await $.get(baseUrl + "artists/");
+}
+
+async function showProfile(){
+    $("#profileSection").css("display", "block");
+}
+
+async function hideProfile(){
+    $("#profileSection").css("display", "none");
+}
+
+async function saveProfileInfo(){
+
+    $("#profileSection").css("display", "none");
 }
 
 async function addBtnClick() {
@@ -101,7 +114,7 @@ async function showAlbumsTable(results) {
 }
 
 async function showTracksTable(results, albums, mediaTypes, genres) {
-    const isAdmin = await admin() === "true";
+    const isAdmin = await getIsAdmin() === "true";
 
     $("#trackTable > tbody").empty();
 
@@ -231,7 +244,7 @@ async function PressAlbumName(albumId) {
     const results = tracks.results;
     const mediaTypes = await getAllMediaTypes();
     const genres = await getAllGenres();
-    const isAdmin = await admin() === "true";
+    const isAdmin = await getIsAdmin() === "true";
 
     $("#albumInfoSectionTracksTable > tbody").empty();
 
@@ -293,7 +306,7 @@ async function PressTrackName(trackId) {
     const mediaType = mediaTypes.find(mt => mt["mediaTypeId"] == response["mediaTypeId"])["name"];
     const genres = await getAllGenres();
     const genre = genres.find(g => g["genreId"] == response["genreId"])["name"];
-    const isAdmin = await admin() === "true";
+    const isAdmin = await getIsAdmin() === "true";
 
     $("#trackId").text(trackId);
     $("#albumId").text(response.albumId);

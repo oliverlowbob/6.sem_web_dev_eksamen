@@ -65,6 +65,12 @@ body {
     margin-top: 0.5rem;
 }
 
+#saveProfileBtn{
+    margin-top: 0.5rem;
+    background-color: var(--btn-color);
+    color: var(--main-text-color);
+}
+
 main,#loginSection{
     margin: 1rem;
     text-align: center;
@@ -113,7 +119,7 @@ th,td {
     display: block;
 }
 
-#resultArtistSection,#resultAlbumSection{
+#resultArtistSection,#resultAlbumSection,#profileSection{
     padding: 1rem;
     display: none;
 }

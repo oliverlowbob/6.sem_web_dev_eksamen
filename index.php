@@ -77,6 +77,10 @@ switch ($requestMethod) {
                 session_destroy();
                 header("Location: ../views/login.php");
             }
+            elseif($urlPieces[1] == "user"){
+                // Get current user logic
+                // Get email from session
+            }
         } elseif (isset($_GET['name'])) {
             if ($urlPieces[1] == "tracks") {
                 // Search track by name

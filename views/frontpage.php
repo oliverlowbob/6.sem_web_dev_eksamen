@@ -10,11 +10,11 @@ if (!isset($_SESSION['email'])) {
 ?>
 
 <div class="dropdown">
-  <button onclick="dropdownBtnClick()" class="dropbtn">Menu</button>
-  <div id="myDropdown" class="dropdown-content">
-    <a href="http://localhost/music/logout/">Logout</a>
-    <a href="#" onclick="showProfile()">Edit Profile</a>
-  </div>
+    <button onclick="dropdownBtnClick()" class="dropbtn">Menu</button>
+    <div id="myDropdown" class="dropdown-content">
+        <a href="#" onclick="showProfile()">Edit Profile</a>
+        <a href="http://localhost/music/logout/">Logout</a>
+    </div>
 </div>
 
 <h1>Music Shop</h1>
@@ -30,13 +30,43 @@ if (!isset($_SESSION['email'])) {
         <button onclick="addBtnClick()" class="frontpageBtn" id="addBtn">Add</button>
     </section>
     <section>
+    <div id="profileSection" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="hideProfile()">&times;</span>
+                <ul>
+                    <br>
+                    <p><strong>Name</strong></p>
+                    <li><input type="text" id="userName" class="trackInput"></li>
+                    <p><strong>Email</strong></p>
+                    <li><input type="text" id="userEmail" class="trackInput"></li>
+                    <p><strong>Old Password</strong></p>
+                    <li><input type="password" id="userOldPassword" class="trackInput"></li>
+                    <p><strong>New Password</strong></p>
+                    <li><input type="password" id="userNewPassword1" class="trackInput"></li>
+                    <p><strong>New Password (repeat)</strong></p>
+                    <li><input type="password" id="userNewPassword2" class="trackInput"></li>
+                </ul>
+                <button id="saveProfileBtn" onclick="saveProfileInfo()">Save</button>
+            </div>
+        </div>
+        <div id="profileSection" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="hideProfile()">&times;</span>
+                <form action="http://localhost/music/user/" method="post">
+                    New Password (repeat): <input type="password" name="userNewPassword2"><br>
+                    <input class="frontpageBtn" type="submit" value="Save">
+                </form>
+            </div>
+        </div>
+    </section>
+    <section>
         <div id="addAlbumSection" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="ShowFrontPageTracks()">&times;</span>
                 <form action="http://localhost/music/album/" method="post">
                     Title: <input type="text" name="title"><br>
                     Artist: <input type="text" name="artist"><br>
-                    <input type="submit" value="Add">
+                    <input class="frontpageBtn" type="submit" value="Add">
                 </form>
             </div>
         </div>

@@ -10,6 +10,8 @@
             return $statusInfo;
         }
 
+        //TODO: Do get user based on email
+
         public function addUser($username, $email, $password){
             $con = (new DatabaseConnector())->getConnection();
 
