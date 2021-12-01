@@ -8,15 +8,13 @@ if (!isset($_SESSION['email'])) {
 }
 
 ?>
-
-<div class="dropdown">
+<section class="dropdown">
     <button onclick="dropdownBtnClick()" class="dropbtn">Menu</button>
     <div id="myDropdown" class="dropdown-content">
         <a href="#" onclick="showProfile()">Edit Profile</a>
         <a href="http://localhost/music/logout/">Logout</a>
     </div>
-</div>
-
+</section>
 <h1>Music Shop</h1>
 <main>
     <section id="searchSection">
@@ -30,15 +28,40 @@ if (!isset($_SESSION['email'])) {
         <button onclick="addBtnClick()" class="frontpageBtn" id="addBtn">Add</button>
     </section>
     <section>
-    <div id="profileSection" class="modal">
+        <div id="profileSection" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="hideProfile()">&times;</span>
                 <ul>
                     <br>
-                    <p><strong>Name</strong></p>
-                    <li><input type="text" id="userName" class="trackInput"></li>
+                    <p hidden id="customerId"></p>
                     <p><strong>Email</strong></p>
                     <li><input type="text" id="userEmail" class="trackInput"></li>
+                    <p><strong>First Name</strong></p>
+                    <li><input type="text" id="userFirstName" class="trackInput"></li>
+                    <p><strong>Last Name</strong></p>
+                    <li><input type="text" id="userLastName" class="trackInput"></li>
+                    <p><strong>Company</strong></p>
+                    <li><input type="text" id="userCompany" class="trackInput"></li>
+                    <p><strong>Address</strong></p>
+                    <li><input type="text" id="userAddress" class="trackInput"></li>
+                    <p><strong>City</strong></p>
+                    <li><input type="text" id="userCity" class="trackInput"></li>
+                    <p><strong>State</strong></p>
+                    <li><input type="text" id="userState" class="trackInput"></li>
+                    <p><strong>Country</strong></p>
+                    <li><input type="text" id="userCountry" class="trackInput"></li>
+                    <p><strong>Postal Code</strong></p>
+                    <li><input type="text" id="userPostalCode" class="trackInput"></li>
+                    <p><strong>Phone</strong></p>
+                    <li><input type="text" id="userPhone" class="trackInput"></li>
+                    <p><strong>Fax</strong></p>
+                    <li><input type="text" id="userFax" class="trackInput"></li>
+                </ul>
+                <button id="saveProfileBtn" onclick="saveProfileInfo()">Save Info</button>
+                <br> <br>
+                <h3>Password Management</h3>
+                <br>
+                <ul>
                     <p><strong>Old Password</strong></p>
                     <li><input type="password" id="userOldPassword" class="trackInput"></li>
                     <p><strong>New Password</strong></p>
@@ -46,14 +69,15 @@ if (!isset($_SESSION['email'])) {
                     <p><strong>New Password (repeat)</strong></p>
                     <li><input type="password" id="userNewPassword2" class="trackInput"></li>
                 </ul>
-                <button id="saveProfileBtn" onclick="saveProfileInfo()">Save</button>
+                <button id="savePasswordBtn" onclick="updatePassword()">Update Password</button>
+                <button id="deleteProfileBtn" onclick="deleteProfile()">Delete Profile</button>
             </div>
         </div>
     </section>
     <section>
         <div id="addAlbumSection" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="ShowFrontPageTracks()">&times;</span>
+                <span class="close" onclick="showFrontPageTracks()">&times;</span>
                 <form action="http://localhost/music/albums/" method="post">
                     Title: <input type="text" name="title"><br>
                     Artist: <input type="text" name="artist"><br>
@@ -63,7 +87,7 @@ if (!isset($_SESSION['email'])) {
         </div>
         <div id="addTrackSection" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="ShowFrontPageTracks()">&times;</span>
+                <span class="close" onclick="showFrontPageTracks()">&times;</span>
                 <form action="http://localhost/music/tracks/" method="post">
                     Name: <input type="text" name="name"><br>
                     Album: <input type="text" name="albumId"><br>
@@ -79,7 +103,7 @@ if (!isset($_SESSION['email'])) {
         </div>
         <div id="addArtistSection" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="ShowFrontPageTracks()">&times;</span>
+                <span class="close" onclick="showFrontPageTracks()">&times;</span>
                 <form action="http://localhost/music/artists/" method="post">
                     Name: <input type="text" name="name"><br>
                     <input type="submit" value="Add">
@@ -128,7 +152,7 @@ if (!isset($_SESSION['email'])) {
     <section>
         <div id="trackInfoSection" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="ShowFrontPageTracks()">&times;</span>
+                <span class="close" onclick="showFrontPageTracks()">&times;</span>
                 <p hidden id="trackId"></p> <br>
                 <p hidden id="albumId"></p> <br>
                 <p hidden id="genreId"></p> <br>
@@ -151,14 +175,14 @@ if (!isset($_SESSION['email'])) {
                     <p><strong>Prize</strong></p>
                     <li><input type="text" id="trackPrice" class="trackInput"></li>
                 </ul>
-                <button id="saveTrackBtn" onclick="SaveTrackInfo()">Save</button>
+                <button id="saveTrackBtn" onclick="saveTrackInfo()">Save</button>
             </div>
         </div>
     </section>
     <section>
         <div id="albumInfoSection" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="ShowFrontpageAlbums()">&times;</span>
+                <span class="close" onclick="showFrontpageAlbums()">&times;</span>
                 <p hidden id="albumId"></p> <br>
                 <ul>
                     <p><strong>Title</strong></p>
@@ -180,7 +204,7 @@ if (!isset($_SESSION['email'])) {
                         </thead>
                         <tbody></tbody>
                     </table>
-                    <button id="saveTrackBtn" onclick="SaveTrackInfo()">Save</button>
+                    <button id="saveAlbumBtn" onclick="saveAlbumInfo()">Save</button>
             </div>
         </div>
     </section>

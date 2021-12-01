@@ -1,237 +1,307 @@
-*{
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
 }
 
 :root {
-    --main-text-color: #EDF5E1;
-    --main-background-color: #5CDB95;
-    --dark-text-color: #05386B;
-    --btn-color: #05386B;
+  --main-text-color: #edf5e1;
+  --main-background-color: #5cdb95;
+  --dark-text-color: #05386b;
+  --btn-color: #05386b;
+  --btn-th-color: #379683;
 }
 
-img{
-    width: 70%;
+img {
+  width: 70%;
 }
 
-h1 { 
-    text-align: center;
-    color: var(--main-text-color);
-    padding-top: 0.6rem;
-    font-size: 2.2rem;
+h1 {
+  text-align: center;
+  color: var(--main-text-color);
+  padding-top: 0.6rem;
+  font-size: 2.2rem;
 }
 
-p,h3,h2{
-    color: var(--dark-text-color);
+p,
+h3,
+h2 {
+  color: var(--dark-text-color);
 }
 
 body {
-    background-color: var(--main-background-color);
+  background-color: var(--main-background-color);
 }
 
-#searchQuery{
-    height: 1.8rem;
-    font-size: 1rem;
-    padding-left: 0.1rem;
+#searchQuery {
+  height: 1.8rem;
+  font-size: 1rem;
+  padding-left: 0.1rem;
 }
 
-#searchOptions{
-    font-size: 0.9rem;
-    height: 1.9rem;
-    padding-left: 0.15rem;
+#searchOptions {
+  font-size: 0.9rem;
+  height: 1.9rem;
+  padding-left: 0.15rem;
 }
 
-#selectMovies{
-    height: 2rem;
-    font-size: 1rem;
+#selectMovies {
+  height: 2rem;
+  font-size: 1rem;
 }
 
-.frontpageBtn{
-    background-color: var(--btn-color);
-    color: var(--main-text-color);
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    height: 2rem;
+.frontpageBtn {
+  background-color: var(--btn-color);
+  color: var(--main-text-color);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  height: 2rem;
+  width: 6rem;
 }
 
-#saveTrackBtn{
-    background-color: var(--btn-color);
-    color: var(--main-text-color);
-    display: none;
-    position: relative;
-    left: 48.4%;
-    margin-top: 0.5rem;
+#saveTrackBtn,#saveAlbumBtn {
+  background-color: var(--btn-color);
+  color: var(--main-text-color);
+  display: none;
+  position: relative;
+  left: 48.4%;
+  margin-top: 0.5rem;
 }
 
-#saveProfileBtn{
-    margin-top: 0.5rem;
-    background-color: var(--btn-color);
-    color: var(--main-text-color);
+#saveProfileBtn,#savePasswordBtn {
+  margin-top: 0.5rem;
+  background-color: var(--btn-color);
+  color: var(--main-text-color);
 }
 
-main,#loginSection{
-    margin: 1rem;
-    text-align: center;
+#deleteProfileBtn{
+  margin-top: 0.5rem;
+  background-color: red;
+  color: var(--main-text-color);
 }
 
-table{
-    margin-left: auto;
-    margin-right: auto;
+main,
+#loginSection {
+  margin: 1rem;
+  text-align: center;
+}
+
+table {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 ul {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 th {
-background-color: #379683;
-color: var(--main-text-color);
+  background-color: var(--btn-th-color);
+  color: var(--main-text-color);
 }
 
-#searchQuery, #selectMovies,#searchOptions{
-    background-color: var(--main-text-color);
+#searchQuery,
+#selectMovies,
+#searchOptions {
+  background-color: var(--main-text-color);
 }
 
-th,td {
+th,
+td {
   width: 100px;
   text-align: center;
   border: 1px solid black;
   padding: 5px;
 }
 
-#frontpageBtnPersonSection, #frontpageBtnMovieSection{
-    display: none;
+#frontpageBtnPersonSection,
+#frontpageBtnMovieSection {
+  display: none;
 }
 
-#searchSection{
-    display: inline;
-    padding: 1rem;
+#searchSection {
+  text-align: center;
+  display: inline;
+  padding: 1rem;
 }
 
-#addBtn{
-    display: none;
+#addBtn,
+#mobileMenu {
+  display: none;
 }
 
-#resultTrackSection{
-    padding: 1rem;
-    display: block;
+#resultTrackSection {
+  padding: 1rem;
+  display: block;
 }
 
-#resultArtistSection,#resultAlbumSection,#profileSection{
-    padding: 1rem;
-    display: none;
+#resultArtistSection,
+#resultAlbumSection,
+#profileSection {
+  padding: 1rem;
+  display: none;
 }
 
-.trackInput{
-    width: 50%;
+.trackInput {
+  width: 50%;
 }
 
 /* The Modal (background) */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: var(--main-background-color)(0,0,0); /* Fallback color */
-    background-color: var(--main-background-color)(0,0,0,0.4); /* Black w/ opacity */
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: var(--main-background-color) (0, 0, 0); /* Fallback color */
+  background-color: var(--main-background-color) (0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 /* The Close Button */
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .modal-content {
-background-color: #8EE4AF;
-margin: 15% auto; /* 15% from the top and centered */
-padding: 20px;
-border: 1px solid #888;
-width: 80%; /* Could be more or less, depending on screen size */
+  background-color: #8ee4af;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
 }
 
 img.logoImg {
-    display: inline-block;
-    width: 1rem;
-    height: 1rem;
-    padding: 0.1rem;
-    cursor: pointer;
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  padding: 0.1rem;
+  cursor: pointer;
 }
-
-/* TODO: Only show two coloums if screen is small */
-/* https://stackoverflow.com/questions/37811034/how-to-remove-an-html-table-column-using-only-css */
-
-@media screen and (max-width: 532px) {
-    #searchSection,#searchBtn,#selectMovies,#searchQuery,#searchOptions {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-    }
-    
-    th,td {
-        width: 50px;
-        font-size: 0.8rem;
-      }
-} 
-
 
 /* Dropdown content */
 /* Dropdown Button */
 .dropbtn {
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-  }
-  
-  /* Dropdown button on hover & focus */
-  .dropbtn:hover, .dropbtn:focus {
-    background-color: var(--btn-color);
-  }
-  
-  /* The container <div> - needed to position the dropdown content */
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  /* Dropdown Content (Hidden by Default) */
-  .dropdown-content {
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  background-color: var(--btn-th-color);
+  color: var(--main-text-color);
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover,
+.dropbtn:focus {
+  background-color: grey;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: var(--main-text-color);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {
+  display: block;
+}
+
+/* Remove columns when screen is less than 768px */
+@media screen and (max-width: 768px) {
+  tr th:nth-child(3),
+  tr th:nth-child(4),
+  tr th:nth-child(5),
+  tr th:nth-child(6),
+  tr th:nth-child(7),
+  tr td:nth-child(3),
+  tr td:nth-child(4),
+  tr td:nth-child(5),
+  tr td:nth-child(6),
+  tr td:nth-child(7) {
     display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
   }
-  
-  /* Links inside the dropdown */
+  .dropbtn {
+    /* display: none; */
+    font-size: 14px;
+    padding: 14px;
+  }
+  .dropdown-content {
+    min-width: 100px;
+  }
   .dropdown-content a {
     color: black;
-    padding: 12px 16px;
+    padding: 10px 14px;
     text-decoration: none;
     display: block;
+    font-size: 80%;
+  }
+
+  
+}
+
+@media screen and (max-width: 600px) {
+  #searchSection,
+  #searchBtn,
+  #selectMovies,
+  #searchQuery,
+  #searchOptions {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .frontpageBtn {
+    width: 55px;
+    height: 30px;
+    font-size: 75%;
+  }
+
+  th,
+  td {
+    width: 50px;
+    font-size: 0.8rem;
   }
   
-  /* Change color of dropdown links on hover */
-  .dropdown-content a:hover {background-color: #ddd}
-  
-  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-  .show {display:block;}
-  
+  #searchQuery{
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+    width: 8rem;
+  }
+}

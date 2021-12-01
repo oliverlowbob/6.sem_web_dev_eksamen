@@ -1,8 +1,27 @@
 const baseUrl = "http://localhost/music/";
 
+//#region Get Methods
 async function getIsAdmin() {
     return await $.get(baseUrl + "admin/");
 }
+async function getAllAlbums() {
+    return await $.get(baseUrl + "albums/");
+}
+
+async function getAllMediaTypes() {
+    return await $.get(baseUrl + "mediaTypes/");
+}
+
+async function getAllGenres() {
+    return await $.get(baseUrl + "genres/");
+}
+
+async function getAllArtists() {
+    return await $.get(baseUrl + "artists/");
+}
+//#endregion
+
+//#region Overall Methods
 
 window.onload = async function () {
     const response = await $.get(baseUrl + "tracks/");
@@ -19,35 +38,6 @@ window.onload = async function () {
     await showTracksTable(results, albums, mediaTypes, genres);
 };
 
-async function getAllAlbums() {
-    return await $.get(baseUrl + "albums/");
-}
-
-async function getAllMediaTypes() {
-    return await $.get(baseUrl + "mediaTypes/");
-}
-
-async function getAllGenres() {
-    return await $.get(baseUrl + "genres/");
-}
-
-async function getAllArtists() {
-    return await $.get(baseUrl + "artists/");
-}
-
-async function showProfile(){
-    $("#profileSection").css("display", "block");
-}
-
-async function hideProfile(){
-    $("#profileSection").css("display", "none");
-}
-
-async function saveProfileInfo(){
-
-    $("#profileSection").css("display", "none");
-}
-
 async function addBtnClick() {
     $("#resultTrackSection").css("display", "none");
     $("#searchSection").css("display", "none");
@@ -63,7 +53,6 @@ async function addBtnClick() {
     else {
         $("#addArtistSection").css("display", "block");
     }
-
 }
 
 async function searchBtnClick() {
@@ -89,6 +78,139 @@ async function searchBtnClick() {
 
 };
 
+//#endregion
+
+//#region User
+async function deleteProfile(){
+    const response = await $.get(baseUrl + "users/me");
+    const newUrl = baseUrl + "tracks/" + response.customerId;
+
+    if (confirm("Are you sure you want to delete your user? (This will also delete all your invoices")) {
+        await $.ajax({
+            url: newUrl,
+            type: 'DELETE',
+            success: function (result) {
+                alert("User Deleted");
+                window.location.replace("http://localhost/music/logout/");
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr);
+                console.log(status);
+                console.log(error);
+                alert("Something went wrong");
+            }
+        })
+    } else {
+        alert("User was not deleted");
+    }
+}
+
+async function showProfile(){
+    const response = await $.get(baseUrl + "users/me");
+
+    $("#userEmail").val(response.email);
+    $("#userFirstName").val(response.firstName);
+    $("#userLastName").val(response.lastName);
+    $("#userCompany").val(response.company);
+    $("#userAddress").val(response.address);
+    $("#userCity").val(response.city);
+    $("#userState").val(response.state);
+    $("#userCountry").val(response.country);
+    $("#userPostalCode").val(response.postalCode);
+    $("#userPhone").val(response.phone);
+    $("#userFax").val(response.fax);
+
+    $("#profileSection").css("display", "block");
+}
+
+async function hideProfile(){
+    $("#profileSection").css("display", "none");
+}
+async function saveProfileInfo(){
+    const user = await $.get(baseUrl + "users/me");
+    const url = baseUrl + "users";
+    const requestData = {
+        customerId: user.customerId,
+        firstName: $("#userFirstName").val(),
+        lastName: $("#userLastName").val(),
+        company: $("#userCompany").val(),
+        address: $("#userAddress").val(),
+        city: $("#userCity").val(),
+        state: $("#userState").val(),
+        country: $("#userCountry").val(),
+        postalCode: $("#userPostalCode").val(),
+        phone: $("#userPhone").val(),
+        fax: $("#userFax").val(),
+        email: $("#userEmail").val()
+    };
+
+    $.ajax({
+        type: 'PUT',
+        url: url,
+        data: JSON.stringify(requestData),
+        contentType: "application/json",
+        success: function (response, status, xhr) {
+            alert("User info updated");
+            $("#profileSection").css("display", "none");
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr);
+            console.log(status);
+            console.log(error);
+            alert("Something went wrong")
+        }
+    });
+}
+
+async function updatePassword(){
+    const user = await $.get(baseUrl + "users/me");
+
+    const newPassword1 = $("#userNewPassword1").val();
+    const newPassword2 = $("#userNewPassword2").val();
+    const oldPassword = $("#userOldPassword").val();
+
+    if(oldPassword != user.oldPassword){
+        alert("Old password is not correct");
+        return;
+    }
+
+    if(newPassword1 != newPassword2){
+        alert("The two new passwords doesn't match");
+        return;   
+    }
+
+    if(newPassword1 == "admin"){
+        alert("New password cannot be 'admin'");
+        return;   
+    }
+
+    const url = baseUrl + "users";
+    const requestData = {
+        customerId: user.customerId,
+        password: $("#userNewPassword1").val()
+    };
+
+    $.ajax({
+        type: 'PUT',
+        url: url,
+        data: JSON.stringify(requestData),
+        contentType: "application/json",
+        success: function (response, status, xhr) {
+            alert("User info updated");
+            $("#profileSection").css("display", "none");
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr);
+            console.log(status);
+            console.log(error);
+            alert("Something went wrong")
+        }
+    });
+}
+
+//#endregion
+
+//#region Albums
 async function showAlbumsTable(results) {
     $("#albumTable > tbody").empty();
     const artists = await getAllArtists();
@@ -100,7 +222,7 @@ async function showAlbumsTable(results) {
         bodyStr +=
             "<tr>" +
             "<td>" +
-            "<a href='#' onClick='PressAlbumName(" + result["albumId"] + ")'>" + result["name"] + "</a> " +
+            "<a href='#' onClick='pressAlbumName(" + result["albumId"] + ")'>" + result["name"] + "</a> " +
             "</td>" +
             "<td>" + artist + "</td>" +
             "</tr>";
@@ -113,129 +235,7 @@ async function showAlbumsTable(results) {
     $("#resultArtistSection").css("display", "none");
 }
 
-async function showTracksTable(results, albums, mediaTypes, genres) {
-    const isAdmin = await getIsAdmin() === "true";
-
-    $("#trackTable > tbody").empty();
-
-    var bodyStr = "";
-
-    for (const result of results) {
-        const album = albums.find(a => a["albumId"] == result["albumId"])["name"];
-        const mediaType = mediaTypes.find(mt => mt["mediaTypeId"] == result["mediaTypeId"])["name"];
-        const genre = genres.find(g => g["genreId"] == result["genreId"])["name"];
-        const composer = result["composer"];
-        var newComposer = "";
-
-        if (composer != null) {
-            newComposer += composer;
-        }
-
-        bodyStr +=
-            "<tr>" +
-            "<td>" +
-            "<a href='#' onClick='PressTrackName(" + result["trackId"] + ")'>" + result["name"] + "</a> " +
-            "</td>" +
-            "<td>" + album + "</td>" +
-            "<td>" + mediaType + "</td>" +
-            "<td>" + genre + "</td>" +
-            "<td>" + newComposer + "</td>" +
-            "<td>" + millisToMinutesAndSeconds(result["milliseconds"]) + "</td>" +
-            "<td>" + bytesToSize(result["bytes"]) + "</td>" +
-            "<td>" + result["unitPrice"] + "$" + "</td>";
-
-        if (isAdmin) {
-            bodyStr +=
-                "<td>" +
-                "<a href='#' onClick='DeleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/delete.png' class='logoImg'>" + "</a>" +
-                "</td>" +
-                "</tr>";
-        }
-        else {
-            bodyStr += "</tr>";
-        }
-    }
-
-    $("#trackTable > tbody").append(bodyStr);
-
-    $("#resultTrackSection").css("display", "block");
-    $("#resultAlbumSection").css("display", "none");
-    $("#resultArtistSection").css("display", "none");
-};
-
-async function DeleteTrack(trackId) {
-    const newUrl = baseUrl + "tracks/" + trackId;
-
-    if (confirm('Are you sure you want to delete this track?')) {
-        await $.ajax({
-            url: newUrl,
-            type: 'DELETE',
-            success: function (result) {
-                console.log(result);
-                alert("Track deleted");
-                location.reload();
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr);
-                console.log(status);
-                console.log(error);
-                alert("Something went wrong");
-            }
-        })
-    } else {
-        alert("Track not deleted");
-    }
-}
-
-async function SaveTrackInfo() {
-    const url = baseUrl + "tracks/";
-
-    const trackId = $("#trackId").text();
-    const albumId = $("#albumId").text();
-    const genreId = $("#genreId").text();
-    const mediaTypeId = $("#mediaTypeId").text();
-    const name = $("#trackName").val();
-    const composer = $("#trackComposer").val();
-    const time = $("#trackTime").val();
-    const size = $("#trackSize").val();
-    const unitPrice = $("#trackPrice").val();
-
-    const requestData = {
-        trackId: trackId,
-        name: name,
-        albumId: albumId,
-        mediaTypeId: mediaTypeId,
-        genreId: genreId,
-        composer: composer,
-        milliseconds: MinutesAndSecondsToMillis(time),
-        bytes: sizeToBytes(size),
-        unitPrice: unitPrice.slice(0, -1)
-    };
-
-    console.log(requestData);
-
-    $.ajax({
-        type: 'PUT',
-        url: url,
-        data: JSON.stringify(requestData),
-        contentType: "application/json",
-        success: function (response, status, xhr) {
-            console.log(response);
-            console.log(status);
-            console.log(xhr);
-            alert("Track updated");
-            location.reload();
-        },
-        error: function (xhr, status, error) {
-            console.log(xhr);
-            console.log(status);
-            console.log(error);
-            alert("Something went wrong")
-        }
-    });
-}
-
-async function PressAlbumName(albumId) {
+async function pressAlbumName(albumId) {
     const newUrl = baseUrl + "albums/" + albumId;
     const response = await $.get(newUrl);
     const artist = await $.get(baseUrl + "artists/" + response["artistId"]);
@@ -266,9 +266,11 @@ async function PressAlbumName(albumId) {
         if (isAdmin) {
             bodyStr +=
                 "<td>" +
-                "<a href='#' onClick='DeleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/delete.png' class='logoImg'>" + "</a>" +
+                "<a href='#' onClick='deleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/delete.png' class='logoImg'>" + "</a>" +
                 "</td>" +
                 "</tr>";
+
+                $("#saveAlbumBtn").css("display", "block");
         }
         else {
             bodyStr += "</tr>";
@@ -298,7 +300,158 @@ async function PressAlbumName(albumId) {
     $("#albumInfoSection").css("display", "block");
 }
 
-async function PressTrackName(trackId) {
+async function saveAlbumInfo() {
+    const url = baseUrl + "albums/";
+
+    const albumId = $("#albumId").text();
+    const name = $("#albumName").val();
+    const artistId = $("#albumArtist").val();
+
+    const requestData = {
+        artistId: artistId,
+        name: name,
+        albumId: albumId,
+    };
+
+    $.ajax({
+        type: 'PUT',
+        url: url,
+        data: JSON.stringify(requestData),
+        contentType: "application/json",
+        success: function (response, status, xhr) {
+            alert("Album updated");
+            location.reload();
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr);
+            console.log(status);
+            console.log(error);
+            alert("Something went wrong")
+        }
+    });
+}
+
+//#endregion
+
+//#region Tracks
+async function showTracksTable(results, albums, mediaTypes, genres) {
+    const isAdmin = await getIsAdmin() === "true";
+
+    $("#trackTable > tbody").empty();
+
+    var bodyStr = "";
+
+    for (const result of results) {
+        const album = albums.find(a => a["albumId"] == result["albumId"])["name"];
+        const mediaType = mediaTypes.find(mt => mt["mediaTypeId"] == result["mediaTypeId"])["name"];
+        const genre = genres.find(g => g["genreId"] == result["genreId"])["name"];
+        const composer = result["composer"];
+        var newComposer = "";
+
+        if (composer != null) {
+            newComposer += composer;
+        }
+
+        bodyStr +=
+            "<tr>" +
+            "<td>" +
+            "<a href='#' onClick='pressTrackName(" + result["trackId"] + ")'>" + result["name"] + "</a> " +
+            "</td>" +
+            "<td>" + album + "</td>" +
+            "<td>" + mediaType + "</td>" +
+            "<td>" + genre + "</td>" +
+            "<td>" + newComposer + "</td>" +
+            "<td>" + millisToMinutesAndSeconds(result["milliseconds"]) + "</td>" +
+            "<td>" + bytesToSize(result["bytes"]) + "</td>" +
+            "<td>" + result["unitPrice"] + "$" + "</td>";
+
+        if (isAdmin) {
+            bodyStr +=
+                "<td>" +
+                "<a href='#' onClick='deleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/delete.png' class='logoImg'>" + "</a>" +
+                "</td>" +
+                "</tr>";
+        }
+        else {
+            bodyStr += "</tr>";
+        }
+    }
+
+    $("#trackTable > tbody").append(bodyStr);
+
+    $("#resultTrackSection").css("display", "block");
+    $("#resultAlbumSection").css("display", "none");
+    $("#resultArtistSection").css("display", "none");
+};
+
+async function deleteTrack(trackId) {
+    const newUrl = baseUrl + "tracks/" + trackId;
+
+    if (confirm('Are you sure you want to delete this track?')) {
+        await $.ajax({
+            url: newUrl,
+            type: 'DELETE',
+            success: function (result) {
+                console.log(result);
+                alert("Track deleted");
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr);
+                console.log(status);
+                console.log(error);
+                alert("Something went wrong");
+            }
+        })
+    } else {
+        alert("Track not deleted");
+    }
+}
+
+async function saveTrackInfo() {
+    const url = baseUrl + "tracks/";
+
+    const trackId = $("#trackId").text();
+    const albumId = $("#albumId").text();
+    const genreId = $("#genreId").text();
+    const mediaTypeId = $("#mediaTypeId").text();
+    const name = $("#trackName").val();
+    const composer = $("#trackComposer").val();
+    const time = $("#trackTime").val();
+    const size = $("#trackSize").val();
+    const unitPrice = $("#trackPrice").val();
+
+    const requestData = {
+        trackId: trackId,
+        name: name,
+        albumId: albumId,
+        mediaTypeId: mediaTypeId,
+        genreId: genreId,
+        composer: composer,
+        milliseconds: minutesAndSecondsToMillis(time),
+        bytes: sizeToBytes(size),
+        unitPrice: unitPrice.slice(0, -1)
+    };
+
+    $.ajax({
+        type: 'PUT',
+        url: url,
+        data: JSON.stringify(requestData),
+        contentType: "application/json",
+        success: function (response, status, xhr) {
+            alert("Track updated");
+            location.reload();
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr);
+            console.log(status);
+            console.log(error);
+            alert("Something went wrong")
+        }
+    });
+}
+
+async function pressTrackName(trackId) {
     const newUrl = baseUrl + "tracks/" + trackId;
     const response = await $.get(newUrl);
     const album = await $.get(baseUrl + "albums/" + response["albumId"]);
@@ -356,7 +509,11 @@ async function PressTrackName(trackId) {
     $("#trackInfoSection").css("display", "block");
 }
 
-function ShowFrontPageTracks() {
+//#endregion
+
+//#region Show Frontpage
+
+function showFrontPageTracks() {
     $("#trackInfoSection").css("display", "none");
     $("#addAlbumSection").css("display", "none");
     $("#addTrackSection").css("display", "none");
@@ -365,7 +522,7 @@ function ShowFrontPageTracks() {
     $("#searchSection").css("display", "block");
 }
 
-function ShowFrontpageAlbums() {
+function showFrontpageAlbums() {
     $("#albumInfoSection").css("display", "none");
     $("#addAlbumSection").css("display", "none");
     $("#addTrackSection").css("display", "none");
@@ -373,6 +530,10 @@ function ShowFrontpageAlbums() {
     $("#resultAlbumSection").css("display", "block");
     $("#searchSection").css("display", "block");
 }
+
+//#endregion
+
+//#region Helper Functions
 
 function bytesToSize(bytes) {
     if (bytes == 0) {
@@ -387,7 +548,7 @@ function millisToMinutesAndSeconds(millis) {
     return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
 }
 
-function MinutesAndSecondsToMillis(time) {
+function minutesAndSecondsToMillis(time) {
     const timeParts = time.split(":");
     return (timeParts[0] * 60000) + (timeParts[1] * 1000)
 }
@@ -397,7 +558,10 @@ function sizeToBytes(size) {
     return sizeInt;
 }
 
-//dropdown logic
+//#endregion
+
+//#region Dropdown Logic
+
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 function dropdownBtnClick() {
@@ -417,3 +581,5 @@ window.onclick = function (event) {
         }
     }
 }
+
+//#endregion

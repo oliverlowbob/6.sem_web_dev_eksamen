@@ -49,6 +49,9 @@ switch ($requestMethod) {
             } elseif ($urlPieces[1] == "albums") {
                 // Get artist by id (<current_dir>/music/artists/{id})
                 echo json_encode($album->getAlbum($urlPieces[2]));
+            } elseif ($urlPieces[1] == "users" && $urlPieces[2] == "me") {
+                // Get the logged in user info
+                echo json_encode($user->getMe($_SESSION['email']));
             }
         } elseif (count($urlPieces) == 2 && !isset($_GET['name']) && !isset($_GET['albumId'])) {
             if ($urlPieces[1] == "tracks") {
@@ -73,13 +76,9 @@ switch ($requestMethod) {
                 } else {
                     echo json_encode(false);
                 }
-            } elseif($urlPieces[1] == "logout"){
+            } elseif ($urlPieces[1] == "logout") {
                 session_destroy();
                 header("Location: ../views/login.php");
-            }
-            elseif($urlPieces[1] == "user"){
-                // Get current user logic
-                // Get email from session
             }
         } elseif (isset($_GET['name'])) {
             if ($urlPieces[1] == "tracks") {
@@ -99,9 +98,19 @@ switch ($requestMethod) {
         }
         break;
     case "PUT":
-        if ($urlPieces[1] == "tracks") {
-            $musicData = (array) json_decode(file_get_contents('php://input'), TRUE);
-            echo json_encode($track->updateTrack($musicData['trackId'], $musicData['name'], $musicData['albumId'], $musicData['mediaTypeId'], $musicData['genreId'], $musicData['composer'], $musicData['milliseconds'], $musicData['bytes'], $musicData['unitPrice']));
+        $putData = (array) json_decode(file_get_contents('php://input'), TRUE);
+        if (count($urlPieces) == 2) {
+            if ($urlPieces[1] == "tracks") {
+                echo json_encode($track->updateTrack($putData['trackId'], $putData['name'], $putData['albumId'], $putData['mediaTypeId'], $putData['genreId'], $putData['composer'], $putData['milliseconds'], $putData['bytes'], $putData['unitPrice']));
+            } elseif ($urlPieces[1] == "users" && isset($putData['password'])) {
+                echo json_encode($user->updatePassword($putData['customerId'], $putData['password']));
+            }
+            elseif($urlPieces[1] == "users" && isset($putData['customerId']) && isset($putData['firstName']) && isset($putData['lastName']) && isset($putData['email'])){
+                echo json_encode($user->updateUser($putData['customerId'], $putData['firstName'], $putData['lastName'], $putData['company'], $putData['address'], $putData['city'], $putData['state'], $putData['country'], $putData['postalCode'], $putData['phone'], $putData['fax'], $putData['email']));
+            }
+            elseif($urlPieces[1] == "albums"){
+                echo json_encode($album->updateAlbum($putData['albumId'], $putData['name'], $putData['artistId']));
+            }
         }
         break;
     case "POST":
@@ -125,16 +134,15 @@ switch ($requestMethod) {
                     $isAdmin = json_encode($user->isAdmin($_POST['password']));
                     if ($isAdmin == "true") {
                         $_SESSION["isAdmin"] = "true";
-                    }else{
+                    } else {
                         $_SESSION["isAdmin"] = "false";
                     }
                     $response = json_encode($user->login($_POST['email'], $_POST['password']));
                     if ($response == "true") {
-                        
                         $_SESSION["email"] = $_POST['email'];
                         header("Location: ../views/frontpage.php");
                     } else {
-                        echo "Wrong username or password";
+                        echo 'Wrong username or password';
                     }
                 }
             }
@@ -144,6 +152,9 @@ switch ($requestMethod) {
         if (count($urlPieces) == 3) {
             if ($urlPieces[1] == "tracks") {
                 echo json_encode($track->deleteTrack($urlPieces[2]));
+            }
+            if ($urlPieces[1] == "user") {
+                echo json_encode($user->deleteUser($urlPieces[2]));
             }
         }
         break;

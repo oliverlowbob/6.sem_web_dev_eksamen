@@ -15,10 +15,8 @@ if (isset($_SESSION['email']))
         <div class="container">
             <label for="email"><b>Email</b></label>
             <input type="text" placeholder="Enter Email" name="email" required>
-
             <label for="password"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="password" required>
-
             <button type="submit" id="loginBtn">Login</button>
         </div>
     </form>
