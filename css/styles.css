@@ -173,6 +173,9 @@ img.logoImg {
     cursor: pointer;
 }
 
+/* TODO: Only show two coloums if screen is small */
+/* https://stackoverflow.com/questions/37811034/how-to-remove-an-html-table-column-using-only-css */
+
 @media screen and (max-width: 532px) {
     #searchSection,#searchBtn,#selectMovies,#searchQuery,#searchOptions {
         display: block;
@@ -186,6 +189,7 @@ img.logoImg {
         font-size: 0.8rem;
       }
 } 
+
 
 /* Dropdown content */
 /* Dropdown Button */
