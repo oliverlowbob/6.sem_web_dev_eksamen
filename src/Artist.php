@@ -43,7 +43,7 @@ class Artist extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            $sql = "UPDATE chinook_abridged.artist SET Name=? WHERE ArtistId=?";
+            $sql = 'UPDATE chinook_abridged.artist SET Name=? WHERE ArtistId=?';
             $stmt = $con->prepare($sql);
             $stmt->execute([$name, $id]);
             $stmt = null;
@@ -57,7 +57,7 @@ class Artist extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            $sql = "SELECT * FROM chinook_abridged.artist WHERE ArtistId=?";
+            $sql = 'SELECT * FROM chinook_abridged.artist WHERE ArtistId=?';
             $stmt = $con->prepare($sql);
             $stmt->execute([$artistId]);
 
@@ -80,7 +80,7 @@ class Artist extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            $cQuery = "SELECT * FROM chinook_abridged.artist";
+            $cQuery = 'SELECT * FROM chinook_abridged.artist';
             $stmt = $con->query($cQuery);
 
             while ($row = $stmt->fetch()) {
@@ -103,7 +103,7 @@ class Artist extends DatabaseConnector
 
         if ($con) {
             $likeVar = "%" . $searchText . "%";
-            $sql = "SELECT * FROM chinook_abridged.artist WHERE Name LIKE ?";
+            $sql = 'SELECT * FROM chinook_abridged.artist WHERE Name LIKE ?';
             $stmt = $con->prepare($sql);
             $stmt->execute([$likeVar]);
 

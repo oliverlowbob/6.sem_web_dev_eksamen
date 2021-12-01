@@ -16,7 +16,7 @@
             $con = (new DatabaseConnector())->getConnection();
 
             if ($con) {
-                $sql = "INSERT INTO chinook_abridged.customer (username, email, password) VALUES (?, ?, ?)";
+                $sql = 'INSERT INTO chinook_abridged.customer (username, email, password) VALUES (?, ?, ?)';
                 $stmt= $con->prepare($sql);
                 $stmt->execute([$username, $email, $password]);
                 $stmt = null;
@@ -29,7 +29,7 @@
             $con = (new DatabaseConnector())->getConnection();
 
             if ($con) {
-                $sql = "SELECT * FROM chinook_abridged.admin WHERE Password=?";
+                $sql = 'SELECT * FROM chinook_abridged.admin WHERE Password=?';
 
                 $stmt= $con->prepare($sql);
                 $stmt->execute([$password]);
@@ -63,7 +63,7 @@
             $con = (new DatabaseConnector())->getConnection();
 
             if ($con) {
-                $sql = "SELECT * FROM chinook_abridged.customer WHERE email=?";
+                $sql = 'SELECT * FROM chinook_abridged.customer WHERE email=?';
 
                 $stmt= $con->prepare($sql);
                 $stmt->execute([$email]);

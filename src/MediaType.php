@@ -15,7 +15,7 @@ class MediaType extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            $cQuery = "SELECT * FROM chinook_abridged.mediatype";
+            $cQuery = 'SELECT * FROM chinook_abridged.mediatype';
             $stmt = $con->query($cQuery);
 
             while ($row = $stmt->fetch()) {

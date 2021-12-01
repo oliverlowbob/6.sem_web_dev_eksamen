@@ -15,7 +15,7 @@ class Album extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            $sql = "INSERT INTO chinook_abridged.album (Title, ArtistId) VALUES (?, ?)";
+            $sql = 'INSERT INTO chinook_abridged.album (Title, ArtistId) VALUES (?, ?)';
             $stmt = $con->prepare($sql);
             $stmt->execute([$name, $artistId]);
             $stmt = null;
@@ -29,7 +29,7 @@ class Album extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            $sql = "DELETE FROM chinook_abridged.album WHERE AlbumId=?";
+            $sql = 'DELETE FROM chinook_abridged.album WHERE AlbumId=?';
             $stmt = $con->prepare($sql);
             $stmt->execute([$albumId]);
             $stmt = null;
@@ -43,7 +43,7 @@ class Album extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            $sql = "UPDATE chinook_abridged.album SET Title=?, ArtistId=? WHERE AlbumId=?";
+            $sql = 'UPDATE chinook_abridged.album SET Title=?, ArtistId=? WHERE AlbumId=?';
             $stmt = $con->prepare($sql);
             $stmt->execute([$name, $artistId, $id]);
             $stmt = null;
@@ -57,7 +57,7 @@ class Album extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            $sql = "SELECT * FROM chinook_abridged.album WHERE AlbumId=?";
+            $sql = 'SELECT * FROM chinook_abridged.album WHERE AlbumId=?';
             $stmt = $con->prepare($sql);
             $stmt->execute([$albumId]);
 
@@ -81,7 +81,7 @@ class Album extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            $cQuery = "SELECT * FROM chinook_abridged.album";
+            $cQuery = 'SELECT * FROM chinook_abridged.album';
             $stmt = $con->query($cQuery);
 
             while ($row = $stmt->fetch()) {
@@ -105,7 +105,7 @@ class Album extends DatabaseConnector
 
         if ($con) {
             $likeVar = "%" . $searchText . "%";
-            $sql = "SELECT * FROM chinook_abridged.album WHERE Title LIKE ?";
+            $sql = 'SELECT * FROM chinook_abridged.album WHERE Title LIKE ?';
             $stmt = $con->prepare($sql);
             $stmt->execute([$likeVar]);
 

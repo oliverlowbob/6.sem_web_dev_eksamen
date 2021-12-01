@@ -40,13 +40,13 @@ $requestMethod = $_SERVER['REQUEST_METHOD'];
 switch ($requestMethod) {
     case "GET":
         if (count($urlPieces) == 3) {
-            if ($urlPieces[1] == "track") {
+            if ($urlPieces[1] == "tracks") {
                 // Get track by id (<current_dir>/music/tracks/{id})
                 echo json_encode($track->getTrack($urlPieces[2]));
-            } elseif ($urlPieces[1] == "artist") {
+            } elseif ($urlPieces[1] == "artists") {
                 // Get artist by id (<current_dir>/music/artists/{id})
                 echo json_encode($artist->getArtist($urlPieces[2]));
-            } elseif ($urlPieces[1] == "album") {
+            } elseif ($urlPieces[1] == "albums") {
                 // Get artist by id (<current_dir>/music/artists/{id})
                 echo json_encode($album->getAlbum($urlPieces[2]));
             }
@@ -99,22 +99,22 @@ switch ($requestMethod) {
         }
         break;
     case "PUT":
-        if ($urlPieces[1] == "track") {
+        if ($urlPieces[1] == "tracks") {
             $musicData = (array) json_decode(file_get_contents('php://input'), TRUE);
             echo json_encode($track->updateTrack($musicData['trackId'], $musicData['name'], $musicData['albumId'], $musicData['mediaTypeId'], $musicData['genreId'], $musicData['composer'], $musicData['milliseconds'], $musicData['bytes'], $musicData['unitPrice']));
         }
         break;
     case "POST":
         if (count($urlPieces) == 2) {
-            if ($urlPieces[1] == "track" && isset($_POST['name']) && isset($_POST['mediaTypeId']) && isset($_POST['milliseconds']) && isset($_POST['unitPrice'])) {
+            if ($urlPieces[1] == "tracks" && isset($_POST['name']) && isset($_POST['mediaTypeId']) && isset($_POST['milliseconds']) && isset($_POST['unitPrice'])) {
                 //add track
                 $track->addTrack($_POST['name'], $_POST['albumId'], $_POST['mediaTypeId'], $_POST['genreId'], $_POST['composer'], $_POST['milliseconds'], $_POST['bytes'], $_POST['unitPrice']);
                 header("Location: ./views/frontpage.php");
-            } elseif ($urlPieces[1] == "album" && isset($_POST['title']) && isset($_POST['artistId'])) {
+            } elseif ($urlPieces[1] == "albums" && isset($_POST['title']) && isset($_POST['artistId'])) {
                 //add album
                 $album->addAlbum($_POST['title'], $_POST['artistId']);
                 header("Location: ./views/frontpage.php");
-            } elseif ($urlPieces[1] == "artist" && isset($_POST['name'])) {
+            } elseif ($urlPieces[1] == "artists" && isset($_POST['name'])) {
                 //add artist
                 $artist->addArtist($_POST["name"]);
                 header("Location: ./views/frontpage.php");
@@ -142,7 +142,7 @@ switch ($requestMethod) {
         break;
     case "DELETE":
         if (count($urlPieces) == 3) {
-            if ($urlPieces[1] == "track") {
+            if ($urlPieces[1] == "tracks") {
                 echo json_encode($track->deleteTrack($urlPieces[2]));
             }
         }

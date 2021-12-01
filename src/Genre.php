@@ -15,7 +15,7 @@ class Genre extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            $cQuery = "SELECT * FROM chinook_abridged.genre";
+            $cQuery = 'SELECT * FROM chinook_abridged.genre';
             $stmt = $con->query($cQuery);
 
             while ($row = $stmt->fetch()) {

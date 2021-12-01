@@ -164,7 +164,7 @@ async function showTracksTable(results, albums, mediaTypes, genres) {
 };
 
 async function DeleteTrack(trackId) {
-    const newUrl = baseUrl + "track/" + trackId;
+    const newUrl = baseUrl + "tracks/" + trackId;
 
     if (confirm('Are you sure you want to delete this track?')) {
         await $.ajax({
@@ -188,7 +188,7 @@ async function DeleteTrack(trackId) {
 }
 
 async function SaveTrackInfo() {
-    const url = baseUrl + "track/";
+    const url = baseUrl + "tracks/";
 
     const trackId = $("#trackId").text();
     const albumId = $("#albumId").text();
@@ -236,9 +236,9 @@ async function SaveTrackInfo() {
 }
 
 async function PressAlbumName(albumId) {
-    const newUrl = baseUrl + "album/" + albumId;
+    const newUrl = baseUrl + "albums/" + albumId;
     const response = await $.get(newUrl);
-    const artist = await $.get(baseUrl + "artist/" + response["artistId"]);
+    const artist = await $.get(baseUrl + "artists/" + response["artistId"]);
     const tracksUrl = baseUrl + "tracks?albumId=" + albumId;
     const tracks = await $.get(tracksUrl);
     const results = tracks.results;
@@ -299,9 +299,9 @@ async function PressAlbumName(albumId) {
 }
 
 async function PressTrackName(trackId) {
-    const newUrl = baseUrl + "track/" + trackId;
+    const newUrl = baseUrl + "tracks/" + trackId;
     const response = await $.get(newUrl);
-    const album = await $.get(baseUrl + "album/" + response["albumId"]);
+    const album = await $.get(baseUrl + "albums/" + response["albumId"]);
     const mediaTypes = await getAllMediaTypes();
     const mediaType = mediaTypes.find(mt => mt["mediaTypeId"] == response["mediaTypeId"])["name"];
     const genres = await getAllGenres();

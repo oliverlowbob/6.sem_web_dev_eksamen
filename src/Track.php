@@ -119,7 +119,7 @@ class Track extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            $sql = "SELECT * FROM chinook_abridged.track WHERE AlbumId=?";
+            $sql = 'SELECT * FROM chinook_abridged.track WHERE AlbumId=?';
             $stmt = $con->prepare($sql);
             $stmt->execute([$albumId]);
 
@@ -154,7 +154,7 @@ class Track extends DatabaseConnector
 
         if ($con) {
             $likeVar = "%" . $searchText . "%";
-            $sql = "SELECT * FROM chinook_abridged.track WHERE Name LIKE ?";
+            $sql = 'SELECT * FROM chinook_abridged.track WHERE Name LIKE ?';
             $stmt = $con->prepare($sql);
             $stmt->execute([$likeVar]);
 

@@ -49,21 +49,12 @@ if (!isset($_SESSION['email'])) {
                 <button id="saveProfileBtn" onclick="saveProfileInfo()">Save</button>
             </div>
         </div>
-        <div id="profileSection" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="hideProfile()">&times;</span>
-                <form action="http://localhost/music/user/" method="post">
-                    New Password (repeat): <input type="password" name="userNewPassword2"><br>
-                    <input class="frontpageBtn" type="submit" value="Save">
-                </form>
-            </div>
-        </div>
     </section>
     <section>
         <div id="addAlbumSection" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="ShowFrontPageTracks()">&times;</span>
-                <form action="http://localhost/music/album/" method="post">
+                <form action="http://localhost/music/albums/" method="post">
                     Title: <input type="text" name="title"><br>
                     Artist: <input type="text" name="artist"><br>
                     <input class="frontpageBtn" type="submit" value="Add">
@@ -73,7 +64,7 @@ if (!isset($_SESSION['email'])) {
         <div id="addTrackSection" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="ShowFrontPageTracks()">&times;</span>
-                <form action="http://localhost/music/track" method="post">
+                <form action="http://localhost/music/tracks/" method="post">
                     Name: <input type="text" name="name"><br>
                     Album: <input type="text" name="albumId"><br>
                     MediaType: <input type="text" name="mediaTypeId"><br>
@@ -89,7 +80,7 @@ if (!isset($_SESSION['email'])) {
         <div id="addArtistSection" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="ShowFrontPageTracks()">&times;</span>
-                <form action="http://localhost/music/artist/" method="post">
+                <form action="http://localhost/music/artists/" method="post">
                     Name: <input type="text" name="name"><br>
                     <input type="submit" value="Add">
                 </form>
