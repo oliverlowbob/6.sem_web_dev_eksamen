@@ -109,15 +109,15 @@ switch ($requestMethod) {
             if ($urlPieces[1] == "tracks" && isset($_POST['name']) && isset($_POST['mediaTypeId']) && isset($_POST['milliseconds']) && isset($_POST['unitPrice'])) {
                 //add track
                 $track->addTrack($_POST['name'], $_POST['albumId'], $_POST['mediaTypeId'], $_POST['genreId'], $_POST['composer'], $_POST['milliseconds'], $_POST['bytes'], $_POST['unitPrice']);
-                header("Location: ./views/frontpage.php");
+                header("Location: ../views/frontpage.php");
             } elseif ($urlPieces[1] == "albums" && isset($_POST['title']) && isset($_POST['artistId'])) {
                 //add album
                 $album->addAlbum($_POST['title'], $_POST['artistId']);
-                header("Location: ./views/frontpage.php");
+                header("Location: ../views/frontpage.php");
             } elseif ($urlPieces[1] == "artists" && isset($_POST['name'])) {
                 //add artist
                 $artist->addArtist($_POST["name"]);
-                header("Location: ./views/frontpage.php");
+                header("Location: ../views/frontpage.php");
             }
             //Login logic
             elseif ($urlPieces[1] == "login") {
