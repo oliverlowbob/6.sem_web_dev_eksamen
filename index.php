@@ -4,7 +4,7 @@ session_start();
 //echo $_SESSION["isAdmin"];
 
 if (!isset($_SESSION['email'])) {
-    header('Location: views/login.php');
+    header('Location: ../views/login.php');
 }
 
 require_once("src/Track.php");
