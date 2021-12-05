@@ -10,20 +10,6 @@
             return $statusInfo;
         }
 
-        public function deleteUser($userId)
-        {
-            $con = (new DatabaseConnector())->getConnection();
-    
-            if ($con) {
-                $sql = "DELETE FROM chinook_abridged.customer WHERE CustomerId=?";
-                $stmt = $con->prepare($sql);
-                $stmt->execute([$userId]);
-                $stmt = null;
-            } else {
-                return $this->statusCode(ERROR);
-            }
-        }
-
         public function updateUser($customerId, $firstName, $lastName, $company, $address, $city, $state, $country, $postalCode, $phone, $fax, $email){
             $con = (new DatabaseConnector())->getConnection();
 

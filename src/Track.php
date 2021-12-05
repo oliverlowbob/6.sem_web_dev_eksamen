@@ -105,8 +105,13 @@ class Track extends DatabaseConnector
                 $tracks[] = $result;
             }
 
-            $results['results'] = $tracks;
-
+            if(!empty($tracks)){
+                $results['results'] = $tracks;
+            }
+            else{
+                $results['results'] = null;
+            }
+            
             $stmt = null;
 
             return ($results);
@@ -138,7 +143,12 @@ class Track extends DatabaseConnector
                 $tracks[] = $result;
             }
 
-            $results['results'] = $tracks;
+            if(!empty($tracks)){
+                $results['results'] = $tracks;
+            }
+            else{
+                $results['results'] = null;
+            }
 
             $stmt = null;
 

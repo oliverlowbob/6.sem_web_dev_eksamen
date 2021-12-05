@@ -153,8 +153,8 @@ switch ($requestMethod) {
             if ($urlPieces[1] == "tracks") {
                 echo json_encode($track->deleteTrack($urlPieces[2]));
             }
-            if ($urlPieces[1] == "user") {
-                echo json_encode($user->deleteUser($urlPieces[2]));
+            if ($urlPieces[1] == "albums") {
+                echo json_encode($album->deleteAlbum($urlPieces[2]));
             }
         }
         break;

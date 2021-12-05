@@ -70,17 +70,16 @@ if (!isset($_SESSION['email'])) {
                     <li><input type="password" id="userNewPassword2" class="trackInput"></li>
                 </ul>
                 <button id="savePasswordBtn" onclick="updatePassword()">Update Password</button>
-                <button id="deleteProfileBtn" onclick="deleteProfile()">Delete Profile</button>
             </div>
         </div>
     </section>
     <section>
         <div id="addAlbumSection" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="showFrontPageTracks()">&times;</span>
+                <span class="close" onclick="showFrontpageAlbums()">&times;</span>
                 <form action="http://localhost/music/albums/" method="post">
                     Title: <input type="text" name="title"><br>
-                    Artist: <input type="text" name="artist"><br>
+                    Artist: <input type="text" name="artistId"><br>
                     <input class="frontpageBtn" type="submit" value="Add">
                 </form>
             </div>
@@ -89,14 +88,14 @@ if (!isset($_SESSION['email'])) {
             <div class="modal-content">
                 <span class="close" onclick="showFrontPageTracks()">&times;</span>
                 <form action="http://localhost/music/tracks/" method="post">
-                    Name: <input type="text" name="name"><br>
-                    Album: <input type="text" name="albumId"><br>
-                    MediaType: <input type="text" name="mediaTypeId"><br>
-                    Genre: <input type="text" name="genreId"><br>
-                    Composer: <input type="text" name="composer"><br>
-                    Milliseconds: <input type="text" name="milliseconds"><br>
-                    Bytes: <input type="text" name="bytes"><br>
-                    Price ($): <input type="text" name="unitPrice"><br>
+                    Name: <input type="text" name="name" class="addTrackOptions"><br>
+                    Album: <select name="albumId" id="addTrackAlbumOptions" class="addTrackOptions"></select> <br>
+                    MediaType: <select name="mediaTypeId" id="addTrackMediaTypeOptions" class="addTrackOptions"></select> <br>
+                    Genre: <select name="genreId" id="addTrackGenreOptions" class="addTrackOptions"></select> <br>
+                    Composer: <input type="text" name="composer" class="addTrackOptions"><br>
+                    Milliseconds: <input type="text" name="milliseconds" class="addTrackOptions"><br>
+                    Bytes: <input type="text" name="bytes" class="addTrackOptions"><br>
+                    Price ($): <input type="text" name="unitPrice" class="addTrackOptions"><br>
                     <input type="submit" value="Add">
                 </form>
             </div>
@@ -161,11 +160,14 @@ if (!isset($_SESSION['email'])) {
                     <p><strong>Title</strong></p>
                     <li><input type="text" id="trackName" class="trackInput"></li>
                     <p><strong>Album</strong></p>
+                    <select name="trackAlbumOptions" id="trackAlbumOptions" class="options"></select>
                     <li><input type="text" id="trackAlbum" class="trackInput"></li>
                     <p><strong>Media Type</strong></p>
                     <li><input type="text" id="trackMediaType" class="trackInput"></li>
+                    <select name="trackMediaOptions" id="trackMediaOptions" class="options"></select>
                     <p><strong>Genre</strong></p>
                     <li><input type="text" id="trackGenre" class="trackInput"></li>
+                    <select name="trackGenreOptions" id="trackGenreOptions" class="options"></select>
                     <p><strong>Composer</strong></p>
                     <li><input type="text" id="trackComposer" class="trackInput"></li>
                     <p><strong>Time</strong></p>
@@ -204,7 +206,7 @@ if (!isset($_SESSION['email'])) {
                         </thead>
                         <tbody></tbody>
                     </table>
-                    <button id="saveAlbumBtn" onclick="saveAlbumInfo()">Save</button>
+                <button id="saveAlbumBtn" onclick="saveAlbumInfo()">Save</button>
             </div>
         </div>
     </section>

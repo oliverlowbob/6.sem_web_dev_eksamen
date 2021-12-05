@@ -29,7 +29,7 @@ class Album extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            $sql = 'DELETE FROM chinook_abridged.album WHERE AlbumId=?';
+            $sql = 'DELETE a, t FROM chinook_abridged.album AS a INNER JOIN chinook_abridged.track AS t ON a.AlbumId = t.AlbumId Where a.AlbumId=?';
             $stmt = $con->prepare($sql);
             $stmt->execute([$albumId]);
             $stmt = null;

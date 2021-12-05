@@ -74,10 +74,12 @@ body {
   color: var(--main-text-color);
 }
 
-#deleteProfileBtn{
+
+.deleteBtn{
   margin-top: 0.5rem;
   background-color: red;
   color: var(--main-text-color);
+  display: none;
 }
 
 main,
@@ -143,6 +145,14 @@ td {
 }
 
 .trackInput {
+  width: 50%;
+}
+
+.options{
+  width: 50.5%;
+}
+
+.addTrackOptions{
   width: 50%;
 }
 
