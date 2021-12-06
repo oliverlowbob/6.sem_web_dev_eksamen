@@ -105,12 +105,7 @@ class Track extends DatabaseConnector
                 $tracks[] = $result;
             }
 
-            if(!empty($tracks)){
-                $results['results'] = $tracks;
-            }
-            else{
-                $results['results'] = null;
-            }
+            $results['results'] = $tracks;
             
             $stmt = null;
 
@@ -128,8 +123,6 @@ class Track extends DatabaseConnector
             $stmt = $con->prepare($sql);
             $stmt->execute([$albumId]);
 
-            $results['_total'] = $stmt->rowCount();
-
             while ($row = $stmt->fetch()) {
                 $result['trackId'] = $row['TrackId'];
                 $result['name'] = $row['Name'];
@@ -143,13 +136,13 @@ class Track extends DatabaseConnector
                 $tracks[] = $result;
             }
 
-            if(empty($tracks)){
+            if(!empty($tracks)){
                 $results['results'] = $tracks;
             }
             else{
                 $results['results'] = null;
             }
-
+            
             $stmt = null;
 
             return ($results);

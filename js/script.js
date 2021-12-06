@@ -111,6 +111,11 @@ async function searchBtnClick() {
 
 //#region User
 async function showProfile(){
+    const isAdmin = await getIsAdmin() === "true";
+    if(isAdmin){
+        alert("Cannot edit admin profile");
+        return;
+    }
     const response = await $.get(baseUrl + "users/me");
 
     $("#userEmail").val(response.email);
