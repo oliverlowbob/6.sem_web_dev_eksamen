@@ -87,6 +87,9 @@ switch ($requestMethod) {
             } elseif ($urlPieces[1] == "albums") {
                 // Search album by name
                 echo json_encode($album->searchAlbums($_GET['name']));
+            } elseif ($urlPieces[1] == "artists") {
+                // Search artist by name
+                echo json_encode($artist->searchArtists($_GET['name']));
             }
         } elseif (isset($_GET['albumId'])) {
             if ($urlPieces[1] == "tracks") {
@@ -108,6 +111,8 @@ switch ($requestMethod) {
                 echo json_encode($user->updateUser($putData['customerId'], $putData['firstName'], $putData['lastName'], $putData['company'], $putData['address'], $putData['city'], $putData['state'], $putData['country'], $putData['postalCode'], $putData['phone'], $putData['fax'], $putData['email']));
             } elseif ($urlPieces[1] == "albums") {
                 echo json_encode($album->updateAlbum($putData['albumId'], $putData['name'], $putData['artistId']));
+            } elseif ($urlPieces[1] == "artists") {
+                echo json_encode($artist->updateArtist($putData['artistId'], $putData['name']));
             }
         }
         break;
@@ -128,7 +133,7 @@ switch ($requestMethod) {
                 if ($isAdmin == "true") {
                     $_SESSION["isAdmin"] = "true";
                     $_SESSION["email"] = "admin";
-                } else{
+                } else {
                     $_SESSION["isAdmin"] = "false";
                     $response = json_encode($user->login($_POST['email'], $_POST['password']));
                     if ($response == "true") {
@@ -144,9 +149,10 @@ switch ($requestMethod) {
         if (count($urlPieces) == 3) {
             if ($urlPieces[1] == "tracks") {
                 echo json_encode($track->deleteTrack($urlPieces[2]));
-            }
-            if ($urlPieces[1] == "albums") {
+            } elseif ($urlPieces[1] == "albums") {
                 echo json_encode($album->deleteAlbum($urlPieces[2]));
+            } elseif ($urlPieces[1] == "artists") {
+                echo json_encode($artist->deleteArtist($urlPieces[2]));
             }
         }
         break;

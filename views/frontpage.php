@@ -141,7 +141,7 @@ $basePath = "http://localhost/" . basename(dirname(__DIR__));
         </table>
     </section>
     <section id="resultArtistSection">
-        <table id="artistAlbumsTable">
+        <table id="artistTable">
             <thead>
                 <tr>
                     <th>Title</th>
@@ -209,7 +209,20 @@ $basePath = "http://localhost/" . basename(dirname(__DIR__));
                         </thead>
                         <tbody></tbody>
                     </table>
-                <button id="saveAlbumBtn" onclick="saveAlbumInfo()">Save</button>
+                    <button id="saveAlbumBtn" onclick="saveAlbumInfo()">Save</button>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div id="artistInfoSection" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="showFrontPageArtists()">&times;</span>
+                <p hidden id="artistId"></p> <br>
+                <ul>
+                    <p><strong>Name</strong></p>
+                    <li><input type="text" id="artistName" class="trackInput"></li>
+                </ul>
+                <button id="saveArtistBtn" onclick="saveArtistInfo()">Save</button>
             </div>
         </div>
     </section>

@@ -59,7 +59,7 @@ body {
   width: 6rem;
 }
 
-#saveTrackBtn,#saveAlbumBtn {
+#saveTrackBtn,#saveAlbumBtn,#saveArtistBtn {
   background-color: var(--btn-color);
   color: var(--main-text-color);
   display: none;

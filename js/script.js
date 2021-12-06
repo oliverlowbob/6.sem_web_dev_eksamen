@@ -46,6 +46,7 @@ async function addBtnClick() {
 
     $("#resultTrackSection").css("display", "none");
     $("#resultAlbumSection").css("display", "none");
+    $("#resultArtistSection").css("display", "none");
     $("#searchSection").css("display", "none");
 
     const selected = $("#searchOptions").val();
@@ -71,7 +72,7 @@ async function addBtnClick() {
         }
         $("#addAlbumSection").css("display", "block");
     }
-    else {
+    else if (selected == "artist"){
         $("#addArtistSection").css("display", "block");
     }
 }
@@ -103,6 +104,16 @@ async function searchBtnClick() {
         }
         const results = response.results;
         await showAlbumsTable(results);
+    }
+
+    else if (searchOptions == "artist"){
+        const url = baseUrl + "artists/?name=" + searchQuery;
+        const response = await $.get(url);
+        if(response == null){
+            alert("No artists found");
+            return;
+        }
+        await showArtistsTable(response);
     }
 
 };
@@ -212,6 +223,131 @@ async function updatePassword(){
         success: function (response, status, xhr) {
             alert("User info updated");
             $("#profileSection").css("display", "none");
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr);
+            console.log(status);
+            console.log(error);
+            alert("Something went wrong")
+        }
+    });
+}
+
+//#endregion
+
+
+//#region Artists
+
+$("#addArtistForm").submit(function(event ) {
+    event.preventDefault();
+
+    const formValues = $("#addArtistForm").serialize();
+    const url = baseUrl + "artists/"
+    $.post(url, formValues)
+        .done(function (data) {
+            alert("Artist was added");
+            window.location.reload();
+        })
+        .fail(function (data){
+            console.log(data);
+            alert("Something went wrong");
+        })
+});
+
+async function showArtistsTable(artists) {
+    const isAdmin = await getIsAdmin() === "true";
+    $("#artistTable > tbody").empty();
+
+    var bodyStr = "";
+    for (const result of artists) {
+
+        bodyStr +=
+            "<tr>" +
+            "<td>" +
+            "<a href='#' onClick='pressArtistName(" + result["artistId"] + ")'>" + result["name"] + "</a> " +
+            "</td>"
+
+            if (isAdmin) {
+                bodyStr +=
+                    "<td>" +
+                    "<a href='#' onClick='deleteArtist(" + result["artistId"] + ")'>" + "<img src='../images/delete.png' class='logoImg'>" + "</a>" +
+                    "</td>" +
+                    "</tr>";
+            }
+            else {
+                bodyStr += "</tr>";
+            }
+    }
+
+    $("#artistTable > tbody").append(bodyStr);
+
+    $("#resultArtistSection").css("display", "block");
+    $("#resultAlbumSection").css("display", "none");
+    $("#resultTrackSection").css("display", "none");
+}
+
+async function pressArtistName(artistId){
+    const isAdmin = await getIsAdmin() === "true";
+    const artist = await $.get(baseUrl + "artists/" + artistId);
+
+    $("#artistName").val(artist.name);
+    $("#artistId").text(artistId);
+    $("#artistName").prop("readonly", true);
+    $("#saveArtistBtn").css("display", "none");
+
+    if (isAdmin) {
+        $("#artistName").prop("readonly", false);
+        $("#albumArtist").css("display", "none");
+        $("#saveArtistBtn").css("display", "block");
+    }
+
+    $("#resultArtistSection").css("display", "none");
+    $("#searchSection").css("display", "none");
+    $("#artistInfoSection").css("display", "block");}
+
+async function deleteArtist(artistId) {
+    const newUrl = baseUrl + "artists/" + artistId;
+
+    if (confirm('Are you sure you want to delete this artist?')) {
+        await $.ajax({
+            url: newUrl,
+            type: 'DELETE',
+            success: function (result) {
+                console.log(result);
+                alert("Artist deleted");
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr);
+                console.log(status);
+                console.log(error);
+                alert("Something went wrong");
+            }
+        })
+    } else {
+        alert("Artist not deleted");
+    }
+}
+
+async function saveArtistInfo() {
+    const url = baseUrl + "artists/";
+
+    const artistId = $("#artistId").text();
+    const name = $("#artistName").val();
+
+    const requestData = {
+        artistId: artistId,
+        name: name,
+    };
+
+    $.ajax({
+        type: 'PUT',
+        url: url,
+        data: JSON.stringify(requestData),
+        contentType: "application/json",
+        success: function (response, status, xhr) {
+            alert("Artist updated");
+            location.reload();
         },
         error: function (xhr, status, error) {
             console.log(xhr);
@@ -377,7 +513,7 @@ async function pressAlbumName(albumId) {
         $("#saveAlbumBtn").css("display", "block");
     }
 
-    $("#saveBtn").css("display", "none");
+    $("#saveAlbumBtn").css("display", "none");
     $("#resultAlbumSection").css("display", "none");
     $("#searchSection").css("display", "none");
     $("#albumInfoSection").css("display", "block");
@@ -667,6 +803,15 @@ function showFrontpageAlbums() {
     $("#addTrackSection").css("display", "none");
     $("#addArtistSection").css("display", "none");
     $("#resultAlbumSection").css("display", "block");
+    $("#searchSection").css("display", "block");
+}
+
+function showFrontPageArtists() {
+    $("#artistInfoSection").css("display", "none");
+    $("#addAlbumSection").css("display", "none");
+    $("#addTrackSection").css("display", "none");
+    $("#addArtistSection").css("display", "none");
+    $("#resultArtistSection").css("display", "block");
     $("#searchSection").css("display", "block");
 }
 
