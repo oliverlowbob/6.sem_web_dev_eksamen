@@ -87,7 +87,7 @@ if (!isset($_SESSION['email'])) {
         <div id="addTrackSection" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="showFrontPageTracks()">&times;</span>
-                <form id="addTrackForm" action="" method="post">
+                <form id="addTrackForm">
                     Name: <input type="text" name="name" class="addTrackOptions"><br>
                     Album: <select name="albumId" id="addTrackAlbumOptions" class="addTrackOptions"></select> <br>
                     MediaType: <select name="mediaTypeId" id="addTrackMediaTypeOptions" class="addTrackOptions"></select> <br>
