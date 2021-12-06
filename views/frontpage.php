@@ -78,10 +78,12 @@ $basePath = "http://localhost/" . basename(dirname(__DIR__));
     <section>
         <div id="addAlbumSection" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="showFrontpageAlbums()">&times;</span>
+                <span class="close" onclick="showFrontPageTracks()">&times;</span>
                 <form id="addAlbumForm">
-                    Title: <input type="text" name="title" class="addOptions"><br>
-                    Artist: <select name="artistId" id="addAlbumArtistOptions" class="addOptions"></select> <br>
+                    <label for="title">Title:</label>
+                    <input type="text" name="title" class="addOptions"><br>
+                    <label for="artistId">Artist:</label>
+                    <select name="artistId" id="addAlbumArtistOptions" class="addOptions"></select> <br>
                     <input class="frontpageBtn" type="submit" value="Add">
                 </form>
             </div>
@@ -90,14 +92,22 @@ $basePath = "http://localhost/" . basename(dirname(__DIR__));
             <div class="modal-content">
                 <span class="close" onclick="showFrontPageTracks()">&times;</span>
                 <form id="addTrackForm">
-                    Name: <input type="text" name="name" class="addOptions"><br>
-                    Album: <select name="albumId" id="addTrackAlbumOptions" class="addOptions"></select> <br>
-                    MediaType: <select name="mediaTypeId" id="addTrackMediaTypeOptions" class="addOptions"></select> <br>
-                    Genre: <select name="genreId" id="addTrackGenreOptions" class="addOptions"></select> <br>
-                    Composer: <input type="text" name="composer" class="addOptions"><br>
-                    Milliseconds: <input type="text" name="milliseconds" class="addOptions"><br>
-                    Bytes: <input type="text" name="bytes" class="addOptions"><br>
-                    Price ($): <input type="text" name="unitPrice" class="addOptions"><br>
+                    <label for="name">Name:</label>
+                    <input type="text" name="name" class="addOptions"> <br>
+                    <label for="albumId">Album:</label>
+                    <select name="albumId" id="addTrackAlbumOptions" class="addOptions"></select> <br>
+                    <label for="mediaTypeId">MediaType:</label>
+                    <select name="mediaTypeId" id="addTrackMediaTypeOptions" class="addOptions"></select> <br>
+                    <label for="genreId">Genre:</label>
+                    <select name="genreId" id="addTrackGenreOptions" class="addOptions"></select> <br>
+                    <label for="composer">Composer:</label>
+                    <input type="text" name="composer" class="addOptions"><br>
+                    <label for="milliseconds">Milliseconds:</label>
+                    <input type="text" name="milliseconds" class="addOptions"><br>
+                    <label for="bytes">Bytes:</label>
+                    <input type="text" name="bytes" class="addOptions"><br>
+                    <label for="unitPrice">Price ($):</label>
+                    <input type="text" name="unitPrice" class="addOptions"><br>
                     <input type="submit" value="Add">
                 </form>
             </div>
@@ -106,7 +116,8 @@ $basePath = "http://localhost/" . basename(dirname(__DIR__));
             <div class="modal-content">
                 <span class="close" onclick="showFrontPageTracks()">&times;</span>
                 <form id="addArtistForm">
-                    Name: <input type="text" name="name"><br>
+                    <label for="name">Name:</label>
+                    <input type="text" name="name"><br>
                     <input type="submit" value="Add">
                 </form>
             </div>

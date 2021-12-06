@@ -5,12 +5,13 @@
 }
 
 :root {
-  --main-text-color: #edf5e1;
-  --main-background-color: #5cdb95;
-  --dark-text-color: #05386b;
-  --btn-color: #05386b;
-  --btn-th-color: #379683;
+  --main-text-color: #6b6664;
+  --second-text-color: #161514;
+  --main-background-color: #141414e5;
+  --btn-color: #052b3a;
+  --btn-th-color: #9e9d9d;
 }
+
 
 img {
   width: 70%;
@@ -21,12 +22,6 @@ h1 {
   color: var(--main-text-color);
   padding-top: 0.6rem;
   font-size: 2.2rem;
-}
-
-p,
-h3,
-h2 {
-  color: var(--dark-text-color);
 }
 
 body {
@@ -102,11 +97,16 @@ th {
   color: var(--main-text-color);
 }
 
-#searchQuery,
-#selectMovies,
-#searchOptions {
-  background-color: var(--main-text-color);
+a, p, td, h3, h2, label{
+  color: var(--btn-th-color);
 }
+
+input[type=text], input[type=password], select, textarea {
+  background-color : #d1d1d1; 
+  color: var(--second-text-color);
+
+}
+
 
 th,
 td {
@@ -186,19 +186,20 @@ td {
 }
 
 .modal-content {
-  background-color: #8ee4af;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
 }
 
+/* Delete button */
 img.logoImg {
   display: inline-block;
   width: 1rem;
   height: 1rem;
   padding: 0.1rem;
   cursor: pointer;
+  background-color: var(--btn-th-color);
 }
 
 /* Dropdown content */
@@ -209,7 +210,7 @@ img.logoImg {
   border: none;
   cursor: pointer;
   background-color: var(--btn-th-color);
-  color: var(--main-text-color);
+  color: var(--second-text-color);
 }
 
 /* Dropdown button on hover & focus */
