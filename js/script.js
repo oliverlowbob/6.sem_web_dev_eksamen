@@ -491,7 +491,8 @@ async function pressAlbumName(albumId) {
 
     $("#albumName").val(response.name);
     $("#albumName").prop("readonly", true);
-
+    
+    $("#saveAlbumBtn").css("display", "none");
     $("#albumArtist").val(artist.name);
     $("#albumArtist").prop("readonly", true);
 
@@ -513,7 +514,6 @@ async function pressAlbumName(albumId) {
         $("#saveAlbumBtn").css("display", "block");
     }
 
-    $("#saveAlbumBtn").css("display", "none");
     $("#resultAlbumSection").css("display", "none");
     $("#searchSection").css("display", "none");
     $("#albumInfoSection").css("display", "block");
