@@ -78,7 +78,7 @@ switch ($requestMethod) {
                 }
             } elseif ($urlPieces[1] == "logout") {
                 session_destroy();
-                header("Location: ../views/login.php");
+                header("Location: ./views/login.php");
             }
         } elseif (isset($_GET['name'])) {
             if ($urlPieces[1] == "tracks") {

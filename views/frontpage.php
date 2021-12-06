@@ -7,12 +7,14 @@ if (!isset($_SESSION['email'])) {
     header('Location: ../views/login.php');
 }
 
+$basePath = "http://localhost/" . basename(dirname(__DIR__));
+
 ?>
 <section class="dropdown">
     <button onclick="dropdownBtnClick()" class="dropbtn">Menu</button>
     <div id="myDropdown" class="dropdown-content">
         <a href="#" onclick="showProfile()">Edit Profile</a>
-        <a href="http://localhost/music/logout/">Logout</a>
+        <a href=<?php echo $basePath . "/logout" ?>>Logout</a>
     </div>
 </section>
 <h1>Music Shop</h1>
@@ -191,6 +193,7 @@ if (!isset($_SESSION['email'])) {
                     <li><input type="text" id="albumName" class="trackInput"></li>
                     <p><strong>Artist</strong></p>
                     <li><input type="text" id="albumArtist" class="trackInput"></li>
+                    <select name="albumArtistOptions" id="albumArtistOptions" class="options"></select>
                 </ul>
                 <h2>Tracks:</h3>
                     <table id="albumInfoSectionTracksTable">

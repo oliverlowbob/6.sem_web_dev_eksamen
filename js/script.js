@@ -315,6 +315,7 @@ async function pressAlbumName(albumId) {
     const mediaTypes = await getAllMediaTypes();
     const genres = await getAllGenres();
     const isAdmin = await getIsAdmin() === "true";
+    const artists = await getAllArtists();
 
     $("#albumInfoSectionTracksTable > tbody").empty();
 
@@ -357,11 +358,22 @@ async function pressAlbumName(albumId) {
     $("#albumArtist").val(artist.name);
     $("#albumArtist").prop("readonly", true);
 
-    if (isAdmin) {
-        $("#albumName").prop("readonly", false);
-        $("#albumArtist").prop("readonly", false);
+    $("#albumArtistOptions").css("display", "none");
 
-        $("#saveTrackBtn").css("display", "block");
+    if (isAdmin) {
+        for (const a of artists){
+            if(a.artistId === artist.artistId){
+                $("#albumArtistOptions").append('<option value=' + a.artistId + ' selected>' + a.name + '</option>')
+            }
+            else{
+                $("#albumArtistOptions").append('<option value=' + a.artistId + '>' + a.name + '</option>')
+            }
+        }
+        $("#albumName").prop("readonly", false);
+        $("#albumArtist").css("display", "none");
+        $("#albumArtistOptions").css("display", "inline-block");
+
+        $("#saveAlbumBtn").css("display", "block");
     }
 
     $("#saveBtn").css("display", "none");

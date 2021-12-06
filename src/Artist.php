@@ -89,10 +89,6 @@ class Artist extends DatabaseConnector
                 $artists[] = $result;
             }
 
-            if(empty($artists)){
-                return null;
-            }
-
             $stmt = null;
 
             return ($artists);
