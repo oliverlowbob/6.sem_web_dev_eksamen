@@ -16,7 +16,7 @@ class Track extends DatabaseConnector
         if ($con) {
             $sql = "INSERT INTO chinook_abridged.track (Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $con->prepare($sql);
-            $stmt->execute([$name, $albumId, $mediaTypeId, $genreId, $composer, $milliseconds, $bytes, $unitPrice]);
+            $stmt->execute([htmlspecialchars($name), htmlspecialchars($albumId), htmlspecialchars($mediaTypeId), htmlspecialchars($genreId), htmlspecialchars($composer), htmlspecialchars($milliseconds), htmlspecialchars($bytes), htmlspecialchars($unitPrice)]);
             $stmt = null;
         } else {
             return $this->statusCode(ERROR);
@@ -44,7 +44,7 @@ class Track extends DatabaseConnector
         if ($con) {
             $sql = "UPDATE chinook_abridged.track SET Name=?, AlbumId=?, MediaTypeId=?, GenreId=?, Composer=?, Milliseconds=?, Bytes=?, UnitPrice=? WHERE TrackId=?";
             $stmt = $con->prepare($sql);
-            $stmt->execute([$name, $albumId, $mediaTypeId, $genreId, $composer, $milliseconds, $bytes, $unitPrice, $id]);
+            $stmt->execute([htmlspecialchars($name), htmlspecialchars($albumId), htmlspecialchars($mediaTypeId), htmlspecialchars($genreId), htmlspecialchars($composer), htmlspecialchars($milliseconds), htmlspecialchars($bytes), htmlspecialchars($unitPrice), $id]);
             $stmt = null;
             return;
         } else {

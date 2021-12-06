@@ -17,7 +17,7 @@ class Artist extends DatabaseConnector
         if ($con) {
             $sql = "INSERT INTO chinook_abridged.artist (Name) VALUES (?)";
             $stmt = $con->prepare($sql);
-            $stmt->execute([$name]);
+            $stmt->execute([htmlspecialchars($name)]);
             $stmt = null;
         } else {
             return $this->statusCode(ERROR);
@@ -45,7 +45,7 @@ class Artist extends DatabaseConnector
         if ($con) {
             $sql = 'UPDATE chinook_abridged.artist SET Name=? WHERE ArtistId=?';
             $stmt = $con->prepare($sql);
-            $stmt->execute([$name, $id]);
+            $stmt->execute([htmlspecialchars($name), $id]);
             $stmt = null;
         } else {
             return $this->statusCode(ERROR);

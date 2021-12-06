@@ -16,7 +16,7 @@
             if ($con) {
                 $sql = "UPDATE chinook_abridged.customer SET FirstName=?, LastName=?, Company=?, Address=?, City=?, State=?, Country=?, PostalCode=?, Phone=?, Fax=?, Email=? WHERE CustomerId=?";
                 $stmt = $con->prepare($sql);
-                $stmt->execute([$firstName, $lastName, $company, $address, $city, $state, $country, $postalCode, $phone, $fax, $email, $customerId]);
+                $stmt->execute([htmlspecialchars($firstName), htmlspecialchars($lastName), htmlspecialchars($company), htmlspecialchars($address), htmlspecialchars($city), htmlspecialchars($state), htmlspecialchars($country), htmlspecialchars($postalCode), htmlspecialchars($phone), htmlspecialchars($fax), htmlspecialchars($email), $customerId]);
                 $stmt = null;
                 return;
             } else {
@@ -31,7 +31,7 @@
                 $sql = "UPDATE chinook_abridged.customer SET Password=? WHERE CustomerId=?";
                 $stmt = $con->prepare($sql);
                 $stmt->execute([$password, $customerId]);
-                $stmt = null;
+                $stmt = null; 
                 return;
             } else {
                 return $this->statusCode(ERROR);
@@ -78,7 +78,7 @@
             if ($con) {
                 $sql = 'INSERT INTO chinook_abridged.customer (username, email, password) VALUES (?, ?, ?)';
                 $stmt= $con->prepare($sql);
-                $stmt->execute([$username, $email, $password]);
+                $stmt->execute([htmlspecialchars($username), htmlspecialchars($email), htmlspecialchars($password)]);
                 $stmt = null;
             }else {
                 return $this->statusCode(ERROR);

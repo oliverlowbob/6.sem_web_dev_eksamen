@@ -17,7 +17,7 @@ class Album extends DatabaseConnector
         if ($con) {
             $sql = 'INSERT INTO chinook_abridged.album (Title, ArtistId) VALUES (?, ?)';
             $stmt = $con->prepare($sql);
-            $stmt->execute([$name, $artistId]);
+            $stmt->execute([htmlspecialchars($name), htmlspecialchars($artistId)]);
             $stmt = null;
         } else {
             return $this->statusCode(ERROR);
@@ -29,7 +29,7 @@ class Album extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            $sql = 'DELETE a, t FROM chinook_abridged.album AS a INNER JOIN chinook_abridged.track AS t ON a.AlbumId = t.AlbumId Where a.AlbumId=?';
+            $sql = 'DELETE FROM chinook_abridged.album Where AlbumId=?';
             $stmt = $con->prepare($sql);
             $stmt->execute([$albumId]);
             $stmt = null;
@@ -45,7 +45,7 @@ class Album extends DatabaseConnector
         if ($con) {
             $sql = 'UPDATE chinook_abridged.album SET Title=?, ArtistId=? WHERE AlbumId=?';
             $stmt = $con->prepare($sql);
-            $stmt->execute([$name, $artistId, $id]);
+            $stmt->execute([htmlspecialchars($name), htmlspecialchars($artistId), $id]);
             $stmt = null;
         } else {
             return $this->statusCode(ERROR);
