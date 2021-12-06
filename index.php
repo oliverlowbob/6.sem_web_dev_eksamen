@@ -127,16 +127,16 @@ switch ($requestMethod) {
                 $isAdmin = json_encode($user->isAdmin($_POST['password']));
                 if ($isAdmin == "true") {
                     $_SESSION["isAdmin"] = "true";
-                } else {
+                    $_SESSION["email"] = "admin";
+                } else{
                     $_SESSION["isAdmin"] = "false";
-                }
-                $response = json_encode($user->login($_POST['email'], $_POST['password']));
-                echo $response;
-                if ($response == "true") {
-                    $_SESSION["email"] = $_POST['email'];
-                    header("Location: ../views/frontpage.php");
-                } else {
-                    echo 'Wrong username or password';
+                    $response = json_encode($user->login($_POST['email'], $_POST['password']));
+                    if ($response == "true") {
+                        $_SESSION["email"] = $_POST['email'];
+                        header("Location: ../views/frontpage.php");
+                    } else {
+                        echo 'Wrong username or password';
+                    }
                 }
             }
         }
