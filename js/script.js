@@ -387,7 +387,7 @@ async function saveAlbumInfo() {
 
     const albumId = $("#albumId").text();
     const name = $("#albumName").val();
-    const artistId = $("#albumArtist").val();
+    const artistId = $("#albumArtistOptions").val();
 
     const requestData = {
         artistId: artistId,
