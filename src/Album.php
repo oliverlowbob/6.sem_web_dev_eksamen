@@ -118,6 +118,10 @@ class Album extends DatabaseConnector
                 $albums[] = $result;
             }
 
+            if(empty($albums)){
+                return null;
+            }
+
             $results['results'] = $albums;
 
             $stmt = null;

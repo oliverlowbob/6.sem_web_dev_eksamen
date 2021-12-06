@@ -183,6 +183,10 @@ class Track extends DatabaseConnector
                 $tracks[] = $result;
             }
 
+            if(empty($tracks)){
+                return null;
+            }
+
             $results['results'] = $tracks;
 
             $stmt = null;

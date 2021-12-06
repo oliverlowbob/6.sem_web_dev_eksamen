@@ -81,6 +81,10 @@ async function searchBtnClick() {
     if (searchOptions == "track") {
         const url = baseUrl + "tracks/?name=" + searchQuery;
         const response = await $.get(url);
+        if(response == null){
+            alert("No tracks found");
+            return;
+        }
         const results = response.results;
         await showTracksTable(results, albums, mediaTypes, genres);
     }
@@ -88,6 +92,10 @@ async function searchBtnClick() {
     else if (searchOptions == "album") {
         const url = baseUrl + "albums/?name=" + searchQuery;
         const response = await $.get(url);
+        if(response == null){
+            alert("No albums found");
+            return;
+        }
         const results = response.results;
         await showAlbumsTable(results);
     }
