@@ -366,6 +366,24 @@ async function saveAlbumInfo() {
 //#endregion
 
 //#region Tracks
+
+$("#addTrackForm").submit(function(event ) {
+    event.preventDefault();
+
+    const formValues = $("#addTrackForm").serialize();
+    const url = baseUrl + "tracks/"
+    $.post(url, formValues)
+        .done(function (data) {
+            console.log(data);
+            alert("Track was added");
+            location.reload();
+        })
+        .fail(function (data){
+            console.log(data);
+            alert("Something went wrong");
+        })
+});
+
 async function showTracksTable(results, albums, mediaTypes, genres) {
     const isAdmin = await getIsAdmin() === "true";
 

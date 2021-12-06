@@ -117,8 +117,8 @@ switch ($requestMethod) {
         if (count($urlPieces) == 2) {
             if ($urlPieces[1] == "tracks" && isset($_POST['name']) && isset($_POST['mediaTypeId']) && isset($_POST['milliseconds']) && isset($_POST['unitPrice'])) {
                 //add track
-                $track->addTrack($_POST['name'], $_POST['albumId'], $_POST['mediaTypeId'], $_POST['genreId'], $_POST['composer'], $_POST['milliseconds'], $_POST['bytes'], $_POST['unitPrice']);
-                header("Location: ../views/frontpage.php");
+                echo json_encode($track->addTrack($_POST['name'], $_POST['albumId'], $_POST['mediaTypeId'], $_POST['genreId'], $_POST['composer'], $_POST['milliseconds'], $_POST['bytes'], $_POST['unitPrice']));
+                //header("Location: ../views/frontpage.php");
             } elseif ($urlPieces[1] == "albums" && isset($_POST['title']) && isset($_POST['artistId'])) {
                 //add album
                 $album->addAlbum($_POST['title'], $_POST['artistId']);
