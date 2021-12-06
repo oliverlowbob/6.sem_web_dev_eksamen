@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost/music/";
+const baseUrl = "http://localhost/" + window.location.pathname.split("/")[1] + "/";
 
 //#region Get Methods
 async function getIsAdmin() {
@@ -110,6 +110,7 @@ async function searchBtnClick() {
 //#endregion
 
 //#region User
+
 async function showProfile(){
     const isAdmin = await getIsAdmin() === "true";
     if(isAdmin){

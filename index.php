@@ -133,7 +133,6 @@ switch ($requestMethod) {
                     $response = json_encode($user->login($_POST['email'], $_POST['password']));
                     if ($response == "true") {
                         $_SESSION["email"] = $_POST['email'];
-                        header("Location: ../views/frontpage.php");
                     } else {
                         echo 'Wrong username or password';
                     }
