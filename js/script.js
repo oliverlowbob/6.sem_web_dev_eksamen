@@ -42,8 +42,10 @@ async function addBtnClick() {
     const genres = await getAllGenres();
     const albums = await getAllAlbums();
     const mediaTypes = await getAllMediaTypes();
+    const artists = await getAllArtists();
 
     $("#resultTrackSection").css("display", "none");
+    $("#resultAlbumSection").css("display", "none");
     $("#searchSection").css("display", "none");
 
     const selected = $("#searchOptions").val();
@@ -64,6 +66,9 @@ async function addBtnClick() {
         $("#addTrackSection").css("display", "block");
     }
     else if (selected == "album") {
+        for (const a of artists){
+            $("#addAlbumArtistOptions").append('<option value=' + a.artistId + '>' + a.name + '</option>')
+        }
         $("#addAlbumSection").css("display", "block");
     }
     else {
@@ -164,6 +169,7 @@ async function saveProfileInfo(){
 
 async function updatePassword(){
     const user = await $.get(baseUrl + "users/me");
+    const isAdmin = await getIsAdmin() === "true";
 
     const newPassword1 = $("#userNewPassword1").val();
     const newPassword2 = $("#userNewPassword2").val();
@@ -179,9 +185,11 @@ async function updatePassword(){
         return;   
     }
 
-    if(newPassword1 == "admin"){
-        alert("New password cannot be 'admin'");
-        return;   
+    if(!isAdmin){
+        if(newPassword1 == "admin"){
+            alert("New password cannot be 'admin'");
+            return;   
+        }
     }
 
     const url = baseUrl + "users";
@@ -211,6 +219,23 @@ async function updatePassword(){
 //#endregion
 
 //#region Albums
+
+$("#addAlbumForm").submit(function(event ) {
+    event.preventDefault();
+
+    const formValues = $("#addAlbumForm").serialize();
+    const url = baseUrl + "albums/"
+    $.post(url, formValues)
+        .done(function (data) {
+            alert("Album was added");
+            window.location.reload();
+        })
+        .fail(function (data){
+            console.log(data);
+            alert("Something went wrong");
+        })
+});
+
 async function deleteAlbum(albumId) {
     const newUrl = baseUrl + "albums/" + albumId;
 
@@ -382,7 +407,6 @@ $("#addTrackForm").submit(function(event ) {
     const url = baseUrl + "tracks/"
     $.post(url, formValues)
         .done(function (data) {
-            console.log(data);
             alert("Track was added");
             location.reload();
         })

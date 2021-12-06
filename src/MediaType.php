@@ -24,6 +24,10 @@ class MediaType extends DatabaseConnector
                 $mediaTypes[] = $result;
             }
 
+            if(empty($mediaTypes)){
+                return null;
+            }
+
             $stmt = null;
 
             return ($mediaTypes);

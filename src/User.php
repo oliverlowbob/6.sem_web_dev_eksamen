@@ -30,7 +30,7 @@
             if ($con) {
                 $sql = "UPDATE chinook_abridged.customer SET Password=? WHERE CustomerId=?";
                 $stmt = $con->prepare($sql);
-                $stmt->execute([$password, $customerId]);
+                $stmt->execute([password_hash($password, PASSWORD_DEFAULT), $customerId]);
                 $stmt = null; 
                 return;
             } else {
@@ -89,11 +89,11 @@
             $con = (new DatabaseConnector())->getConnection();
 
             if ($con) {
-                $sql = 'SELECT * FROM chinook_abridged.admin WHERE Password=?';
+                $sql = 'SELECT * FROM chinook_abridged.admin';
 
                 $stmt= $con->prepare($sql);
-                $stmt->execute([$password]);
-
+                $stmt->execute([]);
+                
                 while($row = $stmt->fetch()) {
                     $result['password'] = $row['Password'];
                     $users[] = $result;
@@ -104,9 +104,10 @@
                 if(empty($users)){
                     return false;
                 }
+                
                 else{
                     $user = $users[0];
-                    if($user['password'] == $password){
+                    if(password_verify($password, $user['password'])){
                         return true;
                     }
                     else{
@@ -141,12 +142,7 @@
                 }
                 else{
                     $user = $users[0];
-                    if($user['password'] == $password){
-                        return true;
-                    }
-                    else{
-                        return false;
-                    }
+                    return password_verify($password, $user['password']);
                 }
 
             } else {

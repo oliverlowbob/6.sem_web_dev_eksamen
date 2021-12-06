@@ -77,9 +77,9 @@ if (!isset($_SESSION['email'])) {
         <div id="addAlbumSection" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="showFrontpageAlbums()">&times;</span>
-                <form action="http://localhost/music/albums/" method="post">
-                    Title: <input type="text" name="title"><br>
-                    Artist: <input type="text" name="artistId"><br>
+                <form id="addAlbumForm">
+                    Title: <input type="text" name="title" class="addOptions"><br>
+                    Artist: <select name="artistId" id="addAlbumArtistOptions" class="addOptions"></select> <br>
                     <input class="frontpageBtn" type="submit" value="Add">
                 </form>
             </div>
@@ -88,14 +88,14 @@ if (!isset($_SESSION['email'])) {
             <div class="modal-content">
                 <span class="close" onclick="showFrontPageTracks()">&times;</span>
                 <form id="addTrackForm">
-                    Name: <input type="text" name="name" class="addTrackOptions"><br>
-                    Album: <select name="albumId" id="addTrackAlbumOptions" class="addTrackOptions"></select> <br>
-                    MediaType: <select name="mediaTypeId" id="addTrackMediaTypeOptions" class="addTrackOptions"></select> <br>
-                    Genre: <select name="genreId" id="addTrackGenreOptions" class="addTrackOptions"></select> <br>
-                    Composer: <input type="text" name="composer" class="addTrackOptions"><br>
-                    Milliseconds: <input type="text" name="milliseconds" class="addTrackOptions"><br>
-                    Bytes: <input type="text" name="bytes" class="addTrackOptions"><br>
-                    Price ($): <input type="text" name="unitPrice" class="addTrackOptions"><br>
+                    Name: <input type="text" name="name" class="addOptions"><br>
+                    Album: <select name="albumId" id="addTrackAlbumOptions" class="addOptions"></select> <br>
+                    MediaType: <select name="mediaTypeId" id="addTrackMediaTypeOptions" class="addOptions"></select> <br>
+                    Genre: <select name="genreId" id="addTrackGenreOptions" class="addOptions"></select> <br>
+                    Composer: <input type="text" name="composer" class="addOptions"><br>
+                    Milliseconds: <input type="text" name="milliseconds" class="addOptions"><br>
+                    Bytes: <input type="text" name="bytes" class="addOptions"><br>
+                    Price ($): <input type="text" name="unitPrice" class="addOptions"><br>
                     <input type="submit" value="Add">
                 </form>
             </div>
@@ -103,7 +103,7 @@ if (!isset($_SESSION['email'])) {
         <div id="addArtistSection" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="showFrontPageTracks()">&times;</span>
-                <form action="http://localhost/music/artists/" method="post">
+                <form id="addArtistForm">
                     Name: <input type="text" name="name"><br>
                     <input type="submit" value="Add">
                 </form>

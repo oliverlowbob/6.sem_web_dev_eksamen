@@ -89,6 +89,10 @@ class Artist extends DatabaseConnector
                 $artists[] = $result;
             }
 
+            if(empty($artists)){
+                return null;
+            }
+
             $stmt = null;
 
             return ($artists);
@@ -107,8 +111,6 @@ class Artist extends DatabaseConnector
             $stmt = $con->prepare($sql);
             $stmt->execute([$likeVar]);
 
-            $results['_total'] = $stmt->rowCount();
-
             while ($row = $stmt->fetch()) {
                 $result['artistId'] = $row['ArtistId'];
                 $result['name'] = $row['Name'];
@@ -119,11 +121,9 @@ class Artist extends DatabaseConnector
                 return null;
             }
 
-            $results['results'] = $artists;
-
             $stmt = null;
 
-            return ($results);
+            return ($artists);
         } else {
             return $this->statusCode(ERROR);
         }

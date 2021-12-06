@@ -24,6 +24,10 @@ class Genre extends DatabaseConnector
                 $genres[] = $result;
             }
 
+            if(empty($genres)){
+                return null;
+            }
+
             $stmt = null;
 
             return ($genres);

@@ -104,11 +104,9 @@ switch ($requestMethod) {
                 echo json_encode($track->updateTrack($putData['trackId'], $putData['name'], $putData['albumId'], $putData['mediaTypeId'], $putData['genreId'], $putData['composer'], $putData['milliseconds'], $putData['bytes'], $putData['unitPrice']));
             } elseif ($urlPieces[1] == "users" && isset($putData['password'])) {
                 echo json_encode($user->updatePassword($putData['customerId'], $putData['password']));
-            }
-            elseif($urlPieces[1] == "users" && isset($putData['customerId']) && isset($putData['firstName']) && isset($putData['lastName']) && isset($putData['email'])){
+            } elseif ($urlPieces[1] == "users" && isset($putData['customerId']) && isset($putData['firstName']) && isset($putData['lastName']) && isset($putData['email'])) {
                 echo json_encode($user->updateUser($putData['customerId'], $putData['firstName'], $putData['lastName'], $putData['company'], $putData['address'], $putData['city'], $putData['state'], $putData['country'], $putData['postalCode'], $putData['phone'], $putData['fax'], $putData['email']));
-            }
-            elseif($urlPieces[1] == "albums"){
+            } elseif ($urlPieces[1] == "albums") {
                 echo json_encode($album->updateAlbum($putData['albumId'], $putData['name'], $putData['artistId']));
             }
         }
@@ -118,32 +116,27 @@ switch ($requestMethod) {
             if ($urlPieces[1] == "tracks" && isset($_POST['name']) && isset($_POST['mediaTypeId']) && isset($_POST['milliseconds']) && isset($_POST['unitPrice'])) {
                 //add track
                 echo json_encode($track->addTrack($_POST['name'], $_POST['albumId'], $_POST['mediaTypeId'], $_POST['genreId'], $_POST['composer'], $_POST['milliseconds'], $_POST['bytes'], $_POST['unitPrice']));
-                //header("Location: ../views/frontpage.php");
             } elseif ($urlPieces[1] == "albums" && isset($_POST['title']) && isset($_POST['artistId'])) {
                 //add album
-                $album->addAlbum($_POST['title'], $_POST['artistId']);
-                header("Location: ../views/frontpage.php");
+                echo json_encode($album->addAlbum($_POST['title'], $_POST['artistId']));
             } elseif ($urlPieces[1] == "artists" && isset($_POST['name'])) {
                 //add artist
-                $artist->addArtist($_POST["name"]);
-                header("Location: ../views/frontpage.php");
-            }
-            //Login logic
-            elseif ($urlPieces[1] == "login") {
-                if (isset($_POST['email']) && isset($_POST['password'])) {
-                    $isAdmin = json_encode($user->isAdmin($_POST['password']));
-                    if ($isAdmin == "true") {
-                        $_SESSION["isAdmin"] = "true";
-                    } else {
-                        $_SESSION["isAdmin"] = "false";
-                    }
-                    $response = json_encode($user->login($_POST['email'], $_POST['password']));
-                    if ($response == "true") {
-                        $_SESSION["email"] = $_POST['email'];
-                        header("Location: ../views/frontpage.php");
-                    } else {
-                        echo 'Wrong username or password';
-                    }
+                echo json_encode($artist->addArtist($_POST["name"]));
+            } elseif (isset($_POST['email']) && isset($_POST['password'])) {
+                // Login logic
+                $isAdmin = json_encode($user->isAdmin($_POST['password']));
+                if ($isAdmin == "true") {
+                    $_SESSION["isAdmin"] = "true";
+                } else {
+                    $_SESSION["isAdmin"] = "false";
+                }
+                $response = json_encode($user->login($_POST['email'], $_POST['password']));
+                echo $response;
+                if ($response == "true") {
+                    $_SESSION["email"] = $_POST['email'];
+                    header("Location: ../views/frontpage.php");
+                } else {
+                    echo 'Wrong username or password';
                 }
             }
         }

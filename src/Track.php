@@ -143,7 +143,7 @@ class Track extends DatabaseConnector
                 $tracks[] = $result;
             }
 
-            if(!empty($tracks)){
+            if(empty($tracks)){
                 $results['results'] = $tracks;
             }
             else{
