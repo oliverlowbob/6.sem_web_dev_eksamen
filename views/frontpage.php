@@ -7,14 +7,12 @@ if (!isset($_SESSION['email'])) {
     header('Location: ../views/login.php');
 }
 
-$basePath = "http://localhost/" . basename(dirname(__DIR__));
-
 ?>
 <section class="dropdown">
     <button onclick="dropdownBtnClick()" class="dropbtn">Menu</button>
     <div id="myDropdown" class="dropdown-content">
         <a href="#" onclick="showProfile()">Edit Profile</a>
-        <a href=<?php echo $basePath . "/logout" ?>>Logout</a>
+        <a href="../logout">Logout</a>
     </div>
 </section>
 <h1>Music Shop</h1>

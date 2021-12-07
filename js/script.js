@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost/" + window.location.pathname.split("/")[1] + "/";
+const baseUrl = "../";
 
 //#region Get Methods
 async function getIsAdmin() {
