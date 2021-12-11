@@ -253,6 +253,50 @@ async function updatePassword(){
 
 //#endregion
 
+//#region Cart 
+
+let cart = [];
+
+sessionStorage.setItem('deletedItems', JSON.stringify(cart));
+//JSON.parse(sessionStorage.getItem('deletedItems'))
+
+
+async function cartCounterBtnPressed(){
+    $("#trackInfoSection").css("display", "none");
+    $("#albumInfoSection").css("display", "none");
+    $("#artistInfoSection").css("display", "none");
+
+    $("#addAlbumSection").css("display", "none");
+    $("#addTrackSection").css("display", "none");
+    $("#addArtistSection").css("display", "none");
+
+    $("#searchSection").css("display", "none");
+
+    $("#resultAlbumSection").css("display", "none");
+    $("#resultTrackSection").css("display", "none");
+    $("#resultArtistSection").css("display", "none");
+
+
+    $("#cartSection").css("display", "block");
+}
+
+async function addTrackToCart(trackId){
+    const url = baseUrl + "tracks/" + trackId; 
+    const track = await $.get(url);
+
+    if(track.name == undefined){
+        alert("Something went wrong");
+        return;
+    }
+
+    cart.push(track)
+    alert("Track added to cart");
+    console.log(cart.length);
+    $("#cartCounterBtn").prop("value", "Cart (" + cart.length + ")")
+}
+
+
+//#endregion
 
 //#region Artists
 
@@ -276,7 +320,7 @@ async function showArtistsTable(artists) {
     const isAdmin = await getIsAdmin() === "true";
     $("#artistTable > tbody").empty();
 
-    var bodyStr = "";
+    let bodyStr = "";
     for (const result of artists) {
 
         bodyStr +=
@@ -430,7 +474,7 @@ async function showAlbumsTable(results) {
     const artists = await getAllArtists();
     const isAdmin = await getIsAdmin() === "true";
 
-    var bodyStr = "";
+    let bodyStr = "";
     for (const result of results) {
         const artist = artists.find(a => a["artistId"] == result["artistId"])["name"];
 
@@ -474,7 +518,7 @@ async function pressAlbumName(albumId) {
 
     $("#albumInfoSectionTracksTable > tbody").empty();
 
-    var bodyStr = "";
+    let bodyStr = "";
 
     if(results != null){
         for (const result of results) {
@@ -593,14 +637,14 @@ async function showTracksTable(results, albums, mediaTypes, genres) {
 
     $("#trackTable > tbody").empty();
 
-    var bodyStr = "";
+    let bodyStr = "";
 
     for (const result of results) {
         const album = albums.find(a => a["albumId"] == result["albumId"])["name"];
         const mediaType = mediaTypes.find(mt => mt["mediaTypeId"] == result["mediaTypeId"])["name"];
         const genre = genres.find(g => g["genreId"] == result["genreId"])["name"];
         const composer = result["composer"];
-        var newComposer = "";
+        let newComposer = "";
 
         if (composer != null) {
             newComposer += composer;
@@ -617,12 +661,17 @@ async function showTracksTable(results, albums, mediaTypes, genres) {
             "<td>" + newComposer + "</td>" +
             "<td>" + millisToMinutesAndSeconds(result["milliseconds"]) + "</td>" +
             "<td>" + bytesToSize(result["bytes"]) + "</td>" +
-            "<td>" + result["unitPrice"] + "$" + "</td>";
+            "<td>" + result["unitPrice"] + "$" + "</td>" + 
+            "<td>" + 
+                "<a href='#' onClick='addTrackToCart(" + result["trackId"] + ")'>" + "<button class='buyBtn'>Buy</button>" + "</a>" +
+            "</td>" 
+                
+            
 
         if (isAdmin) {
             bodyStr +=
                 "<td>" +
-                "<a href='#' onClick='deleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/deleteinv.png' class='logoImg'>" + "</a>" +
+                    "<a href='#' onClick='deleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/deleteinv.png' class='logoImg'>" + "</a>" +
                 "</td>" +
                 "</tr>";
         }
@@ -811,6 +860,7 @@ function showFrontPageTracks() {
     $("#addAlbumSection").css("display", "none");
     $("#addTrackSection").css("display", "none");
     $("#addArtistSection").css("display", "none");
+    $("#cartSection").css("display", "none");
     $("#resultTrackSection").css("display", "block");
     $("#searchSection").css("display", "block");
 }
@@ -820,6 +870,7 @@ function showFrontpageAlbums() {
     $("#addAlbumSection").css("display", "none");
     $("#addTrackSection").css("display", "none");
     $("#addArtistSection").css("display", "none");
+    $("#cartSection").css("display", "none");
     $("#resultAlbumSection").css("display", "block");
     $("#searchSection").css("display", "block");
 }
@@ -829,6 +880,7 @@ function showFrontPageArtists() {
     $("#addAlbumSection").css("display", "none");
     $("#addTrackSection").css("display", "none");
     $("#addArtistSection").css("display", "none");
+    $("#cartSection").css("display", "none");
     $("#resultArtistSection").css("display", "block");
     $("#searchSection").css("display", "block");
 }
@@ -873,10 +925,10 @@ function dropdownBtnClick() {
 // Close the dropdown menu if the user clicks outside of it
 window.onclick = function (event) {
     if (!event.target.matches('.dropbtn')) {
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        var i;
+        let dropdowns = document.getElementsByClassName("dropdown-content");
+        let i;
         for (i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
+            let openDropdown = dropdowns[i];
             if (openDropdown.classList.contains('show')) {
                 openDropdown.classList.remove('show');
             }

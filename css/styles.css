@@ -12,6 +12,10 @@
   --btn-th-color: #9e9d9d;
 }
 
+.buyBtn{
+  background-color: var(--btn-th-color);
+  color: var(--btn-color);
+}
 
 img {
   width: 70%;
@@ -40,11 +44,6 @@ body {
   padding-left: 0.15rem;
 }
 
-#selectMovies {
-  height: 2rem;
-  font-size: 1rem;
-}
-
 .frontpageBtn {
   background-color: var(--btn-color);
   color: var(--main-text-color);
@@ -69,7 +68,6 @@ body {
   color: var(--main-text-color);
 }
 
-
 .deleteBtn{
   margin-top: 0.5rem;
   background-color: red;
@@ -79,7 +77,6 @@ body {
 
 main,
 #loginSection {
-  margin: 1rem;
   text-align: center;
 }
 
@@ -107,13 +104,25 @@ input[type=text], input[type=password], select, textarea {
 
 }
 
+#cartSection{
+  display: none;
+}
+
+#cartCounterBtn{
+  position:absolute; 
+  top:1rem; 
+  right: 1rem;
+  background-color: var(--btn-th-color);
+  color: var(--btn-color);
+  border-radius: 5px;
+}
 
 th,
 td {
   width: 100px;
   text-align: center;
   border: 1px solid black;
-  padding: 5px;
+  padding: 2px;
 }
 
 #frontpageBtnPersonSection,

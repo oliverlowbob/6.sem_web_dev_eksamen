@@ -17,6 +17,12 @@ if (!isset($_SESSION['email'])) {
 </section>
 <h1>Music Shop</h1>
 <main>
+    <input type='button' id="cartCounterBtn" value="Cart (0)" onclick="cartCounterBtnPressed()">
+    <section id="cartSection">
+        <div class="modal-content">
+        <span class="close" onclick="showFrontPageTracks()">&times;</span>
+        </div>
+    </section>
     <section id="searchSection">
         <select name="searchOptions" id="searchOptions">
             <option value="track" selected>Track</option>
