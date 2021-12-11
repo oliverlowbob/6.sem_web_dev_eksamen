@@ -142,10 +142,16 @@ async function showProfile(){
     $("#userPhone").val(response.phone);
     $("#userFax").val(response.fax);
 
+    $("#resultTrackSection").css("display", "none");
+    $("#resultAlbumSection").css("display", "none");
+    $("#resultArtistSection").css("display", "none");
+    $("#searchSection").css("display", "none");
     $("#profileSection").css("display", "block");
 }
 
 async function hideProfile(){
+    $("#searchSection").css("display", "block");
+    $("#resultTrackSection").css("display", "block");
     $("#profileSection").css("display", "none");
 }
 async function saveProfileInfo(){
@@ -173,7 +179,7 @@ async function saveProfileInfo(){
         contentType: "application/json",
         success: function (response, status, xhr) {
             alert("User info updated");
-            $("#profileSection").css("display", "none");
+            location.reload();
         },
         error: function (xhr, status, error) {
             console.log(xhr);
@@ -187,15 +193,27 @@ async function saveProfileInfo(){
 async function updatePassword(){
     const user = await $.get(baseUrl + "users/me");
     const isAdmin = await getIsAdmin() === "true";
-
-    const newPassword1 = $("#userNewPassword1").val();
-    const newPassword2 = $("#userNewPassword2").val();
     const oldPassword = $("#userOldPassword").val();
 
-    if(oldPassword != user.oldPassword){
+    const verifyPasswordRequest = {
+        customerId: user.customerId,
+        password: oldPassword
+    }
+
+    const verifyResponse = await $.post(baseUrl + "users/verify", JSON.stringify(verifyPasswordRequest))
+    .done(async function (data) {})
+    .fail(async function (data){
+        console.log(data);
+        alert("Something went wrong");
+    })
+
+    if(verifyResponse !== true){
         alert("Old password is not correct");
         return;
     }
+
+    const newPassword1 = $("#userNewPassword1").val();
+    const newPassword2 = $("#userNewPassword2").val();
 
     if(newPassword1 != newPassword2){
         alert("The two new passwords doesn't match");
@@ -221,8 +239,8 @@ async function updatePassword(){
         data: JSON.stringify(requestData),
         contentType: "application/json",
         success: function (response, status, xhr) {
-            alert("User info updated");
-            $("#profileSection").css("display", "none");
+            alert("Password updated");
+            location.reload();
         },
         error: function (xhr, status, error) {
             console.log(xhr);
@@ -270,7 +288,7 @@ async function showArtistsTable(artists) {
             if (isAdmin) {
                 bodyStr +=
                     "<td>" +
-                    "<a href='#' onClick='deleteArtist(" + result["artistId"] + ")'>" + "<img src='../images/delete.png' class='logoImg'>" + "</a>" +
+                    "<a href='#' onClick='deleteArtist(" + result["artistId"] + ")'>" + "<img src='../images/deleteinv.png' class='logoImg'>" + "</a>" +
                     "</td>" +
                     "</tr>";
             }
@@ -426,7 +444,7 @@ async function showAlbumsTable(results) {
             if (isAdmin) {
                 bodyStr +=
                     "<td>" +
-                    "<a href='#' onClick='deleteAlbum(" + result["albumId"] + ")'>" + "<img src='../images/delete.png' class='logoImg'>" + "</a>" +
+                    "<a href='#' onClick='deleteAlbum(" + result["albumId"] + ")'>" + "<img src='../images/deleteinv.png' class='logoImg'>" + "</a>" +
                     "</td>" +
                     "</tr>";
             }
@@ -475,7 +493,7 @@ async function pressAlbumName(albumId) {
             if (isAdmin) {
                 bodyStr +=
                     "<td>" +
-                    "<a href='#' onClick='deleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/delete.png' class='logoImg'>" + "</a>" +
+                    "<a href='#' onClick='deleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/deleteinv.png' class='logoImg'>" + "</a>" +
                     "</td>" +
                     "</tr>";
             }
@@ -604,7 +622,7 @@ async function showTracksTable(results, albums, mediaTypes, genres) {
         if (isAdmin) {
             bodyStr +=
                 "<td>" +
-                "<a href='#' onClick='deleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/delete.png' class='logoImg'>" + "</a>" +
+                "<a href='#' onClick='deleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/deleteinv.png' class='logoImg'>" + "</a>" +
                 "</td>" +
                 "</tr>";
         }

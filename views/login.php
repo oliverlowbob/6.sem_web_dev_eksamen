@@ -18,7 +18,7 @@ if (isset($_SESSION['email']))
         @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
     </style>
     <link rel="stylesheet" href="../css/styles.css">
-    <script src="../js/login.js" defer></script>
+    <script src="../js/auth.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <title>Movie Database</title>
 </head>
@@ -36,6 +36,7 @@ if (isset($_SESSION['email']))
             <button type="submit" id="loginBtn">Login</button>
         </div>
     </form>
+    <a href="../views/signup.php">Not a user? Sign up</a>
 </section>
 
 <?php

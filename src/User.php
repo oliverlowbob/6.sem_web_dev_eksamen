@@ -10,6 +10,35 @@
             return $statusInfo;
         }
 
+        public function verifyPassword($customerId, $newpassword){
+            $con = (new DatabaseConnector())->getConnection();
+
+            if ($con) {
+                $sql = 'SELECT * FROM chinook_abridged.customer WHERE CustomerId=?';
+
+                $stmt= $con->prepare($sql);
+                $stmt->execute([$customerId]);
+
+                while($row = $stmt->fetch()) {
+                    $result['password'] = $row['Password'];
+                    $users[] = $result;
+                }
+                
+                $stmt = null;
+                
+                if(empty($users)){
+                    return false;
+                }
+                else{
+                    $user = $users[0];
+                    return password_verify($newpassword, $user['password']);
+                }
+
+            } else {
+                return $this->statusCode(ERROR);
+            } 
+        }
+
         public function updateUser($customerId, $firstName, $lastName, $company, $address, $city, $state, $country, $postalCode, $phone, $fax, $email){
             $con = (new DatabaseConnector())->getConnection();
 
@@ -72,13 +101,13 @@
             } 
         }
 
-        public function addUser($username, $email, $password){
+        public function addUser($firstName, $lastName, $password, $email, $company="", $address ="", $city="", $state="", $country="", $postal="", $phone="", $fax=""){
             $con = (new DatabaseConnector())->getConnection();
 
             if ($con) {
-                $sql = 'INSERT INTO chinook_abridged.customer (username, email, password) VALUES (?, ?, ?)';
+                $sql = 'INSERT INTO chinook_abridged.customer (FirstName, LastName, Password, Email, Company, Address, City, State, Country, PostalCode, Phone, Fax) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
                 $stmt= $con->prepare($sql);
-                $stmt->execute([htmlspecialchars($username), htmlspecialchars($email), htmlspecialchars($password)]);
+                $stmt->execute([htmlspecialchars($firstName), htmlspecialchars($lastName), password_hash(htmlspecialchars($password), PASSWORD_DEFAULT), htmlspecialchars($email), htmlspecialchars($company), htmlspecialchars($address), htmlspecialchars($city), htmlspecialchars($state), htmlspecialchars($country), htmlspecialchars($postal), htmlspecialchars($phone), htmlspecialchars($fax)]);
                 $stmt = null;
             }else {
                 return $this->statusCode(ERROR);

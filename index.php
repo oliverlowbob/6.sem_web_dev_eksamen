@@ -127,7 +127,7 @@ switch ($requestMethod) {
             } elseif ($urlPieces[1] == "artists" && isset($_POST['name'])) {
                 //add artist
                 echo json_encode($artist->addArtist($_POST["name"]));
-            } elseif (isset($_POST['email']) && isset($_POST['password'])) {
+            } elseif ($urlPieces[1] == "login" && isset($_POST['email']) && isset($_POST['password'])) {
                 // Login logic
                 $isAdmin = json_encode($user->isAdmin($_POST['password']));
                 if ($isAdmin == "true") {
@@ -141,6 +141,16 @@ switch ($requestMethod) {
                     } else {
                         echo 'Wrong username or password';
                     }
+                }
+            } elseif ($urlPieces[1] == "signup" && isset($_POST['email']) && isset($_POST['firstName'])  && isset($_POST['lastName'])  && isset($_POST['password']) ){
+                echo json_encode($user->addUser($_POST['firstName'], $_POST['lastName'], $_POST['password'], $_POST['email'], $_POST['company'], $_POST['address'], $_POST['city'], $_POST['state'], $_POST['country'], $_POST['postalCode'], $_POST['phone'], $_POST['fax']));
+            } 
+        }
+        elseif (count($urlPieces) == 3) {
+            if($urlPieces[1] == "users"){
+                $postData = (array) json_decode(file_get_contents('php://input'), TRUE);
+                if($urlPieces[2] == "verify" && isset($postData['customerId']) && isset($postData['password'])){
+                    echo json_encode($user->verifyPassword($postData['customerId'], $postData['password']));
                 }
             }
         }
