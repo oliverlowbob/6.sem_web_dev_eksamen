@@ -12,12 +12,12 @@ if (!isset($_SESSION['email'])) {
     <button onclick="dropdownBtnClick()" class="dropbtn">Menu</button>
     <div id="myDropdown" class="dropdown-content">
         <a href="#" onclick="showProfile()">Edit Profile</a>
-        <a href="../logout">Logout</a>
+        <a href="#" onclick="logOut()">Logout</a>
     </div>
 </section>
 <h1>Music Shop</h1>
 <main>
-    <input type='button' id="cartCounterBtn" value="Cart (0)" onclick="cartCounterBtnPressed()">
+    <input type='button' id="cartCounterBtn" value="" onclick="cartCounterBtnPressed()">
     <section id="cartSection">
         <div class="modal-content">
             <span class="close" onclick="showFrontPageTracks()">&times;</span>

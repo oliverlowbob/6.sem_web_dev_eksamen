@@ -30,9 +30,13 @@ window.onload = async function () {
     const mediaTypes = await getAllMediaTypes();
     const genres = await getAllGenres();
     const isAdmin = await getIsAdmin() === "true";
+    const cart = getCart();
+
+    $("#cartCounterBtn").prop("value", "Cart (" + cart.length + ")")
 
     if (isAdmin) {
         $("#addBtn").css("display", "inline")
+        $("#cartCounterBtn").css("display", "none")
     }
 
     await showTracksTable(results, albums, mediaTypes, genres);
@@ -121,6 +125,11 @@ async function searchBtnClick() {
 //#endregion
 
 //#region User
+
+async function logOut() {
+    localStorage.removeItem("cart");
+    window.location.replace(baseUrl + "logout");
+}
 
 async function showProfile() {
     const isAdmin = await getIsAdmin() === "true";
@@ -255,13 +264,28 @@ async function updatePassword() {
 
 //#region Cart 
 
-let cart = []
+function getCart() {
+    // Get Cart
+    if (localStorage.getItem("cart")) {
+        return JSON.parse(localStorage.getItem("cart"));
+    }
+    else {
+        // No data, start with an empty array
+        return [];
+    }
+}
+
+function setCart(cart){
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
 
 async function cartCounterBtnPressed() {
     $("#trackTableCheckout > tbody").empty();
     const albums = await getAllAlbums();
     const mediaTypes = await getAllMediaTypes();
     const genres = await getAllGenres();
+    const cart = getCart();
+
     let bodyStr = "";
     let totalAmount = 0;
 
@@ -272,7 +296,7 @@ async function cartCounterBtnPressed() {
         const composer = result["composer"];
         let newComposer = "";
 
-        if (composer != null) {
+        if (composer) {
             newComposer += composer;
         }
 
@@ -327,7 +351,9 @@ async function cartCounterBtnPressed() {
 
 async function deleteTrackFromCart(trackId) {
     if (confirm('Are you sure you want to delete the track from the cart?')) {
+        let cart = getCart();
         cart = cart.filter(t => t.trackId != trackId)
+        setCart(cart);
         $("#cartCounterBtn").prop("value", "Cart (" + cart.length + ")")
         await cartCounterBtnPressed();
     } else {
@@ -343,12 +369,15 @@ async function addTrackToCart(trackId) {
         alert("Something went wrong");
         return;
     }
-
+    let cart = getCart();
     cart.push(track)
+    setCart(cart);
     $("#cartCounterBtn").prop("value", "Cart (" + cart.length + ")")
 }
 
 async function checkOut() {
+    const cart = getCart();
+
     if (cart.length === 0) {
         alert("Cart is empty");
         return;
@@ -392,7 +421,7 @@ async function checkOut() {
             quantity: 1,
         };
 
-        const invoiceLineResponse = await $.post(invoiceLineurl, JSON.stringify(invoiceLineData))
+        await $.post(invoiceLineurl, JSON.stringify(invoiceLineData))
             .done(function (data) {
 
             })
@@ -404,7 +433,7 @@ async function checkOut() {
     }
 
     alert("Check out was successful!");
-    cart = [];
+    setCart([]);
     location.reload();
 }
 
@@ -633,7 +662,7 @@ async function pressAlbumName(albumId) {
 
     let bodyStr = "";
 
-    if (results != null) {
+    if (results) {
         for (const result of results) {
             const mediaType = mediaTypes.find(mt => mt["mediaTypeId"] == result["mediaTypeId"])["name"];
             const genre = genres.find(g => g["genreId"] == result["genreId"])["name"];
@@ -645,10 +674,15 @@ async function pressAlbumName(albumId) {
                 "<td>" + genre + "</td>" +
                 "<td>" + millisToMinutesAndSeconds(result["milliseconds"]) + "</td>" +
                 "<td>" + bytesToSize(result["bytes"]) + "</td>" +
-                "<td>" + result["unitPrice"] + "$" + "</td>" + 
-                "<td>" +
-                "<a href='#' onClick='addTrackToCart(" + result["trackId"] + ")'>" + "<button class='buyBtn'>Buy</button>" + "</a>" +
-                "</td>";
+                "<td>" + result["unitPrice"] + "$" + "</td>";
+
+
+                if(!isAdmin){
+                    bodyStr += 
+                    "<td>" +
+                    "<a href='#' onClick='addTrackToCart(" + result["trackId"] + ")'>" + "<button class='buyBtn'>Buy</button>" + "</a>" +
+                    "</td>";
+                }
 
             if (isAdmin) {
                 bodyStr +=
@@ -762,7 +796,7 @@ async function showTracksTable(results, albums, mediaTypes, genres) {
         const composer = result["composer"];
         let newComposer = "";
 
-        if (composer != null) {
+        if (composer) {
             newComposer += composer;
         }
 
@@ -777,12 +811,15 @@ async function showTracksTable(results, albums, mediaTypes, genres) {
             "<td>" + newComposer + "</td>" +
             "<td>" + millisToMinutesAndSeconds(result["milliseconds"]) + "</td>" +
             "<td>" + bytesToSize(result["bytes"]) + "</td>" +
-            "<td>" + result["unitPrice"] + "$" + "</td>" +
+            "<td>" + result["unitPrice"] + "$" + "</td>";
+            
+
+        if(!isAdmin){
+            bodyStr += 
             "<td>" +
             "<a href='#' onClick='addTrackToCart(" + result["trackId"] + ")'>" + "<button class='buyBtn'>Buy</button>" + "</a>" +
-            "</td>"
-
-
+            "</td>";
+        }
 
         if (isAdmin) {
             bodyStr +=
@@ -805,8 +842,8 @@ async function showTracksTable(results, albums, mediaTypes, genres) {
 
 async function deleteTrack(trackId) {
     const newUrl = baseUrl + "tracks/" + trackId;
-
     if (confirm('Are you sure you want to delete this track?')) {
+        //Delete track from db via backend
         await $.ajax({
             url: newUrl,
             type: 'DELETE',
