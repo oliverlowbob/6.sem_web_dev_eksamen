@@ -848,17 +848,21 @@ async function deleteTrack(trackId) {
             url: newUrl,
             type: 'DELETE',
             success: function (result) {
-                console.log(result);
                 alert("Track deleted");
                 location.reload();
             },
             error: function (xhr, status, error) {
-                console.log(xhr);
-                console.log(status);
-                console.log(error);
-                alert("Something went wrong");
+                if (xhr.responseText.includes('SQLSTATE[23000]')) {
+                    alert("Track cannot be deleted, as it has been purchased already");
+                }
+                else {
+                    console.log(xhr);
+                    console.log(status);
+                    console.log(error);
+                    alert("Something went wrong");
+                }
             }
-        })
+        });
     } else {
         alert("Track not deleted");
     }
