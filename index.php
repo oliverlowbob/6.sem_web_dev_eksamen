@@ -13,6 +13,8 @@ require_once("src/Artist.php");
 require_once("src/Album.php");
 require_once("src/MediaType.php");
 require_once("src/Genre.php");
+require_once("src/Invoice.php");
+require_once("src/InvoiceLine.php");
 
 $track = new Track();
 $user = new User();
@@ -20,6 +22,8 @@ $artist = new Artist();
 $album = new Album();
 $mediaType = new MediaType();
 $genre = new Genre();
+$invoice = new Invoice();
+$invoiceLine = new InvoiceLine();
 
 $url = strtok($_SERVER['REQUEST_URI'], "?");    // GET parameters are removed
 // If there is a trailing slash, it is removed, so that it is not taken into account by the explode function
@@ -144,13 +148,25 @@ switch ($requestMethod) {
                 }
             } elseif ($urlPieces[1] == "signup" && isset($_POST['email']) && isset($_POST['firstName'])  && isset($_POST['lastName'])  && isset($_POST['password']) ){
                 echo json_encode($user->addUser($_POST['firstName'], $_POST['lastName'], $_POST['password'], $_POST['email'], $_POST['company'], $_POST['address'], $_POST['city'], $_POST['state'], $_POST['country'], $_POST['postalCode'], $_POST['phone'], $_POST['fax']));
-            } 
+            } elseif($urlPieces[1] == "invoices" ){
+                $postData = (array) json_decode(file_get_contents('php://input'), TRUE);
+                if(isset($postData['customerId']) && isset($postData['date']) && isset($postData['total'])){
+                    echo json_encode($invoice->addInvoice($postData['customerId'], $postData['date'], $postData['total'], $postData['address'], $postData['city'], $postData['state'], $postData['country'], $postData['postalCode']));
+                }
+            }
         }
-        elseif (count($urlPieces) == 3) {
+        elseif (count($urlPieces) == 3){
+            if($urlPieces[1] == "invoices"){
+                $postData = (array) json_decode(file_get_contents('php://input'), TRUE);
+                if($urlPieces[2] == "lines" && isset($postData['invoiceId']) && isset($postData['trackId']) && isset($postData['unitPrice']) && isset($postData['quantity'])){
+                    echo json_encode($invoiceLine->addInvoiceLine($postData['invoiceId'], $postData['trackId'], $postData['unitPrice'], $postData['quantity']));
+                }
+            }
             if($urlPieces[1] == "users"){
                 $postData = (array) json_decode(file_get_contents('php://input'), TRUE);
                 if($urlPieces[2] == "verify" && isset($postData['customerId']) && isset($postData['password'])){
-                    echo json_encode($user->verifyPassword($postData['customerId'], $postData['password']));
+                    echo "TEST";
+                    //echo json_encode($user->verifyPassword($postData['customerId'], $postData['password']));
                 }
             }
         }

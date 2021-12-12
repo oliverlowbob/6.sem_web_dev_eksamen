@@ -20,7 +20,41 @@ if (!isset($_SESSION['email'])) {
     <input type='button' id="cartCounterBtn" value="Cart (0)" onclick="cartCounterBtnPressed()">
     <section id="cartSection">
         <div class="modal-content">
-        <span class="close" onclick="showFrontPageTracks()">&times;</span>
+            <span class="close" onclick="showFrontPageTracks()">&times;</span>
+            <h3>Tracks</h3>
+            <table id="trackTableCheckout">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Album</th>
+                        <th>Media Type</th>
+                        <th>Genre</th>
+                        <th>Composer</th>
+                        <th>Length</th>
+                        <th>Size</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <p>Total Amount: </p>
+            <p id="totalAmountP"></p> <br>
+            <h3>Billing Details</h3>
+            <ul id="customerCheckoutList">
+                <br>
+                <p hidden id="customerIdCheckout"></p>
+                <p><strong>Address</strong></p>
+                <li><input type="text" id="userAddressCheckout" class="trackInput"></li>
+                <p><strong>City</strong></p>
+                <li><input type="text" id="userCityCheckout" class="trackInput"></li>
+                <p><strong>State</strong></p>
+                <li><input type="text" id="userStateCheckout" class="trackInput"></li>
+                <p><strong>Country</strong></p>
+                <li><input type="text" id="userCountryCheckout" class="trackInput"></li>
+                <p><strong>Postal Code</strong></p>
+                <li><input type="text" id="userPostalCodeCheckout" class="trackInput"></li>
+            </ul> <br>
+            <button id="checkOutBtn" class="frontpageBtn" onclick="checkOut()">Check out</button>
         </div>
     </section>
     <section id="searchSection">

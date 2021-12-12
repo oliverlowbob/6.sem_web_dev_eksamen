@@ -30,7 +30,7 @@ window.onload = async function () {
     const mediaTypes = await getAllMediaTypes();
     const genres = await getAllGenres();
     const isAdmin = await getIsAdmin() === "true";
-    
+
     if (isAdmin) {
         $("#addBtn").css("display", "inline")
     }
@@ -52,27 +52,27 @@ async function addBtnClick() {
     const selected = $("#searchOptions").val();
 
     if (selected == "track") {
-        for (const a of albums){
+        for (const a of albums) {
             $("#addTrackAlbumOptions").append('<option value=' + a.albumId + '>' + a.name + '</option>')
         }
 
-        for (const g of genres){
+        for (const g of genres) {
             $("#addTrackGenreOptions").append('<option value=' + g.genreId + '>' + g.name + '</option>')
-        }  
+        }
 
-        for (const mt of mediaTypes){
+        for (const mt of mediaTypes) {
             $("#addTrackMediaTypeOptions").append('<option value=' + mt.mediaTypeId + '>' + mt.name + '</option>')
         }
 
         $("#addTrackSection").css("display", "block");
     }
     else if (selected == "album") {
-        for (const a of artists){
+        for (const a of artists) {
             $("#addAlbumArtistOptions").append('<option value=' + a.artistId + '>' + a.name + '</option>')
         }
         $("#addAlbumSection").css("display", "block");
     }
-    else if (selected == "artist"){
+    else if (selected == "artist") {
         $("#addArtistSection").css("display", "block");
     }
 }
@@ -87,7 +87,7 @@ async function searchBtnClick() {
     if (searchOptions == "track") {
         const url = baseUrl + "tracks/?name=" + searchQuery;
         const response = await $.get(url);
-        if(response == null){
+        if (response == null) {
             alert("No tracks found");
             return;
         }
@@ -98,7 +98,7 @@ async function searchBtnClick() {
     else if (searchOptions == "album") {
         const url = baseUrl + "albums/?name=" + searchQuery;
         const response = await $.get(url);
-        if(response == null){
+        if (response == null) {
             alert("No albums found");
             return;
         }
@@ -106,10 +106,10 @@ async function searchBtnClick() {
         await showAlbumsTable(results);
     }
 
-    else if (searchOptions == "artist"){
+    else if (searchOptions == "artist") {
         const url = baseUrl + "artists/?name=" + searchQuery;
         const response = await $.get(url);
-        if(response == null){
+        if (response == null) {
             alert("No artists found");
             return;
         }
@@ -122,9 +122,9 @@ async function searchBtnClick() {
 
 //#region User
 
-async function showProfile(){
+async function showProfile() {
     const isAdmin = await getIsAdmin() === "true";
-    if(isAdmin){
+    if (isAdmin) {
         alert("Cannot edit admin profile");
         return;
     }
@@ -149,12 +149,12 @@ async function showProfile(){
     $("#profileSection").css("display", "block");
 }
 
-async function hideProfile(){
+async function hideProfile() {
     $("#searchSection").css("display", "block");
     $("#resultTrackSection").css("display", "block");
     $("#profileSection").css("display", "none");
 }
-async function saveProfileInfo(){
+async function saveProfileInfo() {
     const user = await $.get(baseUrl + "users/me");
     const url = baseUrl + "users";
     const requestData = {
@@ -190,7 +190,7 @@ async function saveProfileInfo(){
     });
 }
 
-async function updatePassword(){
+async function updatePassword() {
     const user = await $.get(baseUrl + "users/me");
     const isAdmin = await getIsAdmin() === "true";
     const oldPassword = $("#userOldPassword").val();
@@ -201,13 +201,13 @@ async function updatePassword(){
     }
 
     const verifyResponse = await $.post(baseUrl + "users/verify", JSON.stringify(verifyPasswordRequest))
-    .done(async function (data) {})
-    .fail(async function (data){
-        console.log(data);
-        alert("Something went wrong");
-    })
+        .done(async function (data) { })
+        .fail(async function (data) {
+            console.log(data);
+            alert("Something went wrong");
+        })
 
-    if(verifyResponse !== true){
+    if (verifyResponse !== true) {
         alert("Old password is not correct");
         return;
     }
@@ -215,15 +215,15 @@ async function updatePassword(){
     const newPassword1 = $("#userNewPassword1").val();
     const newPassword2 = $("#userNewPassword2").val();
 
-    if(newPassword1 != newPassword2){
+    if (newPassword1 != newPassword2) {
         alert("The two new passwords doesn't match");
-        return;   
+        return;
     }
 
-    if(!isAdmin){
-        if(newPassword1 == "admin"){
+    if (!isAdmin) {
+        if (newPassword1 == "admin") {
             alert("New password cannot be 'admin'");
-            return;   
+            return;
         }
     }
 
@@ -255,13 +255,59 @@ async function updatePassword(){
 
 //#region Cart 
 
-let cart = [];
+let cart = []
 
-sessionStorage.setItem('deletedItems', JSON.stringify(cart));
-//JSON.parse(sessionStorage.getItem('deletedItems'))
+async function cartCounterBtnPressed() {
+    $("#trackTableCheckout > tbody").empty();
+    const albums = await getAllAlbums();
+    const mediaTypes = await getAllMediaTypes();
+    const genres = await getAllGenres();
+    let bodyStr = "";
+    let totalAmount = 0;
 
+    for (const result of cart) {
+        const album = albums.find(a => a["albumId"] == result["albumId"])["name"];
+        const mediaType = mediaTypes.find(mt => mt["mediaTypeId"] == result["mediaTypeId"])["name"];
+        const genre = genres.find(g => g["genreId"] == result["genreId"])["name"];
+        const composer = result["composer"];
+        let newComposer = "";
 
-async function cartCounterBtnPressed(){
+        if (composer != null) {
+            newComposer += composer;
+        }
+
+        bodyStr +=
+            "<tr>" +
+            "<td>" + result["name"] + "</td>" +
+            "<td>" + album + "</td>" +
+            "<td>" + mediaType + "</td>" +
+            "<td>" + genre + "</td>" +
+            "<td>" + newComposer + "</td>" +
+            "<td>" + millisToMinutesAndSeconds(result["milliseconds"]) + "</td>" +
+            "<td>" + bytesToSize(result["bytes"]) + "</td>" +
+            "<td>" + result["unitPrice"] + "$" + "</td>" +
+            "<td>" +
+            "<a href='#' onClick='deleteTrackFromCart(" + result["trackId"] + ")'>" + "<img src='../images/deleteinv.png' class='logoImg'>" + "</a>" +
+            "</td>" +
+            "</tr>";
+
+        totalAmount += parseFloat(result["unitPrice"]);
+    }
+
+    totalAmount = totalAmount.toFixed(2);
+
+    $("#totalAmountP").text(totalAmount.toString() + "$");
+
+    const response = await $.get(baseUrl + "users/me");
+    $("#userAddressCheckout").val(response.address);
+    $("#userCityCheckout").val(response.city);
+    $("#userStateCheckout").val(response.state);
+    $("#userCountryCheckout").val(response.country);
+    $("#userPostalCodeCheckout").val(response.postalCode);
+    $("#customerIdCheckout").text(response.customerId);
+
+    $("#trackTableCheckout > tbody").append(bodyStr);
+
     $("#trackInfoSection").css("display", "none");
     $("#albumInfoSection").css("display", "none");
     $("#artistInfoSection").css("display", "none");
@@ -276,31 +322,97 @@ async function cartCounterBtnPressed(){
     $("#resultTrackSection").css("display", "none");
     $("#resultArtistSection").css("display", "none");
 
-
     $("#cartSection").css("display", "block");
 }
 
-async function addTrackToCart(trackId){
-    const url = baseUrl + "tracks/" + trackId; 
+async function deleteTrackFromCart(trackId) {
+    if (confirm('Are you sure you want to delete the track from the cart?')) {
+        cart = cart.filter(t => t.trackId != trackId)
+        $("#cartCounterBtn").prop("value", "Cart (" + cart.length + ")")
+        await cartCounterBtnPressed();
+    } else {
+        // Do nothing!
+    }
+}
+
+async function addTrackToCart(trackId) {
+    const url = baseUrl + "tracks/" + trackId;
     const track = await $.get(url);
 
-    if(track.name == undefined){
+    if (track.name == undefined) {
         alert("Something went wrong");
         return;
     }
 
     cart.push(track)
-    alert("Track added to cart");
-    console.log(cart.length);
     $("#cartCounterBtn").prop("value", "Cart (" + cart.length + ")")
 }
 
+async function checkOut() {
+    if (cart.length === 0) {
+        alert("Cart is empty");
+        return;
+    }
+
+    const invoiceUrl = baseUrl + "invoices"
+    const invoiceLineurl = baseUrl + "invoices/lines"
+
+    const invoiceData = {
+        customerId: $("#customerIdCheckout").text(),
+        address: $("#userAddressCheckout").val(),
+        city: $("#userCityCheckout").val(),
+        state: $("#userStateCheckout").val(),
+        country: $("#userCountryCheckout").val(),
+        postalCode: $("#userPostalCodeCheckout").val(),
+        date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+        total: $("#totalAmountP").text().slice(0, -1),
+    }
+
+    const invoiceResponse = await $.post(invoiceUrl, JSON.stringify(invoiceData))
+        .done(function (data) {
+
+        })
+        .fail(function (data) {
+            console.log(data);
+            console.log("invoice went wrong");
+            alert("Something went wrong");
+        });
+    console.log(invoiceResponse);
+
+    if (invoiceResponse.invoiceId == undefined) {
+        console.log("invoiceid is undefined")
+        alert('Something went wrong');
+    }
+
+    for (const track of cart) {
+        const invoiceLineData = {
+            invoiceId: invoiceResponse.invoiceId,
+            trackId: track.trackId,
+            unitPrice: track.unitPrice,
+            quantity: 1,
+        };
+
+        const invoiceLineResponse = await $.post(invoiceLineurl, JSON.stringify(invoiceLineData))
+            .done(function (data) {
+
+            })
+            .fail(function (data) {
+                console.log(data);
+                console.log("invoice line went wrong");
+                alert("Something went wrong");
+            });
+    }
+
+    alert("Check out was successful!");
+    cart = [];
+    location.reload();
+}
 
 //#endregion
 
 //#region Artists
 
-$("#addArtistForm").submit(function(event ) {
+$("#addArtistForm").submit(function (event) {
     event.preventDefault();
 
     const formValues = $("#addArtistForm").serialize();
@@ -310,7 +422,7 @@ $("#addArtistForm").submit(function(event ) {
             alert("Artist was added");
             window.location.reload();
         })
-        .fail(function (data){
+        .fail(function (data) {
             console.log(data);
             alert("Something went wrong");
         })
@@ -329,16 +441,16 @@ async function showArtistsTable(artists) {
             "<a href='#' onClick='pressArtistName(" + result["artistId"] + ")'>" + result["name"] + "</a> " +
             "</td>"
 
-            if (isAdmin) {
-                bodyStr +=
-                    "<td>" +
-                    "<a href='#' onClick='deleteArtist(" + result["artistId"] + ")'>" + "<img src='../images/deleteinv.png' class='logoImg'>" + "</a>" +
-                    "</td>" +
-                    "</tr>";
-            }
-            else {
-                bodyStr += "</tr>";
-            }
+        if (isAdmin) {
+            bodyStr +=
+                "<td>" +
+                "<a href='#' onClick='deleteArtist(" + result["artistId"] + ")'>" + "<img src='../images/deleteinv.png' class='logoImg'>" + "</a>" +
+                "</td>" +
+                "</tr>";
+        }
+        else {
+            bodyStr += "</tr>";
+        }
     }
 
     $("#artistTable > tbody").append(bodyStr);
@@ -348,7 +460,7 @@ async function showArtistsTable(artists) {
     $("#resultTrackSection").css("display", "none");
 }
 
-async function pressArtistName(artistId){
+async function pressArtistName(artistId) {
     const isAdmin = await getIsAdmin() === "true";
     const artist = await $.get(baseUrl + "artists/" + artistId);
 
@@ -365,7 +477,8 @@ async function pressArtistName(artistId){
 
     $("#resultArtistSection").css("display", "none");
     $("#searchSection").css("display", "none");
-    $("#artistInfoSection").css("display", "block");}
+    $("#artistInfoSection").css("display", "block");
+}
 
 async function deleteArtist(artistId) {
     const newUrl = baseUrl + "artists/" + artistId;
@@ -424,7 +537,7 @@ async function saveArtistInfo() {
 
 //#region Albums
 
-$("#addAlbumForm").submit(function(event ) {
+$("#addAlbumForm").submit(function (event) {
     event.preventDefault();
 
     const formValues = $("#addAlbumForm").serialize();
@@ -434,7 +547,7 @@ $("#addAlbumForm").submit(function(event ) {
             alert("Album was added");
             window.location.reload();
         })
-        .fail(function (data){
+        .fail(function (data) {
             console.log(data);
             alert("Something went wrong");
         })
@@ -453,10 +566,10 @@ async function deleteAlbum(albumId) {
                 location.reload();
             },
             error: function (xhr, status, error) {
-                if(xhr.responseText.includes('SQLSTATE[23000]')){
+                if (xhr.responseText.includes('SQLSTATE[23000]')) {
                     alert("You must delete all tracks in the album before deleting the album")
                 }
-                else{
+                else {
                     console.log(xhr);
                     console.log(status);
                     console.log(error);
@@ -483,18 +596,18 @@ async function showAlbumsTable(results) {
             "<td>" +
             "<a href='#' onClick='pressAlbumName(" + result["albumId"] + ")'>" + result["name"] + "</a> " +
             "</td>" +
-            "<td>" + artist + "</td>" 
+            "<td>" + artist + "</td>"
 
-            if (isAdmin) {
-                bodyStr +=
-                    "<td>" +
-                    "<a href='#' onClick='deleteAlbum(" + result["albumId"] + ")'>" + "<img src='../images/deleteinv.png' class='logoImg'>" + "</a>" +
-                    "</td>" +
-                    "</tr>";
-            }
-            else {
-                bodyStr += "</tr>";
-            }
+        if (isAdmin) {
+            bodyStr +=
+                "<td>" +
+                "<a href='#' onClick='deleteAlbum(" + result["albumId"] + ")'>" + "<img src='../images/deleteinv.png' class='logoImg'>" + "</a>" +
+                "</td>" +
+                "</tr>";
+        }
+        else {
+            bodyStr += "</tr>";
+        }
     }
 
     $("#albumTable > tbody").append(bodyStr);
@@ -520,11 +633,11 @@ async function pressAlbumName(albumId) {
 
     let bodyStr = "";
 
-    if(results != null){
+    if (results != null) {
         for (const result of results) {
             const mediaType = mediaTypes.find(mt => mt["mediaTypeId"] == result["mediaTypeId"])["name"];
             const genre = genres.find(g => g["genreId"] == result["genreId"])["name"];
-    
+
             bodyStr +=
                 "<tr>" +
                 "<td>" + result["name"] + "</td>" +
@@ -532,8 +645,11 @@ async function pressAlbumName(albumId) {
                 "<td>" + genre + "</td>" +
                 "<td>" + millisToMinutesAndSeconds(result["milliseconds"]) + "</td>" +
                 "<td>" + bytesToSize(result["bytes"]) + "</td>" +
-                "<td>" + result["unitPrice"] + "$" + "</td>";
-    
+                "<td>" + result["unitPrice"] + "$" + "</td>" + 
+                "<td>" +
+                "<a href='#' onClick='addTrackToCart(" + result["trackId"] + ")'>" + "<button class='buyBtn'>Buy</button>" + "</a>" +
+                "</td>";
+
             if (isAdmin) {
                 bodyStr +=
                     "<td>" +
@@ -553,7 +669,7 @@ async function pressAlbumName(albumId) {
 
     $("#albumName").val(response.name);
     $("#albumName").prop("readonly", true);
-    
+
     $("#saveAlbumBtn").css("display", "none");
     $("#albumArtist").val(artist.name);
     $("#albumArtist").prop("readonly", true);
@@ -561,11 +677,11 @@ async function pressAlbumName(albumId) {
     $("#albumArtistOptions").css("display", "none");
 
     if (isAdmin) {
-        for (const a of artists){
-            if(a.artistId === artist.artistId){
+        for (const a of artists) {
+            if (a.artistId === artist.artistId) {
                 $("#albumArtistOptions").append('<option value=' + a.artistId + ' selected>' + a.name + '</option>')
             }
-            else{
+            else {
                 $("#albumArtistOptions").append('<option value=' + a.artistId + '>' + a.name + '</option>')
             }
         }
@@ -616,17 +732,17 @@ async function saveAlbumInfo() {
 
 //#region Tracks
 
-$("#addTrackForm").submit(function(event ) {
+$("#addTrackForm").submit(async function (event) {
     event.preventDefault();
 
     const formValues = $("#addTrackForm").serialize();
     const url = baseUrl + "tracks/"
-    $.post(url, formValues)
+    await $.post(url, formValues)
         .done(function (data) {
             alert("Track was added");
             location.reload();
         })
-        .fail(function (data){
+        .fail(function (data) {
             console.log(data);
             alert("Something went wrong");
         })
@@ -661,17 +777,17 @@ async function showTracksTable(results, albums, mediaTypes, genres) {
             "<td>" + newComposer + "</td>" +
             "<td>" + millisToMinutesAndSeconds(result["milliseconds"]) + "</td>" +
             "<td>" + bytesToSize(result["bytes"]) + "</td>" +
-            "<td>" + result["unitPrice"] + "$" + "</td>" + 
-            "<td>" + 
-                "<a href='#' onClick='addTrackToCart(" + result["trackId"] + ")'>" + "<button class='buyBtn'>Buy</button>" + "</a>" +
-            "</td>" 
-                
-            
+            "<td>" + result["unitPrice"] + "$" + "</td>" +
+            "<td>" +
+            "<a href='#' onClick='addTrackToCart(" + result["trackId"] + ")'>" + "<button class='buyBtn'>Buy</button>" + "</a>" +
+            "</td>"
+
+
 
         if (isAdmin) {
             bodyStr +=
                 "<td>" +
-                    "<a href='#' onClick='deleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/deleteinv.png' class='logoImg'>" + "</a>" +
+                "<a href='#' onClick='deleteTrack(" + result["trackId"] + ")'>" + "<img src='../images/deleteinv.png' class='logoImg'>" + "</a>" +
                 "</td>" +
                 "</tr>";
         }
@@ -798,32 +914,32 @@ async function pressTrackName(trackId) {
     $("#trackPrice").prop("readonly", true);
 
     if (isAdmin) {
-        for (const a of albums){
-            if(a.albumId === album.albumId){
+        for (const a of albums) {
+            if (a.albumId === album.albumId) {
                 $("#trackAlbumOptions").append('<option value=' + a.albumId + ' selected>' + a.name + '</option>')
             }
-            else{
+            else {
                 $("#trackAlbumOptions").append('<option value=' + a.albumId + '>' + a.name + '</option>')
             }
         }
 
-        for (const mediaType of mediaTypes){
-            if(response.mediaTypeId === mediaType.mediaTypeId){
+        for (const mediaType of mediaTypes) {
+            if (response.mediaTypeId === mediaType.mediaTypeId) {
                 $("#trackMediaOptions").append('<option value=' + mediaType.mediaTypeId + ' selected>' + mediaType.name + '</option>')
             }
-            else{
+            else {
                 $("#trackMediaOptions").append('<option value=' + mediaType.mediaTypeId + '>' + mediaType.name + '</option>')
             }
         }
 
-        for (const g of genres){
-            if(g.genreId === response.genreId){
+        for (const g of genres) {
+            if (g.genreId === response.genreId) {
                 $("#trackGenreOptions").append('<option value=' + g.genreId + ' selected>' + g.name + '</option>')
             }
-            else{
+            else {
                 $("#trackGenreOptions").append('<option value=' + g.genreId + '>' + g.name + '</option>')
             }
-        } 
+        }
 
         $("#trackName").prop("readonly", false);
 

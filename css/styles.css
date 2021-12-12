@@ -15,6 +15,7 @@
 .buyBtn{
   background-color: var(--btn-th-color);
   color: var(--btn-color);
+  font-size: 90%;
 }
 
 img {
@@ -108,13 +109,18 @@ input[type=text], input[type=password], select, textarea {
   display: none;
 }
 
+#trackTableCheckout{
+  margin-bottom: 1rem;
+}
+
 #cartCounterBtn{
   position:absolute; 
   top:1rem; 
   right: 1rem;
   background-color: var(--btn-th-color);
-  color: var(--btn-color);
+  color: var(--second-text-color);
   border-radius: 5px;
+  
 }
 
 th,
@@ -307,6 +313,16 @@ img.logoImg {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+  }
+
+  h3, p, strong{
+    font-size: 95%;
+  }
+
+  .buyBtn{
+    width: 28px;
+    height: auto;
+    font-size: 70%;
   }
 
   .frontpageBtn {
