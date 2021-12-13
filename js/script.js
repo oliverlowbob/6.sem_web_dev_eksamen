@@ -275,7 +275,7 @@ function getCart() {
     }
 }
 
-function setCart(cart){
+function setCart(cart) {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
@@ -395,6 +395,7 @@ async function checkOut() {
         postalCode: $("#userPostalCodeCheckout").val(),
         date: new Date().toISOString().slice(0, 19).replace('T', ' '),
         total: $("#totalAmountP").text().slice(0, -1),
+        cart: cart,
     }
 
     const invoiceResponse = await $.post(invoiceUrl, JSON.stringify(invoiceData))
@@ -406,32 +407,7 @@ async function checkOut() {
             console.log("invoice went wrong");
             alert("Something went wrong");
         });
-    console.log(invoiceResponse);
-
-    if (invoiceResponse.invoiceId == undefined) {
-        console.log("invoiceid is undefined")
-        alert('Something went wrong');
-    }
-
-    for (const track of cart) {
-        const invoiceLineData = {
-            invoiceId: invoiceResponse.invoiceId,
-            trackId: track.trackId,
-            unitPrice: track.unitPrice,
-            quantity: 1,
-        };
-
-        await $.post(invoiceLineurl, JSON.stringify(invoiceLineData))
-            .done(function (data) {
-
-            })
-            .fail(function (data) {
-                console.log(data);
-                console.log("invoice line went wrong");
-                alert("Something went wrong");
-            });
-    }
-
+    
     alert("Check out was successful!");
     setCart([]);
     location.reload();
@@ -494,15 +470,15 @@ async function pressArtistName(artistId) {
     const artist = await $.get(baseUrl + "artists/" + artistId);
     const albumsResponse = await getAllAlbums();
     const albums = albumsResponse.filter(a => a.artistId == artistId);
-    
+
     $("#artistName").val(artist.name);
     $("#artistId").text(artistId);
     $("#artistName").prop("readonly", true);
     $("#saveArtistBtn").css("display", "none");
 
     let albumsString = "";
-    for(const album of albums){
-        albumsString += "<li> <p>"+ album.name + "</p></li>";
+    for (const album of albums) {
+        albumsString += "<li> <p>" + album.name + "</p></li>";
     }
     $("#aristInfoSectionAlbumsList").append(albumsString);
 
@@ -689,12 +665,12 @@ async function pressAlbumName(albumId) {
                 "<td>" + result["unitPrice"] + "$" + "</td>";
 
 
-                if(!isAdmin){
-                    bodyStr += 
+            if (!isAdmin) {
+                bodyStr +=
                     "<td>" +
                     "<a href='#' onClick='addTrackToCart(" + result["trackId"] + ")'>" + "<button class='buyBtn'>Buy</button>" + "</a>" +
                     "</td>";
-                }
+            }
 
             if (isAdmin) {
                 bodyStr +=
@@ -824,13 +800,13 @@ async function showTracksTable(results, albums, mediaTypes, genres) {
             "<td>" + millisToMinutesAndSeconds(result["milliseconds"]) + "</td>" +
             "<td>" + bytesToSize(result["bytes"]) + "</td>" +
             "<td>" + result["unitPrice"] + "$" + "</td>";
-            
 
-        if(!isAdmin){
-            bodyStr += 
-            "<td>" +
-            "<a href='#' onClick='addTrackToCart(" + result["trackId"] + ")'>" + "<button class='buyBtn'>Buy</button>" + "</a>" +
-            "</td>";
+
+        if (!isAdmin) {
+            bodyStr +=
+                "<td>" +
+                "<a href='#' onClick='addTrackToCart(" + result["trackId"] + ")'>" + "<button class='buyBtn'>Buy</button>" + "</a>" +
+                "</td>";
         }
 
         if (isAdmin) {

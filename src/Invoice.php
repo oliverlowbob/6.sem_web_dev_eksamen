@@ -10,28 +10,37 @@ class Invoice extends DatabaseConnector
         return $statusInfo;
     }
 
-    public function addInvoice($customerId, $date, $total, $address="", $city="", $state="", $country="", $postalCode="")
+    public function addInvoice($customerId, $date, $total, $cart, $address = "", $city = "", $state = "", $country = "", $postalCode = "")
     {
         $con = (new DatabaseConnector())->getConnection();
-
         if ($con) {
-            $sql = 'INSERT INTO chinook_abridged.invoice (CustomerId, InvoiceDate, BillingAddress, BillingCity, BillingState, BillingCountry, BillingPostalCode, Total) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-            $stmt = $con->prepare($sql);
-            $response = $stmt->execute([htmlspecialchars($customerId), htmlspecialchars($date), htmlspecialchars($address), htmlspecialchars($city), htmlspecialchars($state), htmlspecialchars($country), htmlspecialchars($postalCode), htmlspecialchars($total)]);
-            if($response == true){
-                $invoiceId = $con->lastInsertId();
-                $sql = 'SELECT * FROM chinook_abridged.Invoice WHERE InvoiceId=?';
-                $stmt= $con->prepare($sql);
-                $stmt->execute([$invoiceId]);
+            try {
+                $con->beginTransaction();
 
-                while($row = $stmt->fetch()) {
+                $sql = 'INSERT INTO chinook_abridged.invoice (CustomerId, InvoiceDate, BillingAddress, BillingCity, BillingState, BillingCountry, BillingPostalCode, Total) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+                $stmt = $con->prepare($sql);
+                $stmt->execute([htmlspecialchars($customerId), htmlspecialchars($date), htmlspecialchars($address), htmlspecialchars($city), htmlspecialchars($state), htmlspecialchars($country), htmlspecialchars($postalCode), htmlspecialchars($total)]);
+                $invoiceId = $con->lastInsertId();
+
+                foreach ($cart as $track) {
+                    $invoiceLineSql = 'INSERT into invoiceline (InvoiceId, TrackId, UnitPrice, Quantity) 
+                    VALUES (?, ?, ?, ?)';
+                    $newStmt = $con->prepare($invoiceLineSql);
+                    $newStmt->execute([$invoiceId, $track['trackId'], $track['unitPrice'], 1]);
+                }
+
+                while ($row = $stmt->fetch()) {
                     $result['invoiceId'] = $row['InvoiceId'];
                     $users[] = $result;
                 }
 
-                return $users[0];
+                $con->commit();
+                $stmt = null;
+                return "true";
+            } catch (\Throwable $e) {
+                $con->rollback();
+                throw $e; // but the error must be handled anyway
             }
-            $stmt = null;
         } else {
             return $this->statusCode(ERROR);
         }

@@ -150,18 +150,12 @@ switch ($requestMethod) {
                 echo json_encode($user->addUser($_POST['firstName'], $_POST['lastName'], $_POST['password'], $_POST['email'], $_POST['company'], $_POST['address'], $_POST['city'], $_POST['state'], $_POST['country'], $_POST['postalCode'], $_POST['phone'], $_POST['fax']));
             } elseif($urlPieces[1] == "invoices" ){
                 $postData = (array) json_decode(file_get_contents('php://input'), TRUE);
-                if(isset($postData['customerId']) && isset($postData['date']) && isset($postData['total'])){
-                    echo json_encode($invoice->addInvoice($postData['customerId'], $postData['date'], $postData['total'], $postData['address'], $postData['city'], $postData['state'], $postData['country'], $postData['postalCode']));
+                if(isset($postData['customerId']) && isset($postData['date']) && isset($postData['total']) && isset($postData['cart'])){
+                    echo json_encode($invoice->addInvoice($postData['customerId'], $postData['date'], $postData['total'], $postData['cart'], $postData['address'], $postData['city'], $postData['state'], $postData['country'], $postData['postalCode'], $postData['postalCode']));
                 }
             }
         }
         elseif (count($urlPieces) == 3){
-            if($urlPieces[1] == "invoices"){
-                $postData = (array) json_decode(file_get_contents('php://input'), TRUE);
-                if($urlPieces[2] == "lines" && isset($postData['invoiceId']) && isset($postData['trackId']) && isset($postData['unitPrice']) && isset($postData['quantity'])){
-                    echo json_encode($invoiceLine->addInvoiceLine($postData['invoiceId'], $postData['trackId'], $postData['unitPrice'], $postData['quantity']));
-                }
-            }
             if($urlPieces[1] == "users"){
                 $postData = (array) json_decode(file_get_contents('php://input'), TRUE);
                 if($urlPieces[2] == "verify" && isset($postData['customerId']) && isset($postData['password'])){
