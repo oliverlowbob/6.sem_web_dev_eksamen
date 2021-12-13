@@ -271,6 +271,8 @@ if (!isset($_SESSION['email'])) {
                     <p><strong>Name</strong></p>
                     <li><input type="text" id="artistName" class="trackInput"></li>
                 </ul>
+                <p><strong>Albums</strong></p>
+                <ul id="aristInfoSectionAlbumsList"></ul>
                 <button id="saveArtistBtn" onclick="saveArtistInfo()">Save</button>
             </div>
         </div>

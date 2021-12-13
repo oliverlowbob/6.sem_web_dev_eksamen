@@ -492,11 +492,19 @@ async function showArtistsTable(artists) {
 async function pressArtistName(artistId) {
     const isAdmin = await getIsAdmin() === "true";
     const artist = await $.get(baseUrl + "artists/" + artistId);
-
+    const albumsResponse = await getAllAlbums();
+    const albums = albumsResponse.filter(a => a.artistId == artistId);
+    
     $("#artistName").val(artist.name);
     $("#artistId").text(artistId);
     $("#artistName").prop("readonly", true);
     $("#saveArtistBtn").css("display", "none");
+
+    let albumsString = "";
+    for(const album of albums){
+        albumsString += "<li> <p>"+ album.name + "</p></li>";
+    }
+    $("#aristInfoSectionAlbumsList").append(albumsString);
 
     if (isAdmin) {
         $("#artistName").prop("readonly", false);
@@ -517,15 +525,19 @@ async function deleteArtist(artistId) {
             url: newUrl,
             type: 'DELETE',
             success: function (result) {
-                console.log(result);
                 alert("Artist deleted");
                 location.reload();
             },
             error: function (xhr, status, error) {
-                console.log(xhr);
-                console.log(status);
-                console.log(error);
-                alert("Something went wrong");
+                if (xhr.responseText.includes('SQLSTATE[23000]')) {
+                    alert("You must delete all albums with artist before deleting the artist");
+                }
+                else {
+                    console.log(xhr);
+                    console.log(status);
+                    console.log(error);
+                    alert("Something went wrong");
+                }
             }
         })
     } else {

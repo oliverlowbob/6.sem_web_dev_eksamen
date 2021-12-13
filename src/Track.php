@@ -11,6 +11,18 @@ class Track extends DatabaseConnector
 
     public function addTrack($name, $albumId, $mediaTypeId, $genreId, $composer, $milliseconds, $bytes, $unitPrice)
     {
+        if($milliseconds == ""){
+            $milliseconds = 0;
+        }
+
+        if($bytes == ""){
+            $bytes = 0;
+        }
+
+        if($unitPrice == ""){
+            $unitPrice = 0;
+        }
+
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
@@ -39,6 +51,18 @@ class Track extends DatabaseConnector
 
     public function updateTrack($id, $name, $albumId, $mediaTypeId, $genreId, $composer, $milliseconds, $bytes, $unitPrice)
     {
+        if($milliseconds == ""){
+            $milliseconds = 0;
+        }
+
+        if($bytes == ""){
+            $bytes = 0;
+        }
+
+        if($unitPrice == ""){
+            $unitPrice = 0;
+        }
+        
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {

@@ -107,28 +107,28 @@ switch ($requestMethod) {
     case "PUT":
         $putData = (array) json_decode(file_get_contents('php://input'), TRUE);
         if (count($urlPieces) == 2) {
-            if ($urlPieces[1] == "tracks") {
+            if ($urlPieces[1] == "tracks" && $_SESSION["isAdmin"] == "true") {
                 echo json_encode($track->updateTrack($putData['trackId'], $putData['name'], $putData['albumId'], $putData['mediaTypeId'], $putData['genreId'], $putData['composer'], $putData['milliseconds'], $putData['bytes'], $putData['unitPrice']));
             } elseif ($urlPieces[1] == "users" && isset($putData['password'])) {
                 echo json_encode($user->updatePassword($putData['customerId'], $putData['password']));
             } elseif ($urlPieces[1] == "users" && isset($putData['customerId']) && isset($putData['firstName']) && isset($putData['lastName']) && isset($putData['email'])) {
                 echo json_encode($user->updateUser($putData['customerId'], $putData['firstName'], $putData['lastName'], $putData['company'], $putData['address'], $putData['city'], $putData['state'], $putData['country'], $putData['postalCode'], $putData['phone'], $putData['fax'], $putData['email']));
-            } elseif ($urlPieces[1] == "albums") {
+            } elseif ($urlPieces[1] == "albums" && $_SESSION["isAdmin"] == "true") {
                 echo json_encode($album->updateAlbum($putData['albumId'], $putData['name'], $putData['artistId']));
-            } elseif ($urlPieces[1] == "artists") {
+            } elseif ($urlPieces[1] == "artists" && $_SESSION["isAdmin"] == "true") {
                 echo json_encode($artist->updateArtist($putData['artistId'], $putData['name']));
             }
         }
         break;
     case "POST":
         if (count($urlPieces) == 2) {
-            if ($urlPieces[1] == "tracks" && isset($_POST['name']) && isset($_POST['mediaTypeId']) && isset($_POST['milliseconds']) && isset($_POST['unitPrice'])) {
+            if ($urlPieces[1] == "tracks" && $_SESSION["isAdmin"] == "true" && isset($_POST['name']) && isset($_POST['mediaTypeId']) && isset($_POST['milliseconds']) && isset($_POST['unitPrice'])) {
                 //add track
                 echo json_encode($track->addTrack($_POST['name'], $_POST['albumId'], $_POST['mediaTypeId'], $_POST['genreId'], $_POST['composer'], $_POST['milliseconds'], $_POST['bytes'], $_POST['unitPrice']));
-            } elseif ($urlPieces[1] == "albums" && isset($_POST['title']) && isset($_POST['artistId'])) {
+            } elseif ($urlPieces[1] == "albums" && $_SESSION["isAdmin"] == "true" && isset($_POST['title']) && isset($_POST['artistId'])) {
                 //add album
                 echo json_encode($album->addAlbum($_POST['title'], $_POST['artistId']));
-            } elseif ($urlPieces[1] == "artists" && isset($_POST['name'])) {
+            } elseif ($urlPieces[1] == "artists" && $_SESSION["isAdmin"] == "true" && isset($_POST['name'])) {
                 //add artist
                 echo json_encode($artist->addArtist($_POST["name"]));
             } elseif ($urlPieces[1] == "login" && isset($_POST['email']) && isset($_POST['password'])) {
@@ -165,14 +165,13 @@ switch ($requestMethod) {
             if($urlPieces[1] == "users"){
                 $postData = (array) json_decode(file_get_contents('php://input'), TRUE);
                 if($urlPieces[2] == "verify" && isset($postData['customerId']) && isset($postData['password'])){
-                    echo "TEST";
-                    //echo json_encode($user->verifyPassword($postData['customerId'], $postData['password']));
+                    echo json_encode($user->verifyPassword($postData['customerId'], $postData['password']));
                 }
             }
         }
         break;
     case "DELETE":
-        if (count($urlPieces) == 3) {
+        if (count($urlPieces) == 3 && $_SESSION["isAdmin"] == "true") {
             if ($urlPieces[1] == "tracks") {
                 echo json_encode($track->deleteTrack($urlPieces[2]));
             } elseif ($urlPieces[1] == "albums") {
