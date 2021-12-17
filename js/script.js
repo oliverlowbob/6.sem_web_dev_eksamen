@@ -384,7 +384,6 @@ async function checkOut() {
     }
 
     const invoiceUrl = baseUrl + "invoices"
-    const invoiceLineurl = baseUrl + "invoices/lines"
 
     const invoiceData = {
         customerId: $("#customerIdCheckout").text(),

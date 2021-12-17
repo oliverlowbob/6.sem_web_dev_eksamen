@@ -1,0 +1,17 @@
+{
+    "name": "olive/music",
+    "autoload": {
+        "psr-4": {
+            "Olive\\Music\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "oliverlowbob",
+            "email": "oliverlowbob@live.dk"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
