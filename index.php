@@ -163,9 +163,9 @@ switch ($requestMethod) {
                 echo json_encode($user->addUser($_POST['firstName'], $_POST['lastName'], $_POST['password'], $_POST['email'], $_POST['company'], $_POST['address'], $_POST['city'], $_POST['state'], $_POST['country'], $_POST['postalCode'], $_POST['phone'], $_POST['fax']));
             } elseif($urlPieces[1] == "invoices" ){
                 $postData = (array) json_decode(file_get_contents('php://input'), TRUE);
-                if(isset($postData['customerId']) && isset($postData['date']) && isset($postData['total']) && isset($postData['cart'])){
+                if(isset($postData['customerId']) && isset($postData['date']) && isset($postData['cart'])){
                     // Checkout
-                    echo json_encode($invoice->addInvoice($postData['customerId'], $postData['date'], $postData['total'], $postData['cart'], $postData['address'], $postData['city'], $postData['state'], $postData['country'], $postData['postalCode'], $postData['postalCode']));
+                    echo json_encode($invoice->addInvoice($postData['customerId'], $postData['date'], $postData['cart'], $postData['address'], $postData['city'], $postData['state'], $postData['country'], $postData['postalCode'], $postData['postalCode']));
                 }
             }
         }

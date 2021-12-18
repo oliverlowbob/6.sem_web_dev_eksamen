@@ -393,7 +393,7 @@ async function checkOut() {
         country: $("#userCountryCheckout").val(),
         postalCode: $("#userPostalCodeCheckout").val(),
         date: new Date().toISOString().slice(0, 19).replace('T', ' '),
-        total: $("#totalAmountP").text().slice(0, -1),
+        //total: $("#totalAmountP").text().slice(0, -1),
         cart: cart,
     }
 

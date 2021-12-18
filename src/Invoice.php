@@ -10,12 +10,25 @@ class Invoice extends DatabaseConnector
         return $statusInfo;
     }
 
-    public function addInvoice($customerId, $date, $total, $cart, $address = "", $city = "", $state = "", $country = "", $postalCode = "")
+    public function addInvoice($customerId, $date, $cart, $address = "", $city = "", $state = "", $country = "", $postalCode = "")
     {
         $con = (new DatabaseConnector())->getConnection();
         if ($con) {
             try {
                 $con->beginTransaction();
+
+                $total = 0;
+
+                foreach($cart as $track){
+                    $getTotalSql = 'SELECT * FROM chinook_abridged.track WHERE TrackId=?';
+                    $getStmt = $con->prepare($getTotalSql);
+                    $getStmt->execute([$track['trackId']]);
+
+                    while ($row = $getStmt->fetch()) {
+                        $total += $row['UnitPrice'];
+                    }
+
+                }
 
                 $sql = 'INSERT INTO chinook_abridged.invoice (CustomerId, InvoiceDate, BillingAddress, BillingCity, BillingState, BillingCountry, BillingPostalCode, Total) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
                 $stmt = $con->prepare($sql);
@@ -27,11 +40,6 @@ class Invoice extends DatabaseConnector
                     VALUES (?, ?, ?, ?)';
                     $newStmt = $con->prepare($invoiceLineSql);
                     $newStmt->execute([$invoiceId, $track['trackId'], $track['unitPrice'], 1]);
-                }
-
-                while ($row = $stmt->fetch()) {
-                    $result['invoiceId'] = $row['InvoiceId'];
-                    $users[] = $result;
                 }
 
                 $con->commit();
