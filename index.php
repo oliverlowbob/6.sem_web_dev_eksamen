@@ -1,7 +1,13 @@
 <?php
+/**
+ * SD Exam 2021 - Music Webshop
+ * Refer to README.md for API documentation
+ * 
+ * @author  Oliver Dehnfjeld
+ * @version 1.0, December 2021
+*/
+
 session_start();
-//session_destroy();
-//echo $_SESSION["isAdmin"];
 
 if (!isset($_SESSION['email'])) {
     header('Location: ../views/login.php');
@@ -81,6 +87,7 @@ switch ($requestMethod) {
                     echo json_encode(false);
                 }
             } elseif ($urlPieces[1] == "logout") {
+                // Log out
                 session_destroy();
                 header("Location: ./views/login.php");
             }
@@ -108,14 +115,19 @@ switch ($requestMethod) {
         $putData = (array) json_decode(file_get_contents('php://input'), TRUE);
         if (count($urlPieces) == 2) {
             if ($urlPieces[1] == "tracks" && $_SESSION["isAdmin"] == "true") {
+                // Update Track
                 echo json_encode($track->updateTrack($putData['trackId'], $putData['name'], $putData['albumId'], $putData['mediaTypeId'], $putData['genreId'], $putData['composer'], $putData['milliseconds'], $putData['bytes'], $putData['unitPrice']));
             } elseif ($urlPieces[1] == "users" && isset($putData['password'])) {
+                // Update user password
                 echo json_encode($user->updatePassword($putData['customerId'], $putData['password']));
             } elseif ($urlPieces[1] == "users" && isset($putData['customerId']) && isset($putData['firstName']) && isset($putData['lastName']) && isset($putData['email'])) {
+                // Update user info
                 echo json_encode($user->updateUser($putData['customerId'], $putData['firstName'], $putData['lastName'], $putData['company'], $putData['address'], $putData['city'], $putData['state'], $putData['country'], $putData['postalCode'], $putData['phone'], $putData['fax'], $putData['email']));
             } elseif ($urlPieces[1] == "albums" && $_SESSION["isAdmin"] == "true") {
+                // Update album
                 echo json_encode($album->updateAlbum($putData['albumId'], $putData['name'], $putData['artistId']));
             } elseif ($urlPieces[1] == "artists" && $_SESSION["isAdmin"] == "true") {
+                // Update artist
                 echo json_encode($artist->updateArtist($putData['artistId'], $putData['name']));
             }
         }
@@ -132,7 +144,7 @@ switch ($requestMethod) {
                 //add artist
                 echo json_encode($artist->addArtist($_POST["name"]));
             } elseif ($urlPieces[1] == "login" && isset($_POST['email']) && isset($_POST['password'])) {
-                // Login logic
+                // Login
                 $isAdmin = json_encode($user->isAdmin($_POST['password']));
                 if ($isAdmin == "true") {
                     $_SESSION["isAdmin"] = "true";
@@ -147,10 +159,12 @@ switch ($requestMethod) {
                     }
                 }
             } elseif ($urlPieces[1] == "signup" && isset($_POST['email']) && isset($_POST['firstName'])  && isset($_POST['lastName'])  && isset($_POST['password']) ){
+                // Signup 
                 echo json_encode($user->addUser($_POST['firstName'], $_POST['lastName'], $_POST['password'], $_POST['email'], $_POST['company'], $_POST['address'], $_POST['city'], $_POST['state'], $_POST['country'], $_POST['postalCode'], $_POST['phone'], $_POST['fax']));
             } elseif($urlPieces[1] == "invoices" ){
                 $postData = (array) json_decode(file_get_contents('php://input'), TRUE);
                 if(isset($postData['customerId']) && isset($postData['date']) && isset($postData['total']) && isset($postData['cart'])){
+                    // Checkout
                     echo json_encode($invoice->addInvoice($postData['customerId'], $postData['date'], $postData['total'], $postData['cart'], $postData['address'], $postData['city'], $postData['state'], $postData['country'], $postData['postalCode'], $postData['postalCode']));
                 }
             }
@@ -159,6 +173,7 @@ switch ($requestMethod) {
             if($urlPieces[1] == "users"){
                 $postData = (array) json_decode(file_get_contents('php://input'), TRUE);
                 if($urlPieces[2] == "verify" && isset($postData['customerId']) && isset($postData['password'])){
+                    // Verify user password
                     echo json_encode($user->verifyPassword($postData['customerId'], $postData['password']));
                 }
             }
@@ -167,10 +182,13 @@ switch ($requestMethod) {
     case "DELETE":
         if (count($urlPieces) == 3 && $_SESSION["isAdmin"] == "true") {
             if ($urlPieces[1] == "tracks") {
+                // Delete track
                 echo json_encode($track->deleteTrack($urlPieces[2]));
             } elseif ($urlPieces[1] == "albums") {
+                // Delete album
                 echo json_encode($album->deleteAlbum($urlPieces[2]));
             } elseif ($urlPieces[1] == "artists") {
+                // Delete artist
                 echo json_encode($artist->deleteArtist($urlPieces[2]));
             }
         }
