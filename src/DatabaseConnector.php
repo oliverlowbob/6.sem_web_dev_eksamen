@@ -5,11 +5,11 @@ class DatabaseConnector {
 
     public function __construct()
     {
-        $host = 'localhost';
+        $host = '127.0.0.1';
         $port = 3306;
         $db   = 'chinook_abridged';
         $user = 'root';
-        $pass = '';
+        $pass = '21xHSlibYZZK';
 
         try {
             $this->dbConnection = new \PDO(
