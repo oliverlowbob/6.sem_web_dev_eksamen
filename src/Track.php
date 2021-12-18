@@ -11,15 +11,15 @@ class Track extends DatabaseConnector
 
     public function addTrack($name, $albumId, $mediaTypeId, $genreId, $composer, $milliseconds, $bytes, $unitPrice)
     {
-        if($milliseconds == ""){
+        if ($milliseconds == "") {
             $milliseconds = 0;
         }
 
-        if($bytes == ""){
+        if ($bytes == "") {
             $bytes = 0;
         }
 
-        if($unitPrice == ""){
+        if ($unitPrice == "") {
             $unitPrice = 0;
         }
 
@@ -40,13 +40,12 @@ class Track extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            try{
-            $sql = "DELETE FROM chinook_abridged.track WHERE TrackId=?";
-            $stmt = $con->prepare($sql);
-            $stmt->execute([$trackId]);
-            $stmt = null;
-            }
-            catch(PDOException $e){
+            try {
+                $sql = "DELETE FROM chinook_abridged.track WHERE TrackId=?";
+                $stmt = $con->prepare($sql);
+                $stmt->execute([$trackId]);
+                $stmt = null;
+            } catch (PDOException $e) {
                 return "trackDeleteError";
             }
         } else {
@@ -56,18 +55,18 @@ class Track extends DatabaseConnector
 
     public function updateTrack($id, $name, $albumId, $mediaTypeId, $genreId, $composer, $milliseconds, $bytes, $unitPrice)
     {
-        if($milliseconds == ""){
+        if ($milliseconds == "") {
             $milliseconds = 0;
         }
 
-        if($bytes == ""){
+        if ($bytes == "") {
             $bytes = 0;
         }
 
-        if($unitPrice == ""){
+        if ($unitPrice == "") {
             $unitPrice = 0;
         }
-        
+
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
@@ -135,7 +134,7 @@ class Track extends DatabaseConnector
             }
 
             $results['results'] = $tracks;
-            
+
             $stmt = null;
 
             return ($results);
@@ -144,7 +143,8 @@ class Track extends DatabaseConnector
         }
     }
 
-    public function getTracksByAlbumId($albumId){
+    public function getTracksByAlbumId($albumId)
+    {
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
@@ -165,13 +165,12 @@ class Track extends DatabaseConnector
                 $tracks[] = $result;
             }
 
-            if(!empty($tracks)){
+            if (!empty($tracks)) {
                 $results['results'] = $tracks;
-            }
-            else{
+            } else {
                 $results['results'] = null;
             }
-            
+
             $stmt = null;
 
             return ($results);
@@ -205,7 +204,7 @@ class Track extends DatabaseConnector
                 $tracks[] = $result;
             }
 
-            if(empty($tracks)){
+            if (empty($tracks)) {
                 return null;
             }
 

@@ -29,12 +29,12 @@ class Album extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
-            try{
-            $sql = 'DELETE FROM chinook_abridged.album Where AlbumId=?';
-            $stmt = $con->prepare($sql);
-            $stmt->execute([$albumId]);
-            $stmt = null;}
-            catch(PDOException $e){
+            try {
+                $sql = 'DELETE FROM chinook_abridged.album Where AlbumId=?';
+                $stmt = $con->prepare($sql);
+                $stmt->execute([$albumId]);
+                $stmt = null;
+            } catch (PDOException $e) {
                 return "deleteAlbumError";
             }
         } else {
@@ -122,7 +122,7 @@ class Album extends DatabaseConnector
                 $albums[] = $result;
             }
 
-            if(empty($albums)){
+            if (empty($albums)) {
                 return null;
             }
 
