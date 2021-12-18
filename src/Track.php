@@ -40,10 +40,15 @@ class Track extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
+            try{
             $sql = "DELETE FROM chinook_abridged.track WHERE TrackId=?";
             $stmt = $con->prepare($sql);
             $stmt->execute([$trackId]);
             $stmt = null;
+            }
+            catch(PDOException $e){
+                return "trackDeleteError";
+            }
         } else {
             return $this->statusCode(ERROR);
         }

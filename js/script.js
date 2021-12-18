@@ -406,7 +406,7 @@ async function checkOut() {
             console.log("invoice went wrong");
             alert("Something went wrong");
         });
-    
+
     alert("Check out was successful!");
     setCart([]);
     location.reload();
@@ -500,19 +500,19 @@ async function deleteArtist(artistId) {
             url: newUrl,
             type: 'DELETE',
             success: function (result) {
+                if (result == "artistDeleteError") {
+                    alert("You must delete all albums with artist before deleting the artist");
+                    return;
+                }
                 alert("Artist deleted");
                 location.reload();
             },
             error: function (xhr, status, error) {
-                if (xhr.responseText.includes('SQLSTATE[23000]')) {
-                    alert("You must delete all albums with artist before deleting the artist");
-                }
-                else {
-                    console.log(xhr);
-                    console.log(status);
-                    console.log(error);
-                    alert("Something went wrong");
-                }
+                console.log(xhr);
+                console.log(status);
+                console.log(error);
+                alert("Something went wrong");
+
             }
         })
     } else {
@@ -577,20 +577,19 @@ async function deleteAlbum(albumId) {
             url: newUrl,
             type: 'DELETE',
             success: function (result) {
+                if (result == "deleteAlbumError") {
+                    alert('You must delete all tracks in the album before deleting the album');
+                    return;
+                }
                 console.log(result);
                 alert("Album deleted");
                 location.reload();
             },
             error: function (xhr, status, error) {
-                if (xhr.responseText.includes('SQLSTATE[23000]')) {
-                    alert("You must delete all tracks in the album before deleting the album")
-                }
-                else {
-                    console.log(xhr);
-                    console.log(status);
-                    console.log(error);
-                    alert("Something went wrong");
-                }
+                console.log(xhr);
+                console.log(status);
+                console.log(error);
+                alert("Something went wrong");
             }
         })
     } else {
@@ -835,19 +834,18 @@ async function deleteTrack(trackId) {
             url: newUrl,
             type: 'DELETE',
             success: function (result) {
+                if (result == "trackDeleteError") {
+                    alert("Track cannot be deleted, as it has been purchased already");
+                    return;
+                }
                 alert("Track deleted");
                 location.reload();
             },
             error: function (xhr, status, error) {
-                if (xhr.responseText.includes('SQLSTATE[23000]')) {
-                    alert("Track cannot be deleted, as it has been purchased already");
-                }
-                else {
-                    console.log(xhr);
-                    console.log(status);
-                    console.log(error);
-                    alert("Something went wrong");
-                }
+                console.log(xhr);
+                console.log(status);
+                console.log(error);
+                alert("Something went wrong");
             }
         });
     } else {

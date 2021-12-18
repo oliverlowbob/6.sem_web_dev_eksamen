@@ -29,10 +29,15 @@ class Artist extends DatabaseConnector
         $con = (new DatabaseConnector())->getConnection();
 
         if ($con) {
+            try{
             $sql = "DELETE FROM chinook_abridged.artist WHERE ArtistId=?";
             $stmt = $con->prepare($sql);
             $stmt->execute([$artistId]);
             $stmt = null;
+            }
+            catch(PDOException $e){
+                return "artistDeleteError";
+            }
         } else {
             return $this->statusCode(ERROR);
         }
@@ -113,7 +118,7 @@ class Artist extends DatabaseConnector
                 $artists[] = $result;
             }
 
-            if(empty($artists)){
+            if (empty($artists)) {
                 return null;
             }
 
