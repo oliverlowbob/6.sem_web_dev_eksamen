@@ -1,20 +1,23 @@
 <?php
-require_once("Album.php");
+require_once("./src/Album.php");
 use PHPUnit\Framework\TestCase;
+
 
 final Class albumTest extends TestCase{
 
     public function testGetAlbums(): void
     {
-        $stack = [];
-        $this->assertSame(0, count($stack));
+        $albumClass = new Album();
+        $albums = $albumClass->getAllAlbums();
+        $this->assertSame('1', reset($albums)['albumId']);
+        $this->assertSame(347, count($albums));
+    }
 
-        array_push($stack, 'foo');
-        $this->assertSame('foo', $stack[count($stack)-1]);
-        $this->assertSame(1, count($stack));
-
-        $this->assertSame('foo', array_pop($stack));
-        $this->assertSame(0, count($stack));
+    public function testGetGetAlbumById(): void
+    {
+        $albumClass = new Album();
+        $album = $albumClass->getAlbum(10000);
+        $this->assertSame('1', $album);
     }
 }
 
