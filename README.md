@@ -41,28 +41,28 @@ For the following actions, you must be logged in as admin. <br/>
 
 Update track: /tracks <br/>
 {<br/>
-    trackId: int,<br/>
-    name: string,<br/>
-    albumId: int?,<br/>
-    mediaTypeId: int,<br/>
-    genreId: int?,<br/>
-    composer: string?,<br/>
-    milliseconds: int,<br/>
-    bytes: int?,<br/>
-    unitPrice: int<br/>
+&nbsp;    trackId: int,<br/>
+&nbsp;    name: string,<br/>
+&nbsp;    albumId: int?,<br/>
+&nbsp;    mediaTypeId: int,<br/>
+&nbsp;    genreId: int?,<br/>
+&nbsp;    composer: string?,<br/>
+&nbsp;    milliseconds: int,<br/>
+&nbsp;    bytes: int?,<br/>
+&nbsp;    unitPrice: int<br/>
 } <br/>
 
 Update artist: /artists <br/>
 {<br/>
-    artistId: int,<br/>
-    name: string<br/>
+&nbsp;    artistId: int,<br/>
+&nbsp;    name: string<br/>
 } <br/>
 
 Update album: /albums <br/>
 {<br/>
-    artistId: int,<br/>
-    name: string,<br/>
-    albumId: int,<br/>
+&nbsp;    artistId: int,<br/>
+&nbsp;    name: string,<br/>
+&nbsp;    albumId: int,<br/>
 } <br/>
 
 The following PUT endpoints requires user login. <br/>
