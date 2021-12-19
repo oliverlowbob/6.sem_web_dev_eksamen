@@ -34,133 +34,135 @@ Search artists by name: /artists?name='Insert search query' - returns list of ar
 Get all tracks in album: /tracks?albumId='Id of the album' - returns list of tracks in an album <br/>
 
 ### Put Endpoints
-For the PUT endpoints, it's shown beneath every endpoint, what the server is expecting. All PUT endpoints expect JSON format. Furthermore, if a value is optional, there will be added an '?' after it, for example string? <br/>
+For the PUT endpoints, it's shown beneath every endpoint, what the server is expecting. <br/>
+All PUT endpoints expect JSON format. Furthermore, if a value is optional, there will be added an '?' after it, for example string? <br/>
 
 For the following actions, you must be logged in as admin. <br/>
 
 Update track: /tracks <br/>
-{
-    trackId: int,
-    name: string,
-    albumId: int?,
-    mediaTypeId: int,
-    genreId: int?,
-    composer: string?,
-    milliseconds: int,
-    bytes: int?,
-    unitPrice: int
+{<br/>
+    trackId: int,<br/>
+    name: string,<br/>
+    albumId: int?,<br/>
+    mediaTypeId: int,<br/>
+    genreId: int?,<br/>
+    composer: string?,<br/>
+    milliseconds: int,<br/>
+    bytes: int?,<br/>
+    unitPrice: int<br/>
 } <br/>
 
 Update artist: /artists <br/>
-{
-    artistId: int,
-    name: string
+{<br/>
+    artistId: int,<br/>
+    name: string<br/>
 } <br/>
 
 Update album: /albums <br/>
-{
-    artistId: int,
-    name: string,
-    albumId: int,
+{<br/>
+    artistId: int,<br/>
+    name: string,<br/>
+    albumId: int,<br/>
 } <br/>
 
 The following PUT endpoints requires user login. <br/>
 
 Update user password: /users - you can only update the password of the user you're logged in as <br/>
-{
-    customerId: int,
-    password: string
+{<br/>
+    customerId: int,<br/>
+    password: string<br/>
 } <br/>
 
 Update user information: /users - you can only update information of the user you're logged in as <br/>
-{
-    customerId: int,
-    firstName: string,
-    lastName: string,
-    company: string,
-    address: string,
-    city: string,
-    state: string,
-    country: string,
-    postalCode: string,
-    phone: string,
-    fax: string,
-    email: string
-}
+{<br/>
+    customerId: int,<br/>
+    firstName: string,<br/>
+    lastName: string,<br/>
+    company: string,<br/>
+    address: string,<br/>
+    city: string,<br/>
+    state: string,<br/>
+    country: string,<br/>
+    postalCode: string,<br/>
+    phone: string,<br/>
+    fax: string,<br/>
+    email: string<br/>
+}<br/>
 
 ### POST Endpoints
-For the POST endpoints, it's also shown beneath what the server is expecting. Some POST endpoints expect JSON format, while others except form-data. Again, optional values will be displayed with a '?'. <br/>
+For the POST endpoints, it's also shown beneath what the server is expecting. Some POST endpoints expect JSON format, while others except form-data.<br/> 
+Again, optional values will be displayed with a '?'. <br/>
 The following actions can only be performed by admin. <br/>
 
 Add track: /tracks - expects form data <br/>
-{
-    trackId: int,
-    name: string,
-    albumId: int?,
-    mediaTypeId: int,
-    genreId: int?,
-    composer: string?,
-    milliseconds: int,
-    bytes: int?,
-    unitPrice: int
+{<br/>
+    trackId: int,<br/>
+    name: string,<br/>
+    albumId: int?,<br/>
+    mediaTypeId: int,<br/>
+    genreId: int?,<br/>
+    composer: string?,<br/>
+    milliseconds: int,<br/>
+    bytes: int?,<br/>
+    unitPrice: int<br/>
 } <br/>
 
 Add album: /albums - expects form data <br/>
-{
-    artistId: int,
-    name: string,
-    albumId: int,
+{<br/>
+    artistId: int,<br/>
+    name: string,<br/>
+    albumId: int,<br/>
 } <br/>
 
 Add artist: /artists - expects form data <br/>
-{
-    artistId: int,
-    name: string
+{<br/>
+    artistId: int,<br/>
+    name: string<br/>
 } <br/>
 
 Login: /login - expects form data, can be performed by admin and user <br/>
-{
-    email: string,
-    password: string
+{<br/>
+    email: string,<br/>
+    password: string<br/>
 } <br/>
 
 Signup: /signup - expects form data, can be performed without login <br/>
-{
-    firstName: string, 
-    lastName: string, 
-    password: string,
-    email: string,
-    company: string,
-    address: string,
-    city: string,
-    state: string,
-    country: string,
-    postalCode: string,
-    phone: string,
-    fax: string
+{<br/>
+    firstName: string, <br/>
+    lastName: string, <br/>
+    password: string,<br/>
+    email: string,<br/>
+    company: string,<br/>
+    address: string,<br/>
+    city: string,<br/>
+    state: string,<br/>
+    country: string,<br/>
+    postalCode: string,<br/>
+    phone: string,<br/>
+    fax: string<br/>
 } <br/>
 
 The following actions can only be performed by users. <br/>
 
 Checkout (buy tracks): /invoices - expects JSON format <br/>
-{
-    customerId: int,
-    address: string?,
-    city: string?,
-    state: string?,
-    country: string?,
-    postalCode: string?,
-    date: datetime,
-    cart: [{
-        trackId: int,
-        unitPrice: int
-    }]
+{<br/>
+    customerId: int,<br/>
+    address: string?,<br/>
+    city: string?,<br/>
+    state: string?,<br/>
+    country: string?, <br/>
+    postalCode: string?, <br/>
+    date: datetime, <br/>
+    cart: [{ <br/>
+        trackId: int, <br/>
+        unitPrice: int <br/>
+    }] <br/>
 } <br/>
 
 Verify password (used when updating password): users/verify - expects JSON format <br/>
 {
-    customerId: int,
-    password: string
+    customerId: int, <br/>
+    password: string <br/>
 } <br/>
 
 ### DELETE Endpoints
