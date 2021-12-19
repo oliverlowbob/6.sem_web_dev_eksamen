@@ -69,24 +69,24 @@ The following PUT endpoints requires user login. <br/>
 
 Update user password: /users - you can only update the password of the user you're logged in as <br/>
 {<br/>
-    customerId: int,<br/>
-    password: string<br/>
+&nbsp;    customerId: int,<br/>
+&nbsp;    password: string<br/>
 } <br/>
 
 Update user information: /users - you can only update information of the user you're logged in as <br/>
 {<br/>
-    customerId: int,<br/>
-    firstName: string,<br/>
-    lastName: string,<br/>
-    company: string,<br/>
-    address: string,<br/>
-    city: string,<br/>
-    state: string,<br/>
-    country: string,<br/>
-    postalCode: string,<br/>
-    phone: string,<br/>
-    fax: string,<br/>
-    email: string<br/>
+&nbsp;    customerId: int,<br/>
+&nbsp;    firstName: string,<br/>
+&nbsp;    lastName: string,<br/>
+&nbsp;    company: string,<br/>
+&nbsp;    address: string,<br/>
+&nbsp;    city: string,<br/>
+&nbsp;    state: string,<br/>
+&nbsp;    country: string,<br/>
+&nbsp;    postalCode: string,<br/>
+&nbsp;    phone: string,<br/>
+&nbsp;    fax: string,<br/>
+&nbsp;    email: string<br/>
 }<br/>
 
 ### POST Endpoints
@@ -96,73 +96,73 @@ The following actions can only be performed by admin. <br/>
 
 Add track: /tracks - expects form data <br/>
 {<br/>
-    trackId: int,<br/>
-    name: string,<br/>
-    albumId: int?,<br/>
-    mediaTypeId: int,<br/>
-    genreId: int?,<br/>
-    composer: string?,<br/>
-    milliseconds: int,<br/>
-    bytes: int?,<br/>
-    unitPrice: int<br/>
+&nbsp;    trackId: int,<br/>
+&nbsp;    name: string,<br/>
+&nbsp;    albumId: int?,<br/>
+&nbsp;    mediaTypeId: int,<br/>
+&nbsp;    genreId: int?,<br/>
+&nbsp;    composer: string?,<br/>
+&nbsp;    milliseconds: int,<br/>
+&nbsp;    bytes: int?,<br/>
+&nbsp;    unitPrice: int<br/>
 } <br/>
 
 Add album: /albums - expects form data <br/>
 {<br/>
-    artistId: int,<br/>
-    name: string,<br/>
-    albumId: int,<br/>
+&nbsp;    artistId: int,<br/>
+&nbsp;    name: string,<br/>
+&nbsp;    albumId: int,<br/>
 } <br/>
 
 Add artist: /artists - expects form data <br/>
 {<br/>
-    artistId: int,<br/>
-    name: string<br/>
+&nbsp;    artistId: int,<br/>
+&nbsp;    name: string<br/>
 } <br/>
 
 Login: /login - expects form data, can be performed by admin and user <br/>
 {<br/>
-    email: string,<br/>
-    password: string<br/>
+&nbsp;    email: string,<br/>
+&nbsp;    password: string<br/>
 } <br/>
 
 Signup: /signup - expects form data, can be performed without login <br/>
 {<br/>
-    firstName: string, <br/>
-    lastName: string, <br/>
-    password: string,<br/>
-    email: string,<br/>
-    company: string,<br/>
-    address: string,<br/>
-    city: string,<br/>
-    state: string,<br/>
-    country: string,<br/>
-    postalCode: string,<br/>
-    phone: string,<br/>
-    fax: string<br/>
+&nbsp;    firstName: string, <br/>
+&nbsp;    lastName: string, <br/>
+&nbsp;    password: string,<br/>
+&nbsp;    email: string,<br/>
+&nbsp;    company: string,<br/>
+&nbsp;    address: string,<br/>
+&nbsp;    city: string,<br/>
+&nbsp;    state: string,<br/>
+&nbsp;    country: string,<br/>
+&nbsp;    postalCode: string,<br/>
+&nbsp;    phone: string,<br/>
+&nbsp;    fax: string<br/>
 } <br/>
 
 The following actions can only be performed by users. <br/>
 
 Checkout (buy tracks): /invoices - expects JSON format <br/>
 {<br/>
-    customerId: int,<br/>
-    address: string?,<br/>
-    city: string?,<br/>
-    state: string?,<br/>
-    country: string?, <br/>
-    postalCode: string?, <br/>
-    date: datetime, <br/>
-    cart: [{ <br/>
-        trackId: int, <br/>
-        unitPrice: int <br/>
-    }] <br/>
+&nbsp;    customerId: int,<br/>
+&nbsp;    address: string?,<br/>
+&nbsp;    city: string?,<br/>
+&nbsp;    state: string?,<br/>
+&nbsp;    country: string?, <br/>
+&nbsp;    postalCode: string?, <br/>
+&nbsp;    date: datetime, <br/>
+&nbsp;    cart: [{ <br/>
+&nbsp;&nbsp;        trackId: int, <br/>
+&nbsp;&nbsp;        unitPrice: int <br/>
+&nbsp;    }] <br/>
 } <br/>
 
 Verify password (used when updating password): users/verify - expects JSON format <br/>
 {
-    customerId: int, <br/>
-    password: string <br/>
+&nbsp;    customerId: int, <br/>
+&nbsp;    password: string <br/>
 } <br/>
 
 ### DELETE Endpoints
