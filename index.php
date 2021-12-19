@@ -135,6 +135,9 @@ switch ($requestMethod) {
                 echo json_encode($artist->updateArtist($putData['artistId'], $putData['name']));
             }
         }
+        else{
+            http_response_code(404);
+        }
         break;
     case "POST":
         if (count($urlPieces) == 2) {
@@ -182,6 +185,9 @@ switch ($requestMethod) {
                 }
             }
         }
+        else{
+            http_response_code(404);
+        }
         break;
     case "DELETE":
         if (count($urlPieces) == 3 && $_SESSION["isAdmin"] == "true") {
@@ -195,6 +201,9 @@ switch ($requestMethod) {
                 // Delete artist
                 echo json_encode($artist->deleteArtist($urlPieces[2]));
             }
+        }
+        else{
+            http_response_code(404);
         }
         break;
     default:
