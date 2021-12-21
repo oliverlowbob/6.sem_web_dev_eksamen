@@ -89,6 +89,8 @@ class Track extends DatabaseConnector
             $stmt = $con->prepare($sql);
             $stmt->execute([$trackId]);
 
+            $tracks = array();
+
             while ($row = $stmt->fetch()) {
                 $result['trackId'] = $row['TrackId'];
                 $result['name'] = $row['Name'];
@@ -100,6 +102,10 @@ class Track extends DatabaseConnector
                 $result['bytes'] = $row['Bytes'];
                 $result['unitPrice'] = $row['UnitPrice'];
                 $tracks[] = $result;
+            }
+
+            if($tracks == null){
+                return null;
             }
 
             $stmt = null;

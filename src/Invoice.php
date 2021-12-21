@@ -47,7 +47,7 @@ class Invoice extends DatabaseConnector
                 return "true";
             } catch (\Throwable $e) {
                 $con->rollback();
-                throw $e; // but the error must be handled anyway
+                throw $e;
             }
         } else {
             return $this->statusCode(ERROR);

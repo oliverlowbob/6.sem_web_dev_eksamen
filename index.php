@@ -24,7 +24,6 @@ require_once("src/Album.php");
 require_once("src/MediaType.php");
 require_once("src/Genre.php");
 require_once("src/Invoice.php");
-require_once("src/InvoiceLine.php");
 
 $track = new Track();
 $user = new User();
@@ -33,7 +32,6 @@ $album = new Album();
 $mediaType = new MediaType();
 $genre = new Genre();
 $invoice = new Invoice();
-$invoiceLine = new InvoiceLine();
 
 $url = strtok($_SERVER['REQUEST_URI'], "?");    // GET parameters are removed
 // If there is a trailing slash, it is removed, so that it is not taken into account by the explode function

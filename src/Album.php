@@ -65,11 +65,17 @@ class Album extends DatabaseConnector
             $stmt = $con->prepare($sql);
             $stmt->execute([$albumId]);
 
+            $albums = array();
+
             while ($row = $stmt->fetch()) {
                 $result['artistId'] = $row['ArtistId'];
                 $result['name'] = $row['Title'];
                 $result['albumId'] = $row['AlbumId'];
                 $albums[] = $result;
+            }
+
+            if($albums == null){
+                return null;
             }
 
             $stmt = null;

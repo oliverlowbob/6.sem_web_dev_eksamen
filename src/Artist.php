@@ -66,10 +66,16 @@ class Artist extends DatabaseConnector
             $stmt = $con->prepare($sql);
             $stmt->execute([$artistId]);
 
+            $artists = array();
+
             while ($row = $stmt->fetch()) {
                 $result['artistId'] = $row['ArtistId'];
                 $result['name'] = $row['Name'];
                 $artists[] = $result;
+            }
+
+            if($artists == null){
+                return null;
             }
 
             $stmt = null;

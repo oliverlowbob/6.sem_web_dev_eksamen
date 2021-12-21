@@ -10,14 +10,14 @@ final Class albumTest extends TestCase{
         $albumClass = new Album();
         $albums = $albumClass->getAllAlbums();
         $this->assertSame('1', reset($albums)['albumId']);
-        $this->assertSame(347, count($albums));
+        $this->assertSame(348, count($albums));
     }
 
     public function testGetGetAlbumById(): void
     {
         $albumClass = new Album();
         $album = $albumClass->getAlbum(10000);
-        $this->assertSame('1', $album);
+        $this->assertSame(null, $album);
     }
 }
 
