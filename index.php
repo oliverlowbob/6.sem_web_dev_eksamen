@@ -90,6 +90,7 @@ switch ($requestMethod) {
                 }
             } elseif ($urlPieces[1] == "logout") {
                 // Log out
+                session_unset();
                 session_destroy();
                 header("Location: ./views/login.php");
             }
@@ -154,11 +155,15 @@ switch ($requestMethod) {
                 if ($isAdmin == "true") {
                     $_SESSION["isAdmin"] = "true";
                     $_SESSION["email"] = "admin";
+                    # Prevents session hijacking
+                    session_regenerate_id();
                 } else {
                     $_SESSION["isAdmin"] = "false";
                     $response = json_encode($user->login($_POST['email'], $_POST['password']));
                     if ($response == "true") {
                         $_SESSION["email"] = $_POST['email'];
+                        # Prevents session hijacking
+                        session_regenerate_id();
                     } else {
                         echo 'Wrong username or password';
                     }
