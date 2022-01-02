@@ -9,7 +9,7 @@ class DatabaseConnector {
         $port = 3306;
         $db   = 'chinook_abridged';
         $user = 'root';
-        $pass = '';
+        $pass = 'CWnP0NG1kwja';
 
         try {
             $this->dbConnection = new \PDO(
